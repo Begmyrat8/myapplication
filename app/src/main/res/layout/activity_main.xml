@@ -67,38 +67,84 @@
 
     </RelativeLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/black"
+        app:layout_constraintTop_toBottomOf="@+id/search_box">
+
+        <TextView
+            android:id="@+id/title_txt"
+            android:layout_width="90dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="Title"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/Gram"
+            android:layout_width="90dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="Gram"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/title_txt" />
+
+
+        <TextView
+            android:id="@+id/Kg"
+            android:layout_width="90dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="Kg"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/Gram" />
+
+        <TextView
+            android:id="@+id/Price"
+            android:layout_width="90dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:inputType="numberSigned"
+            android:text="Price"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/Kg" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categoryList"
-        android:layout_width="428dp"
-        android:layout_height="621dp"
-        android:background="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
         android:padding="5dp"
         android:scrollbarSize="5dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/result"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_box" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
-    <RelativeLayout
-        android:id="@+id/result"
+
+    <TextView
+        android:id="@+id/result_tv"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/teal_200"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/purple_700"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/result_tv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp" />
-    </RelativeLayout>
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 

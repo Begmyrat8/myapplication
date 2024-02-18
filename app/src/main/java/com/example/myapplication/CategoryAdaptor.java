@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +36,14 @@ CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.CategoryViewHolder>
         String categoryName = categories.get(position).getTitle();
         holder.title.setText(categoryName);
 
+        String kg = String.valueOf(categories.get(position).getKg());
+        holder.kg.setText(kg);
 
+        String price = String.valueOf(categories.get(position).getPrice());
+        holder.price.setText(price);
+
+        String gram = String.valueOf(categories.get(position).getGram());
+        holder.gram.setText(gram);
 
 
     }
@@ -48,7 +55,7 @@ CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.CategoryViewHolder>
 
     public static final class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       EditText title, kg, price;
+       TextView title, kg, price, gram;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -56,7 +63,7 @@ CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.CategoryViewHolder>
             kg = itemView.findViewById(R.id.kg);
             title = itemView.findViewById(R.id.title);
             price = itemView.findViewById(R.id.price);
-
+            gram = itemView.findViewById(R.id.gram);
         }
     }
 }

@@ -105,7 +105,7 @@ public class DatabaseAccess {
         return str;
     }
 
-    public List<CategoryModel> getAllCategory() {
+    public List<CategoryModel> getAllList() {
         c = database.rawQuery("select * from list", null);
         List<CategoryModel> stringArrayList = new ArrayList<>();
         while (c.moveToNext()) {
@@ -113,8 +113,9 @@ public class DatabaseAccess {
             String title = c.getString(1);
             int kg = c.getInt(2);
             int price = c.getInt(3);
+            int gram = c.getInt(4);
 
-            stringArrayList.add(new CategoryModel(id, title, kg, price));
+            stringArrayList.add(new CategoryModel(id, title, kg, price,gram));
         }
         return stringArrayList;
     }

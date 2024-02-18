@@ -4,31 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@color/white"
-    android:layout_height="100dp"
-    android:layout_margin="20dp">
+    android:layout_height="70dp"
 
-    <EditText
+    android:layout_marginBottom="20dp">
+
+
+    <TextView
         android:id="@+id/title"
         android:layout_width="90dp"
-        android:layout_height="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/gram"
+        android:layout_width="90dp"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/title" />
 
 
-    <EditText
+    <TextView
         android:id="@+id/kg"
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
+        android:layout_width="90dp"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/price" />
+        app:layout_constraintStart_toEndOf="@+id/gram" />
 
-    <EditText
+    <TextView
         android:id="@+id/price"
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
+        android:layout_width="90dp"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:inputType="numberSigned"/>
+        app:layout_constraintStart_toEndOf="@+id/kg" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
