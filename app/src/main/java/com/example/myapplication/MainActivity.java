@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView categoryRecycler;
     Button new_button;
     TextView title , result_tv;
-    EditText search;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -44,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
         title = findViewById(R.id.title_txt);
         result_tv = findViewById(R.id.result_tv);
-        search = findViewById(R.id.dictionary_input_search);
         new_button = findViewById(R.id.button);
 
         new_button.setOnClickListener(view -> {
@@ -93,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
         categoryList = databaseAccess.getAllList();
 
         setCategoryRecycler(categoryList);
-        Toast.makeText(this, "aaaaaaaaaaa", Toast.LENGTH_SHORT).show();
     }
 
 }

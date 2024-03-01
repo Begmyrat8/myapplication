@@ -3,15 +3,16 @@ package com.example.myapplication;
 public class CategoryModel {
     int id;
     String title;
-    int kg, price,gram;
+    int kg, price, gram, gram_price;
 
 
-    public CategoryModel(int id, String title, int kg, int price, int gram) {
+    public CategoryModel(int id, String title, int kg, int price, int gram, int gram_price) {
         this.id = id;
         this.title = title;
         this.kg = kg;
         this.price = price;
         this.gram = gram;
+        this.gram_price = gram_price;
 
     }
     public int getId() {
@@ -50,8 +51,16 @@ public class CategoryModel {
         return gram;
     }
 
-    public void setGram(int gram) {
-        this.gram = gram;
+    public void setGram_price(int gram_price) {
+        this.gram_price = gram_price;
+    }
+
+    public int getGram_price() {
+        return gram_price;
+    }
+
+    public void setGram(int gram_price) {
+        this.gram_price = gram_price;
     }
 
 }

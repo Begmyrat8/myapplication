@@ -114,8 +114,10 @@ public class DatabaseAccess {
             int kg = c.getInt(2);
             int price = c.getInt(3);
             int gram = c.getInt(4);
+            int gram_price = c.getInt(5);
 
-            stringArrayList.add(new CategoryModel(id, title, kg, price,gram));
+
+            stringArrayList.add(new CategoryModel(id, title, kg, price, gram, gram_price));
         }
         return stringArrayList;
     }

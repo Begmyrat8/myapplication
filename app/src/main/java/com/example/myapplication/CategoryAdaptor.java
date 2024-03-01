@@ -1,13 +1,17 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.myapplication.Datebase.DatabaseAccess;
 
 import java.util.List;
 
@@ -16,6 +20,7 @@ CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.CategoryViewHolder>
 
     Context context;
     List<CategoryModel> categories;
+    SQLiteDatabase database;
 
     public CategoryAdaptor(Context context, List<CategoryModel> categories) {
         this.context = context;
@@ -45,6 +50,11 @@ CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.CategoryViewHolder>
         String gram = String.valueOf(categories.get(position).getGram());
         holder.gram.setText(gram);
 
+        String gram_price = String.valueOf(categories.get(position).getGram_price());
+        holder.gram_price.setText(gram_price);
+
+        holder.delete_btn.setOnClickListener(v -> {
+        });
 
     }
 
@@ -55,7 +65,8 @@ CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.CategoryViewHolder>
 
     public static final class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       TextView title, kg, price, gram;
+       TextView title, kg, price, gram, gram_price;
+       Button delete_btn;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,6 +75,9 @@ CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.CategoryViewHolder>
             title = itemView.findViewById(R.id.title);
             price = itemView.findViewById(R.id.price);
             gram = itemView.findViewById(R.id.gram);
+            gram_price = itemView.findViewById(R.id.gram_price);
+            delete_btn = itemView.findViewById(R.id.delete_btn);
+
         }
     }
 }

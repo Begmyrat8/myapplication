@@ -25,15 +25,16 @@
         android:text="gram"
         android:textSize="22sp"
         android:gravity="center"
+        android:inputType="numberSigned"
         app:layout_constraintEnd_toStartOf="@+id/set_kg"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <EditText
+    <TextView
         android:id="@+id/set_kg"
         android:layout_width="90dp"
         android:layout_height="70dp"
-        android:text="kg"
+        android:text="1kg"
         android:textSize="22sp"
         android:gravity="center"
         app:layout_constraintEnd_toStartOf="@+id/set_price"

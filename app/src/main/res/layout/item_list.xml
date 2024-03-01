@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@color/white"
-    android:layout_height="70dp"
+    android:layout_height="wrap_content"
 
     android:layout_marginBottom="20dp">
 
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="90dp"
+        android:layout_width="70dp"
         android:layout_height="70dp"
         android:gravity="center"
         android:textColor="@color/black"
@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/gram"
-        android:layout_width="90dp"
+        android:layout_width="70dp"
         android:layout_height="70dp"
         android:gravity="center"
         android:textColor="@color/black"
@@ -29,10 +29,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/title" />
 
-
     <TextView
-        android:id="@+id/kg"
-        android:layout_width="90dp"
+        android:id="@+id/gram_price"
+        android:layout_width="70dp"
         android:layout_height="70dp"
         android:gravity="center"
         android:textColor="@color/black"
@@ -40,9 +39,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/gram" />
 
+
+    <TextView
+        android:id="@+id/kg"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/gram_price" />
+
     <TextView
         android:id="@+id/price"
-        android:layout_width="90dp"
+        android:layout_width="70dp"
         android:layout_height="70dp"
         android:gravity="center"
         android:textColor="@color/black"
@@ -50,6 +60,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/kg" />
 
+    <Button
+        android:id="@+id/delete_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/price"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
