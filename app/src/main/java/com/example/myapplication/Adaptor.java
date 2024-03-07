@@ -6,25 +6,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Datebase.DatabaseAccess;
+import com.example.myapplication.Datebase.DatabaseOpenHelper;
 
 import java.util.List;
 
 public class
-CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.CategoryViewHolder> {
+Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     Context context;
-    List<CategoryModel> categories;
+    List<Model> list;
     SQLiteDatabase database;
+    DatabaseOpenHelper databaseHelper;
 
-    public CategoryAdaptor(Context context, List<CategoryModel> categories) {
+
+    public Adaptor(Context context, List<Model> list) {
         this.context = context;
-        this.categories = categories;
+        this.list = list;
     }
 
     @NonNull
@@ -36,37 +40,41 @@ CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.CategoryViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
+        databaseHelper = new DatabaseOpenHelper(context);
+        database = databaseHelper.getWritableDatabase();
+
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstances(context.getApplicationContext());
+        databaseAccess.open();
 
 
-        String categoryName = categories.get(position).getTitle();
-        holder.title.setText(categoryName);
 
-        String kg = String.valueOf(categories.get(position).getKg());
+        String Name = list.get(position).getTitle();
+        holder.title.setText(Name);
+
+        String kg = String.valueOf(list.get(position).getKg());
         holder.kg.setText(kg);
 
-        String price = String.valueOf(categories.get(position).getPrice());
+        String price = String.valueOf(list.get(position).getPrice());
         holder.price.setText(price);
 
-        String gram = String.valueOf(categories.get(position).getGram());
+        String gram = String.valueOf(list.get(position).getGram());
         holder.gram.setText(gram);
 
-        String gram_price = String.valueOf(categories.get(position).getGram_price());
+        String gram_price = String.valueOf(list.get(position).getGram_price());
         holder.gram_price.setText(gram_price);
 
-        holder.delete_btn.setOnClickListener(v -> {
-        });
 
     }
 
     @Override
     public int getItemCount() {
-        return categories.size();
+        return list.size();
     }
 
-    public static final class CategoryViewHolder extends RecyclerView.ViewHolder{
+    public static  class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       TextView title, kg, price, gram, gram_price;
-       Button delete_btn;
+       EditText title,  price, gram, gram_price;
+       TextView kg;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,8 +84,6 @@ CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.CategoryViewHolder>
             price = itemView.findViewById(R.id.price);
             gram = itemView.findViewById(R.id.gram);
             gram_price = itemView.findViewById(R.id.gram_price);
-            delete_btn = itemView.findViewById(R.id.delete_btn);
-
         }
     }
 }

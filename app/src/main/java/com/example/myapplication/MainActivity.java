@@ -1,16 +1,20 @@
 package com.example.myapplication;
 
+import static java.lang.String.valueOf;
+
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,14 +26,19 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    List<CategoryModel> categoryList = new ArrayList<>();
-    CategoryAdaptor categoryAdaptor;
+    List<Model> List = new ArrayList<>();
+    com.example.myapplication.Adaptor Adaptor;
     DatabaseAccess databaseAccess;
-    RecyclerView categoryRecycler;
-    Button new_button;
-    TextView title , result_tv;
+    SQLiteDatabase database;
+    RecyclerView Recycler;
+    Button new_button, sum_btn, delete_btn, save_btn;
+    EditText title;
+    String gram;
+    EditText price;
+    EditText gram_price;
+    TextView result_tv, kg;
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,12 +47,34 @@ public class MainActivity extends AppCompatActivity {
         databaseAccess = DatabaseAccess.getInstances(this.getApplicationContext());
         databaseAccess.open();
 
-        categoryRecycler = findViewById(R.id.categoryList);
-        categoryRecycler.setHasFixedSize(true);
+        Recycler = findViewById(R.id.categoryList);
+        Recycler.setHasFixedSize(true);
 
-        title = findViewById(R.id.title_txt);
         result_tv = findViewById(R.id.result_tv);
-        new_button = findViewById(R.id.button);
+        sum_btn = findViewById(R.id.sum_btn);
+        new_button = findViewById(R.id.new_btn);
+        delete_btn = findViewById(R.id.delete_btn);
+        save_btn = findViewById(R.id.save_btn);
+        com.example.myapplication.Adaptor.CategoryViewHolder categoryViewHolder = new Adaptor.CategoryViewHolder(new View(this));
+        gram = categoryViewHolder.gram.getText().toString();
+        categoryViewHolder.title.getText().toString();
+        categoryViewHolder.price.getText().toString();
+
+        save_btn.setOnClickListener(v -> {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("title", title.getText().toString());
+            contentValues.put("gram", gram.getText().toString());
+            contentValues.put("kg", kg.getText().toString());
+            contentValues.put("price", set_price.getText().toString());
+            double a = Double.parseDouble(valueOf(set_price.getText()));
+            double result = a / 1000;
+            contentValues.put(COL_GRAM_PRICE, result);
+            database.insert("list", null, contentValues);
+
+            List = databaseAccess.getAllList();
+            setRecycler(List);
+        });
+
 
         new_button.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -51,33 +82,56 @@ public class MainActivity extends AppCompatActivity {
                     .setCancelable(true)
 
                     .setPositiveButton("Yes", (dialog, which) -> {
+
                         Intent intent = new Intent(this,MainActivity2.class);
                         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
                     })
 
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
+                    .setNegativeButton("No", (dialog, which) -> dialog.cancel());
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+
+
+        });
+
+        delete_btn.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Delete all?")
+                    .setCancelable(true)
+
+                    .setPositiveButton("Yes", (dialog, which) -> {
+
+                        databaseAccess.clearAllDataFromTable("list");
+                        List = databaseAccess.getAllList();
+                        setRecycler(List);
+                    })
+
+                    .setNegativeButton("No", (dialog, which) -> dialog.cancel());
 
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
 
         });
 
-        categoryList = databaseAccess.getAllList();
+        sum_btn.setOnClickListener(v -> {
+            result_tv.setText(String.format("SUM : %s", databaseAccess.getSumPrice() + " Gram : " + databaseAccess.getSumGram()));
+        });
 
-        setCategoryRecycler(categoryList);
+        List = databaseAccess.getAllList();
+
+        setRecycler(List);
     }
-    private void setCategoryRecycler(List<CategoryModel> categoryList) {
+    private void setRecycler(List<Model> categoryList) {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this,RecyclerView.VERTICAL,false);
-        categoryRecycler.setLayoutManager(manager);
+        Recycler.setLayoutManager(manager);
 
-        categoryAdaptor = new CategoryAdaptor(this, categoryList);
-        categoryRecycler.setAdapter(categoryAdaptor);
+        Adaptor = new Adaptor(this, categoryList);
+        Recycler.setAdapter(Adaptor);
+
     }
+
 
     @Override
     protected void onResume() {
@@ -85,12 +139,13 @@ public class MainActivity extends AppCompatActivity {
         databaseAccess = DatabaseAccess.getInstances(this.getApplicationContext());
         databaseAccess.open();
 
-        categoryRecycler = findViewById(R.id.categoryList);
-        categoryRecycler.setHasFixedSize(true);
 
-        categoryList = databaseAccess.getAllList();
+        Recycler = findViewById(R.id.categoryList);
+        Recycler.setHasFixedSize(true);
 
-        setCategoryRecycler(categoryList);
+        List = databaseAccess.getAllList();
+
+        setRecycler(List);
     }
 
 }

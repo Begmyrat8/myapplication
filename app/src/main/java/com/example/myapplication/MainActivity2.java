@@ -53,7 +53,8 @@ public class MainActivity2 extends AppCompatActivity {
             contentValues.put(COL_KG, set_kg.getText().toString());
             contentValues.put(COL_Price, set_price.getText().toString());
             double a = Double.parseDouble(valueOf(set_price.getText()));
-            contentValues.put(COL_GRAM_PRICE, a/1000);
+            double result = a / 1000;
+            contentValues.put(COL_GRAM_PRICE, result);
             database.insert("list", null, contentValues);
 
 
@@ -62,4 +63,6 @@ public class MainActivity2 extends AppCompatActivity {
 
         });
     }
+
+
 }

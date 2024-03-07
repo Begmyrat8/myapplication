@@ -1,13 +1,17 @@
 package com.example.myapplication.Datebase;
 
+import static java.lang.String.valueOf;
+
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.EditText;
+import android.widget.TextView;
 
-import com.example.myapplication.CategoryModel;
+import com.example.myapplication.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +23,10 @@ public class DatabaseAccess {
     private static DatabaseAccess instances;
     Cursor c = null;
     String COL_TITLE = "title";
-    String COL_LANG = "lang";
+    String COL_GRAM = "gram";
+    String COL_KG = "kg";
+    String COL_Price = "price";
+    String COL_GRAM_PRICE = "gram_price";
 
 
     public DatabaseAccess(Context context) {
@@ -61,13 +68,19 @@ public class DatabaseAccess {
         return word;
     }
 
-    public void insertWordIntoTable(String word, String lang, String table){
+    public void insertWordIntoTable(EditText title, EditText gram, TextView kg, EditText price, String table){
 
         try {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(COL_TITLE, word);
-            contentValues.put(COL_LANG, lang);
-            database.insert(table, null, contentValues);
+            contentValues.put(COL_TITLE, String.valueOf(title));
+            contentValues.put(COL_GRAM, String.valueOf(gram));
+            contentValues.put(COL_KG, String.valueOf(kg));
+            contentValues.put(COL_Price, String.valueOf(price));
+            double a = Double.parseDouble(valueOf(price));
+            double result = a / 1000;
+            contentValues.put(COL_GRAM_PRICE, result);
+            database.update(table, null, String.valueOf(contentValues),null);
+
         }catch (Exception e){
 
         }
@@ -88,7 +101,31 @@ public class DatabaseAccess {
 
         }
     }
+    public String getSumPrice(){
+        String sAmount;
+        String sQuery = "select sum(price) from list";
+        c = database.rawQuery(sQuery,null);
+        if (c.moveToFirst()){
+            sAmount = String.valueOf(c.getInt(0));
+        }else {
+            sAmount = "0";
+        }
 
+
+        return sAmount;
+    }
+    public String getSumGram(){
+        String sAmount;
+        String sQuery = "select sum(gram) from list";
+        c = database.rawQuery(sQuery,null);
+        if (c.moveToFirst()){
+            sAmount = String.valueOf(c.getInt(0));
+        }else {
+            sAmount = "0";
+        }
+
+        return sAmount;
+    }
     @SuppressLint("Range")
     public String getLastRowOfTable(String table){
         String selectQuery= "SELECT * FROM " + table +" ORDER BY id DESC LIMIT 1";
@@ -105,9 +142,9 @@ public class DatabaseAccess {
         return str;
     }
 
-    public List<CategoryModel> getAllList() {
+    public List<Model> getAllList() {
         c = database.rawQuery("select * from list", null);
-        List<CategoryModel> stringArrayList = new ArrayList<>();
+        List<Model> stringArrayList = new ArrayList<>();
         while (c.moveToNext()) {
             int id = c.getInt(0);
             String title = c.getString(1);
@@ -117,7 +154,7 @@ public class DatabaseAccess {
             int gram_price = c.getInt(5);
 
 
-            stringArrayList.add(new CategoryModel(id, title, kg, price, gram, gram_price));
+            stringArrayList.add(new Model(id, title, kg, price, gram, gram_price));
         }
         return stringArrayList;
     }

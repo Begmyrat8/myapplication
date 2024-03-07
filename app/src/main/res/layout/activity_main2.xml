@@ -11,7 +11,7 @@
         android:id="@+id/set_title"
         android:layout_width="90dp"
         android:layout_height="70dp"
-        android:text="title"
+        android:hint="title"
         android:textSize="22sp"
         android:gravity="center"
         app:layout_constraintEnd_toStartOf="@+id/set_gram"
@@ -22,10 +22,10 @@
         android:id="@+id/set_gram"
         android:layout_width="90dp"
         android:layout_height="70dp"
-        android:text="gram"
+        android:hint="gram"
         android:textSize="22sp"
         android:gravity="center"
-        android:inputType="numberSigned"
+        android:inputType="numberDecimal"
         app:layout_constraintEnd_toStartOf="@+id/set_kg"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,10 +44,10 @@
         android:id="@+id/set_price"
         android:layout_width="90dp"
         android:layout_height="70dp"
-        android:text="price"
+        android:hint="price"
         android:textSize="22sp"
         android:gravity="center"
-        android:inputType="numberSigned"
+        android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

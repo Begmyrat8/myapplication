@@ -1,12 +1,12 @@
 package com.example.myapplication;
 
-public class CategoryModel {
+public class Model {
     int id;
     String title;
     int kg, price, gram, gram_price;
 
 
-    public CategoryModel(int id, String title, int kg, int price, int gram, int gram_price) {
+    public Model(int id, String title, int kg, int price, int gram, int gram_price) {
         this.id = id;
         this.title = title;
         this.kg = kg;
