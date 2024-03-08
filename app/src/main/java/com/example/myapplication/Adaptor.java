@@ -1,11 +1,11 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -52,18 +52,20 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         holder.title.setText(Name);
 
         String kg = String.valueOf(list.get(position).getKg());
-        holder.kg.setText(kg);
+        holder.kg.setText(kg + " kg ");
 
         String price = String.valueOf(list.get(position).getPrice());
-        holder.price.setText(price);
+        holder.price.setText(price + " m ");
 
         String gram = String.valueOf(list.get(position).getGram());
-        holder.gram.setText(gram);
+        holder.gram.setText(gram + " g ");
 
         String gram_price = String.valueOf(list.get(position).getGram_price());
-        holder.gram_price.setText(gram_price);
+        holder.gram_price.setText(gram_price + " m ");
 
+        holder.sum.setText(String.format("%s",databaseAccess.getSumPrice() + " m "));
 
+        holder.weight.setText(String.format("%s", databaseAccess.getSumGram() + " g "));
     }
 
     @Override
@@ -73,17 +75,20 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     public static  class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       EditText title,  price, gram, gram_price;
-       TextView kg;
+       TextView title,  price, kg, gram, gram_price, sum, weight;
 
+
+        @SuppressLint("WrongViewCast")
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
 
             kg = itemView.findViewById(R.id.kg);
-            title = itemView.findViewById(R.id.title);
+            title = itemView.findViewById(R.id.title_edit_text);
             price = itemView.findViewById(R.id.price);
             gram = itemView.findViewById(R.id.gram);
             gram_price = itemView.findViewById(R.id.gram_price);
+            sum = itemView.findViewById(R.id.sum);
+            weight = itemView.findViewById(R.id.weight);
         }
     }
 }

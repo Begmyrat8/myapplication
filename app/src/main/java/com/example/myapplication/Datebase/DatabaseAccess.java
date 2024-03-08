@@ -103,10 +103,10 @@ public class DatabaseAccess {
     }
     public String getSumPrice(){
         String sAmount;
-        String sQuery = "select sum(price) from list";
+        String sQuery = "select sum(gram_price) from list";
         c = database.rawQuery(sQuery,null);
         if (c.moveToFirst()){
-            sAmount = String.valueOf(c.getInt(0));
+            sAmount = String.valueOf(c.getDouble(0));
         }else {
             sAmount = "0";
         }
@@ -149,12 +149,14 @@ public class DatabaseAccess {
             int id = c.getInt(0);
             String title = c.getString(1);
             int kg = c.getInt(2);
-            int price = c.getInt(3);
+            double price = c.getDouble(3);
             int gram = c.getInt(4);
-            int gram_price = c.getInt(5);
+            double gram_price = c.getDouble(5);
+            double sum = c.getDouble(6);
+            int weight = c.getInt(7);
 
 
-            stringArrayList.add(new Model(id, title, kg, price, gram, gram_price));
+            stringArrayList.add(new Model(id, title, kg, price, gram, gram_price, sum, weight));
         }
         return stringArrayList;
     }

@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import static java.lang.String.format;
 import static java.lang.String.valueOf;
 
 import android.annotation.SuppressLint;
@@ -12,10 +13,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.WindowDecorActionBar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,14 +32,9 @@ public class MainActivity extends AppCompatActivity {
     List<Model> List = new ArrayList<>();
     com.example.myapplication.Adaptor Adaptor;
     DatabaseAccess databaseAccess;
-    SQLiteDatabase database;
     RecyclerView Recycler;
-    Button new_button, sum_btn, delete_btn, save_btn;
-    EditText title;
-    String gram;
-    EditText price;
-    EditText gram_price;
-    TextView result_tv, kg;
+    Button delete_btn;
+    ImageButton add_button;
 
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
@@ -50,33 +48,10 @@ public class MainActivity extends AppCompatActivity {
         Recycler = findViewById(R.id.categoryList);
         Recycler.setHasFixedSize(true);
 
-        result_tv = findViewById(R.id.result_tv);
-        sum_btn = findViewById(R.id.sum_btn);
-        new_button = findViewById(R.id.new_btn);
+        add_button = findViewById(R.id.add_btn);
         delete_btn = findViewById(R.id.delete_btn);
-        save_btn = findViewById(R.id.save_btn);
-        com.example.myapplication.Adaptor.CategoryViewHolder categoryViewHolder = new Adaptor.CategoryViewHolder(new View(this));
-        gram = categoryViewHolder.gram.getText().toString();
-        categoryViewHolder.title.getText().toString();
-        categoryViewHolder.price.getText().toString();
 
-        save_btn.setOnClickListener(v -> {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("title", title.getText().toString());
-            contentValues.put("gram", gram.getText().toString());
-            contentValues.put("kg", kg.getText().toString());
-            contentValues.put("price", set_price.getText().toString());
-            double a = Double.parseDouble(valueOf(set_price.getText()));
-            double result = a / 1000;
-            contentValues.put(COL_GRAM_PRICE, result);
-            database.insert("list", null, contentValues);
-
-            List = databaseAccess.getAllList();
-            setRecycler(List);
-        });
-
-
-        new_button.setOnClickListener(view -> {
+        add_button.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("New")
                     .setCancelable(true)
@@ -115,9 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        sum_btn.setOnClickListener(v -> {
-            result_tv.setText(String.format("SUM : %s", databaseAccess.getSumPrice() + " Gram : " + databaseAccess.getSumGram()));
-        });
+
 
         List = databaseAccess.getAllList();
 
@@ -131,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         Recycler.setAdapter(Adaptor);
 
     }
+
 
 
     @Override
