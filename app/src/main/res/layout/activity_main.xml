@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,113 +8,54 @@
     tools:context=".MainActivity">
 
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:background="@color/teal_200"
-        android:backgroundTint="@color/purple_700"
-        android:text="new"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints">
-
-    </Button>
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/buttons"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/black"
+        android:layout_height="50dp"
+        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/title_txt"
-            android:layout_width="70dp"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:text="Title"
-            android:textColor="@color/white"
-            android:textSize="22sp"
+
+        <ImageButton
+            android:id="@+id/add_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/add"
+            app:cornerRadius="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/Gram"
-            android:layout_width="70dp"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:text="Gram"
-            android:textColor="@color/white"
-            android:textSize="22sp"
+        <Button
+            android:id="@+id/delete_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_delete"
+            android:backgroundTint="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/title_txt" />
-
-        <TextView
-            android:id="@+id/Gram_price"
-            android:layout_width="70dp"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:text="Gram_price"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/Gram" />
+            app:layout_constraintEnd_toStartOf="@+id/add_btn"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-        <TextView
-            android:id="@+id/Kg"
-            android:layout_width="70dp"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:text="Kg"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/Gram_price" />
-
-        <TextView
-            android:id="@+id/Price"
-            android:layout_width="70dp"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:inputType="numberSigned"
-            android:text="Price"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/Kg" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categoryList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/white"
+        android:background="#DDAFA4"
         android:padding="5dp"
         android:scrollbarSize="5dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/result_tv"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/buttons" />
 
 
-    <TextView
-        android:id="@+id/result_tv"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@color/purple_700"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
