@@ -1,18 +1,16 @@
 package com.example.myapplication;
 
-import static java.lang.String.*;
+import static java.lang.String.valueOf;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -43,14 +41,12 @@ public class MainActivity2 extends AppCompatActivity {
         set_gram = findViewById(R.id.set_gram);
         set_kg = findViewById(R.id.set_kg);
         set_price = findViewById(R.id.set_price);
-
-
+        add_product = findViewById(R.id.add_product);
 
 
         DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this);
         database = dbHelper.getWritableDatabase();
 
-        add_product = findViewById(R.id.add_product);
         add_product.setOnClickListener(view -> {
 
             ContentValues contentValues = new ContentValues();
@@ -65,9 +61,10 @@ public class MainActivity2 extends AppCompatActivity {
             }else {
                 double a = Double.parseDouble(valueOf(set_price.getText())) / 1000;
                 contentValues.put(COL_GRAM_PRICE, a);
+                database.insert("list", null, contentValues);
             }
 
-            database.insert("list", null, contentValues);
+
 
 
             Intent intent = new Intent(this,MainActivity.class);

@@ -5,55 +5,94 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
+    android:background="@drawable/edit_text_border"
     tools:context=".MainActivity2">
 
-    <EditText
-        android:id="@+id/set_title"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:gravity="center"
-        android:hint="title"
-        android:textSize="22sp"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
-        android:id="@+id/set_gram"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:gravity="center"
-        android:hint="gram"
-        android:layout_marginTop="10dp"
-        android:inputType="numberDecimal"
-        android:textSize="22sp"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/set_title"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_margin="10dp"
+            android:gravity="start"
+            android:hint="title"
+            android:background="@drawable/edit_text_border"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/set_price" />
+        app:layout_constraintTop_toBottomOf="@+id/input_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/set_price"
+            android:layout_width="200dp"
+            android:layout_height="70dp"
+            android:layout_margin="10dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/edit_text_border"
+            android:gravity="start"
+            android:hint="price"
+            android:inputType="numberDecimal"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/set_gram"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/edit_text_border"
+            android:gravity="start"
+            android:hint="gram"
+            android:inputType="numberDecimal"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/set_price" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <TextView
         android:id="@+id/set_kg"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        android:gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="center_vertical"
         android:text="1kg"
-        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
         android:textSize="22sp"
-        app:layout_constraintEnd_toStartOf="@+id/set_price"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
+        app:layout_constraintEnd_toStartOf="@+id/textInputLayout"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/set_title" />
-
-    <EditText
-        android:id="@+id/set_price"
-        android:layout_width="200dp"
-        android:layout_height="70dp"
-        android:gravity="center"
-        android:hint="price"
-        android:layout_marginTop="10dp"
-        android:inputType="numberDecimal"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/set_title" />
+        app:layout_constraintTop_toBottomOf="@+id/input_layout" />
 
     <Button
         android:id="@+id/add_product"

@@ -1,7 +1,7 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,12 +23,14 @@ public class
 Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     Context context;
+    Activity activity;
     List<Model> list;
     SQLiteDatabase database;
     DatabaseOpenHelper databaseHelper;
 
 
-    public Adaptor(Context context, List<Model> list) {
+    public Adaptor(Activity activity,Context context, List<Model> list) {
+        this.activity = activity;
         this.context = context;
         this.list = list;
     }
@@ -73,8 +74,11 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         holder.change_btn.setOnClickListener(view -> {
 
             Intent intent = new Intent(context,MainActivity3.class);
-            intent.putExtra("name", list.get(position).title);
-            context.startActivity(intent);
+            intent.putExtra("id", String.valueOf(list.get(position).getId()));
+            intent.putExtra("title", String.valueOf(list.get(position).getTitle()));
+            intent.putExtra("gram", String.valueOf(list.get(position).getGram()));
+            intent.putExtra("price", String.valueOf(list.get(position).getPrice()));
+            activity.startActivityForResult(intent, 1);
 
         });
     }

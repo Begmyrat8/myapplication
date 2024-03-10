@@ -1,15 +1,12 @@
 package com.example.myapplication.Datebase;
 
-import static java.lang.String.valueOf;
-
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.Model;
 
@@ -25,12 +22,16 @@ public class DatabaseAccess {
     String COL_TITLE = "title";
     String COL_GRAM = "gram";
     String COL_KG = "kg";
-    String COL_Price = "price";
+    String COL_PRICE = "price";
     String COL_GRAM_PRICE = "gram_price";
-
+    String TABLE_NAME = "list";
+    String ID = "id";
+    Context context;
 
     public DatabaseAccess(Context context) {
         this.openHelper = new com.example.myapplication.Datebase.DatabaseOpenHelper(context);
+        this.context = context;
+
     }
 
     public static DatabaseAccess getInstances(Context context) {
@@ -68,23 +69,6 @@ public class DatabaseAccess {
         return word;
     }
 
-    public void insertWordIntoTable(EditText title, EditText gram, TextView kg, EditText price, String table){
-
-        try {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(COL_TITLE, String.valueOf(title));
-            contentValues.put(COL_GRAM, String.valueOf(gram));
-            contentValues.put(COL_KG, String.valueOf(kg));
-            contentValues.put(COL_Price, String.valueOf(price));
-            double a = Double.parseDouble(valueOf(price));
-            double result = a / 1000;
-            contentValues.put(COL_GRAM_PRICE, result);
-            database.update(table, null, String.valueOf(contentValues),null);
-
-        }catch (Exception e){
-
-        }
-    }
 
     public void deleteWordFromTable(String word, String table){
         try {
@@ -140,6 +124,20 @@ public class DatabaseAccess {
 
         }
         return str;
+    }
+     public void updateData( String title, String gram, String price){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_TITLE, title);
+        contentValues.put(COL_GRAM, gram);
+        contentValues.put(COL_PRICE, price);
+        c = database.rawQuery("Select * from list where title = ?",new String[]{title});
+
+        long result = database.update(TABLE_NAME, contentValues,"title=?", new String[]{title});
+        if (result == -1){
+            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public List<Model> getAllList() {
