@@ -23,14 +23,12 @@ public class
 Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     Context context;
-    Activity activity;
     List<Model> list;
     SQLiteDatabase database;
     DatabaseOpenHelper databaseHelper;
 
 
-    public Adaptor(Activity activity,Context context, List<Model> list) {
-        this.activity = activity;
+    public Adaptor(Context context, List<Model> list) {
         this.context = context;
         this.list = list;
     }
@@ -78,7 +76,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             intent.putExtra("title", String.valueOf(list.get(position).getTitle()));
             intent.putExtra("gram", String.valueOf(list.get(position).getGram()));
             intent.putExtra("price", String.valueOf(list.get(position).getPrice()));
-            activity.startActivityForResult(intent, 1);
+            context.startActivity(intent);
 
         });
     }

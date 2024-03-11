@@ -125,20 +125,6 @@ public class DatabaseAccess {
         }
         return str;
     }
-     public void updateData( String title, String gram, String price){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_TITLE, title);
-        contentValues.put(COL_GRAM, gram);
-        contentValues.put(COL_PRICE, price);
-        c = database.rawQuery("Select * from list where title = ?",new String[]{title});
-
-        long result = database.update(TABLE_NAME, contentValues,"title=?", new String[]{title});
-        if (result == -1){
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     public List<Model> getAllList() {
         c = database.rawQuery("select * from list", null);

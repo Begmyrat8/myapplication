@@ -91,18 +91,11 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this,RecyclerView.VERTICAL,false);
         Recycler.setLayoutManager(manager);
 
-        Adaptor = new Adaptor(MainActivity.this,this, categoryList);
+        Adaptor = new Adaptor(this, categoryList);
         Recycler.setAdapter(Adaptor);
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1){
-            recreate();
-        }
-    }
 
     @Override
     protected void onResume() {

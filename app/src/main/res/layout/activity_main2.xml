@@ -45,7 +45,7 @@
             android:layout_marginEnd="4dp"
             android:background="@drawable/edit_text_border"
             android:gravity="start"
-            android:hint="price"
+            android:hint="kg/price"
             android:inputType="numberDecimal"
             android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"

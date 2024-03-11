@@ -45,7 +45,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categoryList"
-        android:background="#886D6E73"
+        android:background="#C8DAEAE9"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="5dp"
