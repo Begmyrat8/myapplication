@@ -11,6 +11,7 @@
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         app:cardCornerRadius="15dp"
+        android:backgroundTint="#CCD5D6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,6 +21,18 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
 
+            <Button
+                android:id="@+id/delete_btn"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/ic_clear_black_24dp"
+                android:backgroundTint="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/title_and_btn" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/title_and_btn"
                 android:layout_width="match_parent"
@@ -27,7 +40,7 @@
                 android:layout_margin="5dp"
                 android:background="@drawable/edit_text_border"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/delete_btn">
 
                 <Button
                     android:id="@+id/change_btn"
@@ -43,12 +56,11 @@
                 <TextView
                     android:id="@+id/title_edit_text"
                     android:layout_width="0dp"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="title"
                     android:textColor="@color/black"
-                    android:textSize="22sp"
                     app:layout_constraintEnd_toStartOf="@+id/change_btn"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -60,6 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:padding="5dp"
                 android:background="@drawable/edit_text_border"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title_and_btn">
@@ -76,11 +89,11 @@
                     <TextView
                         android:id="@+id/gram"
                         android:layout_width="150dp"
-                        android:layout_height="30dp"
+                        android:layout_height="wrap_content"
                         android:gravity="end"
                         android:text="gram"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
+
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -88,12 +101,11 @@
 
                         android:id="@+id/hint_gram"
                         android:layout_width="50dp"
-                        android:layout_height="30dp"
+                        android:layout_height="wrap_content"
                         android:gravity="start"
                         android:text="gram"
                         android:textColor="#4C4949"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
+
                         app:layout_constraintEnd_toStartOf="@+id/gram"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -113,23 +125,21 @@
                     <TextView
                         android:id="@+id/gram_price"
                         android:layout_width="150dp"
-                        android:layout_height="30dp"
+                        android:layout_height="wrap_content"
                         android:gravity="end"
                         android:text="gram_price"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
+
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/hint_gram_price"
                         android:layout_width="0dp"
-                        android:layout_height="30dp"
+                        android:layout_height="wrap_content"
                         android:gravity="start"
                         android:text="price"
                         android:textColor="#4C4949"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/gram_price"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -149,23 +159,20 @@
                     <TextView
                         android:id="@+id/kg"
                         android:layout_width="150dp"
-                        android:layout_height="30dp"
+                        android:layout_height="wrap_content"
                         android:gravity="end"
                         android:text="kg"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/hint_kg"
                         android:layout_width="0dp"
-                        android:layout_height="30dp"
+                        android:layout_height="wrap_content"
                         android:gravity="start"
                         android:text="kg"
                         android:textColor="#4C4949"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/kg"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -185,23 +192,20 @@
                     <TextView
                         android:id="@+id/price"
                         android:layout_width="150dp"
-                        android:layout_height="30dp"
-                        android:gravity="end"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|end"
                         android:text="price"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/hint_price"
                         android:layout_width="0dp"
-                        android:layout_height="30dp"
+                        android:layout_height="wrap_content"
                         android:gravity="start"
                         android:text="price"
                         android:textColor="#4C4949"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/price"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -212,97 +216,15 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/result"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                android:background="@drawable/edit_text_green_border"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/containers"
-                app:layout_constraintTop_toBottomOf="@+id/containers">
-
-
-                <TextView
-                    android:id="@+id/sum"
-                    android:layout_width="150dp"
-                    android:layout_height="30dp"
-                    android:background="@android:color/transparent"
-                    android:gravity="end"
-                    android:text="sum"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/weight"
-                    android:layout_width="150dp"
-                    android:layout_height="30dp"
-                    android:background="@android:color/transparent"
-                    android:gravity="end"
-                    android:text="weight"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/sum" />
-
-
-                <TextView
-                    android:id="@+id/hint_sum"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:background="@android:color/transparent"
-                    android:gravity="start"
-                    android:text="sum"
-                    android:textColor="#4C4949"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/hint_weight"
-                    app:layout_constraintEnd_toStartOf="@+id/sum"
-                    app:layout_constraintStart_toStartOf="@+id/hint_weight" />
-
-                <TextView
-                    android:id="@+id/hint_weight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:background="@android:color/transparent"
-                    android:gravity="start"
-                    android:text="weight"
-                    android:textColor="#4C4949"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/weight" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/hint_result"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_margin="5dp"
-                android:padding="10dp"
-                android:gravity="start|center_vertical"
-                android:text="result :"
-                android:background="@drawable/edit_text_green_border"
-                android:textColor="#4C4949"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/result"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageView" />
-
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/avatar"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="5dp"
                 android:src="@drawable/baseline_cake_24"
                 android:background="@drawable/edit_text_border"
                 android:importantForAccessibility="no"
-                app:layout_constraintBottom_toTopOf="@+id/result"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/containers"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"

@@ -5,21 +5,20 @@ public class Model {
     String title;
     int kg;
     double price;
-    int gram;
+    double gram;
     double gram_price;
-    double sum;
-    int weight;
+    byte [] image;
 
 
-    public Model(int id, String title, int kg, double price, int gram, double gram_price, double sum, int weight) {
+    public Model(int id, String title, int kg, double price, double gram, double gram_price,byte[] image) {
         this.id = id;
         this.title = title;
         this.kg = kg;
         this.price = price;
         this.gram = gram;
         this.gram_price = gram_price;
-        this.sum = sum;
-        this.weight = weight;
+
+        this.image = image;
 
     }
     public int getId() {
@@ -54,7 +53,7 @@ public class Model {
         this.price = price;
     }
 
-    public int getGram() {
+    public double getGram() {
         return gram;
     }
 
@@ -70,20 +69,14 @@ public class Model {
         this.gram = gram;
     }
 
-    public void setSum(double sum) {
-        this.sum = sum;
+
+    public byte[] getImage() {
+        return image;
     }
 
-    public double getSum() {
-        return sum;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
 
 }

@@ -6,10 +6,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.widget.Toast;
 
+import com.example.myapplication.CategoryModel;
 import com.example.myapplication.Model;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class DatabaseAccess {
     String COL_GRAM_PRICE = "gram_price";
     String TABLE_NAME = "list";
     String ID = "id";
+    byte [] imageInBytes;
     Context context;
 
     public DatabaseAccess(Context context) {
@@ -90,7 +94,7 @@ public class DatabaseAccess {
         String sQuery = "select sum(gram_price) from list";
         c = database.rawQuery(sQuery,null);
         if (c.moveToFirst()){
-            sAmount = String.valueOf(c.getDouble(0));
+            sAmount = String.valueOf(c.getDouble(0) / 1000);
         }else {
             sAmount = "0";
         }
@@ -103,7 +107,7 @@ public class DatabaseAccess {
         String sQuery = "select sum(gram) from list";
         c = database.rawQuery(sQuery,null);
         if (c.moveToFirst()){
-            sAmount = String.valueOf(c.getInt(0));
+            sAmount = String.valueOf(c.getDouble(0) /1000);
         }else {
             sAmount = "0";
         }
@@ -136,11 +140,43 @@ public class DatabaseAccess {
             double price = c.getDouble(3);
             int gram = c.getInt(4);
             double gram_price = c.getDouble(5);
-            double sum = c.getDouble(6);
-            int weight = c.getInt(7);
+            byte[] image = c.getBlob(6);
 
 
-            stringArrayList.add(new Model(id, title, kg, price, gram, gram_price, sum, weight));
+            stringArrayList.add(new Model(id, title, kg, price, gram, gram_price, image));
+        }
+        return stringArrayList;
+    }
+    public List<CategoryModel> getCategoryList() {
+        c = database.rawQuery("select * from category", null);
+        List<CategoryModel> stringArrayList = new ArrayList<>();
+        while (c.moveToNext()) {
+            int id = c.getInt(0);
+            String title = c.getString(1);
+            byte[] image = c.getBlob(2);
+            double weight = c.getDouble(3);
+            double sum = c.getDouble(4);
+
+
+            stringArrayList.add(new CategoryModel(id, title, sum, weight, image));
+        }
+        return stringArrayList;
+    }
+    public List<Model> getCategoryData(String categoryName) {
+        c = database.rawQuery("select * from list where category_name ='" + categoryName + "';" , null);
+        List<Model> stringArrayList = new ArrayList<>();
+        while (c.moveToNext()) {
+            int id = c.getInt(0);
+            String title = c.getString(1);
+            int kg = c.getInt(2);
+            double price = c.getDouble(3);
+            int gram = c.getInt(4);
+            double gram_price = c.getDouble(5);
+            byte[] image = c.getBlob(6);
+
+
+
+            stringArrayList.add(new Model(id, title, kg, price, gram, gram_price, image));
         }
         return stringArrayList;
     }

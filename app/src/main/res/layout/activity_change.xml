@@ -4,26 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    android:background="@drawable/edit_text_border"
-    tools:context=".MainActivity2">
+    tools:context=".ChangeActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/include">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/set_title"
+            android:id="@+id/edit_title"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:layout_margin="10dp"
             android:gravity="start"
             android:hint="title"
             android:background="@drawable/edit_text_border"
-            android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,22 +36,21 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_layout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/set_price"
+            android:id="@+id/edit_price"
             android:layout_width="200dp"
-            android:layout_height="70dp"
+            android:layout_height="55dp"
             android:layout_margin="10dp"
             android:layout_marginEnd="4dp"
             android:background="@drawable/edit_text_border"
             android:gravity="start"
-            android:hint="kg/price"
+            android:hint="price"
             android:inputType="numberDecimal"
-            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_layout" />
 
@@ -61,15 +64,14 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/set_gram"
+            android:id="@+id/edit_gram"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="55dp"
             android:layout_margin="10dp"
             android:background="@drawable/edit_text_border"
             android:gravity="start"
             android:hint="gram"
             android:inputType="numberDecimal"
-            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/set_price" />
@@ -77,28 +79,23 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
-    <TextView
-        android:id="@+id/set_kg"
+    <ImageView
+        android:id="@+id/edit_image"
         android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/edit_text_border"
-        android:gravity="center_vertical"
-        android:text="1kg"
-        android:textColor="@color/black"
-        android:textSize="22sp"
+        android:layout_height="0dp"
+        android:src="@drawable/baseline_cake_24"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
         app:layout_constraintEnd_toStartOf="@+id/textInputLayout"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_layout" />
 
+
+
     <Button
-        android:id="@+id/add_product"
+        android:id="@+id/save_product"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:text="OK"
+        android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

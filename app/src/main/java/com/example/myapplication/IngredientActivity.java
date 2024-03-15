@@ -1,56 +1,68 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Datebase.DatabaseAccess;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class IngredientActivity extends AppCompatActivity {
 
-    java.util.List<CategoryModel> List = new ArrayList<>();
-    CategoryAdaptor Adaptor;
+    List<Model> List = new ArrayList<>();
+    com.example.myapplication.Adaptor Adaptor;
     DatabaseAccess databaseAccess;
     RecyclerView Recycler;
-    ImageView imageView;
-    ImageButton add_button, delete;
+    String categoryName;
+    Toolbar toolbar;
+    ImageButton add_button, delete, home;
+
+    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_ingredient);
+
         databaseAccess = DatabaseAccess.getInstances(this.getApplicationContext());
         databaseAccess.open();
 
-        Recycler = findViewById(R.id.category_list);
+        Recycler = findViewById(R.id.List);
         Recycler.setHasFixedSize(true);
 
+        home = findViewById(R.id.home_btn);
         delete = findViewById(R.id.delete);
-        imageView = findViewById(R.id.imageView);
-        add_button = findViewById(R.id.add_category_btn);
+        toolbar = findViewById(R.id.toolbar);
+        add_button = findViewById(R.id.add_btn);
+
+        categoryName = getIntent().getStringExtra("categoryName");
+
+        home.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        });
 
         delete.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Delete all?")
                     .setCancelable(true)
+
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            databaseAccess.clearAllDataFromTable("category");
+                            databaseAccess.clearAllDataFromTable("list");
 
-                            List = databaseAccess.getCategoryList();
-
+                            List = databaseAccess.getCategoryData(categoryName);
                             setRecycler(List);
                         }
                     })
@@ -67,11 +79,12 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        imageView.setVisibility(View.INVISIBLE);
+        toolbar.setSubtitle(categoryName);
+
 
         add_button.setOnClickListener(view -> {
 
-            Intent intent = new Intent(this, Activity.class);
+            Intent intent = new Intent(this, AddProductActivity.class);
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
 
@@ -79,15 +92,15 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        List = databaseAccess.getCategoryList();
+        List = databaseAccess.getCategoryData(categoryName);
 
         setRecycler(List);
     }
-    private void setRecycler(List<CategoryModel> categoryList) {
+    private void setRecycler(List<Model> categoryList) {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this,RecyclerView.VERTICAL,false);
         Recycler.setLayoutManager(manager);
 
-        Adaptor = new CategoryAdaptor(this, categoryList);
+        Adaptor = new Adaptor(this, categoryList);
         Recycler.setAdapter(Adaptor);
 
     }
@@ -100,11 +113,12 @@ public class MainActivity extends AppCompatActivity {
         databaseAccess.open();
 
 
-        Recycler = findViewById(R.id.category_list);
+        Recycler = findViewById(R.id.List);
         Recycler.setHasFixedSize(true);
 
-        List = databaseAccess.getCategoryList();
+        List = databaseAccess.getCategoryData(categoryName);
 
         setRecycler(List);
     }
+
 }

@@ -1,14 +1,16 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -53,30 +55,49 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         String Name = list.get(position).getTitle();
         holder.title.setText(Name);
 
-        String kg = String.valueOf(list.get(position).getKg());
-        holder.kg.setText(kg + " kg ");
+        holder.kg.setText(1 + " kg ");
 
         String price = String.valueOf(list.get(position).getPrice());
         holder.price.setText(price + " TMT ");
 
-        String gram = String.valueOf(list.get(position).getGram());
-        holder.gram.setText(gram + " g ");
+        double gram = Double.valueOf(list.get(position).getGram());
+        if (gram >= 1000){
+            holder.gram.setText(gram / 1000 +"kg");
+        }else {
+            holder.gram.setText(gram + " g ");
+        }
+        double gram_price = Double.valueOf(list.get(position).getGram_price());
+        holder.gram_price.setText(gram_price / 1000 + " TMT ");
 
-        String gram_price = String.valueOf(list.get(position).getGram_price());
-        holder.gram_price.setText(gram_price + " TMT ");
 
-        holder.sum.setText(String.format("%s",databaseAccess.getSumPrice() + " TMT "));
 
-        holder.weight.setText(String.format("%s", databaseAccess.getSumGram() + " g "));
+        byte[] image =  list.get(position).getImage();
+        Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+        if (bitmap == null){
+            holder.img.setImageResource(R.drawable.baseline_cake_24);
+        }else {
+            holder.img.setImageBitmap(bitmap);
+
+        }
 
         holder.change_btn.setOnClickListener(view -> {
 
-            Intent intent = new Intent(context,MainActivity3.class);
+            Intent intent = new Intent(context, ChangeActivity.class);
             intent.putExtra("id", String.valueOf(list.get(position).getId()));
             intent.putExtra("title", String.valueOf(list.get(position).getTitle()));
             intent.putExtra("gram", String.valueOf(list.get(position).getGram()));
             intent.putExtra("price", String.valueOf(list.get(position).getPrice()));
+            intent.putExtra("image", list.get(position).getImage());
             context.startActivity(intent);
+
+
+        });
+        holder.delete_btn.setOnClickListener(v -> {
+
+            database.delete("list","id="+list.get(position).getId(),null);
+            list.remove(position);
+            notifyDataSetChanged();
+
 
         });
     }
@@ -88,8 +109,9 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     public static  class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       TextView title,  price, kg, gram, gram_price, sum, weight;
-       Button change_btn;
+       TextView title,  price, kg, gram, gram_price;
+       ImageView img;
+       Button change_btn, delete_btn;
 
 
         @SuppressLint("WrongViewCast")
@@ -101,9 +123,9 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             price = itemView.findViewById(R.id.price);
             gram = itemView.findViewById(R.id.gram);
             gram_price = itemView.findViewById(R.id.gram_price);
-            sum = itemView.findViewById(R.id.sum);
-            weight = itemView.findViewById(R.id.weight);
             change_btn = itemView.findViewById(R.id.change_btn);
+            img = itemView.findViewById(R.id.avatar);
+            delete_btn = itemView.findViewById(R.id.delete_btn);
         }
     }
 }
