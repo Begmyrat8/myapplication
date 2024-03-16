@@ -11,7 +11,7 @@
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         app:cardCornerRadius="15dp"
-        android:backgroundTint="#CCD5D6"
+        android:backgroundTint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,13 +21,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
 
-            <Button
+            <ImageButton
                 android:id="@+id/delete_btn"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_margin="10dp"
-                android:background="@drawable/ic_clear_black_24dp"
-                android:backgroundTint="@color/black"
+                android:src="@drawable/ic_clear_black_24dp"
+                android:backgroundTint="@android:color/transparent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,12 +42,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/delete_btn">
 
-                <Button
+                <ImageButton
                     android:id="@+id/change_btn"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:gravity="center_vertical"
-                    android:background="@drawable/edit"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/edit"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/title_edit_text"
@@ -59,8 +60,8 @@
                     android:layout_height="40dp"
                     android:gravity="center_vertical"
                     android:padding="10dp"
-                    android:text="title"
-                    android:textColor="@color/black"
+                    android:text="@string/title"
+                    android:textColor="@color/white"
                     app:layout_constraintEnd_toStartOf="@+id/change_btn"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -91,8 +92,8 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:text="gram"
-                        android:textColor="@color/black"
+                        android:text="@string/gram"
+                        android:textColor="@color/white"
 
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -103,9 +104,9 @@
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:gravity="start"
-                        android:text="gram"
-                        android:textColor="#4C4949"
-
+                        android:text="@string/gram"
+                        android:textColor="#ACABAB"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/gram"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -127,8 +128,8 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:text="gram_price"
-                        android:textColor="@color/black"
+                        android:text="@string/gram_price"
+                        android:textColor="@color/white"
 
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -138,8 +139,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="start"
-                        android:text="price"
-                        android:textColor="#4C4949"
+                        android:text="@string/price"
+                        android:textColor="#ACABAB"
                         app:layout_constraintEnd_toStartOf="@+id/gram_price"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -161,8 +162,8 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:text="kg"
-                        android:textColor="@color/black"
+                        android:text="@string/kg"
+                        android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -171,8 +172,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="start"
-                        android:text="kg"
-                        android:textColor="#4C4949"
+                        android:text="@string/kg"
+                        android:textColor="#ACABAB"
                         app:layout_constraintEnd_toStartOf="@+id/kg"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -194,8 +195,8 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical|end"
-                        android:text="price"
-                        android:textColor="@color/black"
+                        android:text="@string/price"
+                        android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -204,8 +205,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="start"
-                        android:text="price"
-                        android:textColor="#4C4949"
+                        android:text="@string/price"
+                        android:textColor="#ACABAB"
                         app:layout_constraintEnd_toStartOf="@+id/price"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -221,8 +222,8 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="5dp"
-                android:src="@drawable/baseline_cake_24"
-                android:background="@drawable/edit_text_border"
+                android:src="@drawable/baseline_black_cake"
+                android:background="@color/white"
                 android:importantForAccessibility="no"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/containers"

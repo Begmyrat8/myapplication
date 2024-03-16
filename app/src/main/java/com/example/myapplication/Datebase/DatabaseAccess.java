@@ -1,18 +1,14 @@
 package com.example.myapplication.Datebase;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.widget.Toast;
 
-import com.example.myapplication.CategoryModel;
-import com.example.myapplication.Model;
+import com.example.myapplication.Models.CategoryModel;
+import com.example.myapplication.Models.Model;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 

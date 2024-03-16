@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <string name="app_name">Dessert Prices</string>
+    <string name="title">названия</string>
+    <string name="kg_price">кг/цена</string>
+    <string name="gram">грам</string>
+    <string name="dessert_name">названия десерта</string>
+    <string name="price">цена</string>
+    <string name="save">Сохранить</string>
+    <string name="todo">TODO</string>
+    <string name="sum">сумма</string>
+    <string name="weight">вес</string>
+    <string name="name">имя</string>
+    <string name="kg">кг</string>
+    <string name="gram_price">грам_цена</string>
+
+    <string name="rus"> Rus</string>
+    <string name="eng"> Eng</string>
+
+    <string name="add"> Добавить</string>
+    <string name="change">Изменить</string>
+    <string name="delete_all"> Удалить всё?</string>
+    <string name="Yes">Да</string>
+    <string name="No">Нет</string>
+    <string name="Select_language">Выберите язык</string>
+
+    <string name="saved">Сохранино</string>
+    <string name="changed">Изменино</string>
+</resources>

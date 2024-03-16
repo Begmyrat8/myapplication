@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddProductActivity">
+    android:background="@color/white"
+    tools:context=".Activities.ChangeDessertActivity">
 
     <include
         android:id="@+id/include"
@@ -18,19 +18,21 @@
         android:id="@+id/input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
+        android:textColorHint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image"
+        app:layout_constraintStart_toEndOf="@+id/dessert_image"
         app:layout_constraintTop_toBottomOf="@+id/include">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/set_name"
+            android:id="@+id/set_dessert_name"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_margin="10dp"
-            android:background="@drawable/edit_text_border"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:background="@drawable/edit_text_black_border"
             android:gravity="start"
-            android:hint="title"
+            android:hint="@string/title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,24 +40,25 @@
 
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/dessert_image"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="10dp"
-        android:background="@drawable/edit_text_border"
+        android:src="@drawable/baseline_black_cake"
+        android:background="@drawable/edit_text_black_border"
         app:layout_constraintBottom_toBottomOf="@+id/input_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        android:contentDescription="@string/todo" />
 
 
     <Button
-        android:id="@+id/set"
+        android:id="@+id/save_dessert"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:text="OK"
+        android:text="@string/save"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

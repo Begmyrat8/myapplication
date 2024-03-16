@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.Adaptors;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,14 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Activities.ChangeIngredientsActivity;
 import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
+import com.example.myapplication.Models.Model;
+import com.example.myapplication.R;
 
 import java.util.List;
 
@@ -38,10 +42,11 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View categoryItems = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list, parent, false);
+        View categoryItems = LayoutInflater.from(parent.getContext()).inflate(R.layout.ingredients_model, parent, false);
         return new CategoryViewHolder(categoryItems);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         databaseHelper = new DatabaseOpenHelper(context);
@@ -60,13 +65,13 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         String price = String.valueOf(list.get(position).getPrice());
         holder.price.setText(price + " TMT ");
 
-        double gram = Double.valueOf(list.get(position).getGram());
+        double gram = list.get(position).getGram();
         if (gram >= 1000){
             holder.gram.setText(gram / 1000 +"kg");
         }else {
             holder.gram.setText(gram + " g ");
         }
-        double gram_price = Double.valueOf(list.get(position).getGram_price());
+        double gram_price = list.get(position).getGram_price();
         holder.gram_price.setText(gram_price / 1000 + " TMT ");
 
 
@@ -74,7 +79,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         byte[] image =  list.get(position).getImage();
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
         if (bitmap == null){
-            holder.img.setImageResource(R.drawable.baseline_cake_24);
+            holder.img.setImageResource(R.drawable.baseline_black_cake);
         }else {
             holder.img.setImageBitmap(bitmap);
 
@@ -82,7 +87,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
         holder.change_btn.setOnClickListener(view -> {
 
-            Intent intent = new Intent(context, ChangeActivity.class);
+            Intent intent = new Intent(context, ChangeIngredientsActivity.class);
             intent.putExtra("id", String.valueOf(list.get(position).getId()));
             intent.putExtra("title", String.valueOf(list.get(position).getTitle()));
             intent.putExtra("gram", String.valueOf(list.get(position).getGram()));
@@ -111,7 +116,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
        TextView title,  price, kg, gram, gram_price;
        ImageView img;
-       Button change_btn, delete_btn;
+       ImageButton change_btn, delete_btn;
 
 
         @SuppressLint("WrongViewCast")

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.Adaptors;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,8 +16,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.myapplication.Activities.ChangeDessertActivity;
+import com.example.myapplication.Activities.ChangeIngredientsActivity;
+import com.example.myapplication.Activities.IngredientActivity;
+import com.example.myapplication.Models.CategoryModel;
 import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
+import com.example.myapplication.R;
 
 import java.util.List;
 
@@ -37,7 +42,7 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.Catego
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View categoryItems = LayoutInflater.from(parent.getContext()).inflate(R.layout.view, parent, false);
+        View categoryItems = LayoutInflater.from(parent.getContext()).inflate(R.layout.dessert_model, parent, false);
         return new CategoryViewHolder(categoryItems);
     }
 
@@ -73,6 +78,15 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.Catego
 
 
         });
+
+        holder.change_dessert.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ChangeDessertActivity.class);
+            intent.putExtra("id", String.valueOf(categories.get(position).getId()));
+            intent.putExtra("title", String.valueOf(categories.get(position).getTitle()));
+            intent.putExtra("image", categories.get(position).getImage());
+            context.startActivity(intent);
+        });
+
         holder.itemView.setOnClickListener(v -> {
 
             Intent intent = new Intent(context, IngredientActivity.class);
@@ -89,7 +103,7 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.Catego
     public static final class CategoryViewHolder extends RecyclerView.ViewHolder{
 
         ImageView categoryImage;
-        ImageButton delete_btn;
+        ImageButton delete_btn, change_dessert;
         TextView categoryTitle, sum, weight;
 
         public CategoryViewHolder(@NonNull View itemView) {
@@ -100,6 +114,7 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.Catego
             sum = itemView.findViewById(R.id.sum);
             weight = itemView.findViewById(R.id.weight);
             delete_btn = itemView.findViewById(R.id.words_fav);
+            change_dessert = itemView.findViewById(R.id.change_dessert);
         }
     }
 }

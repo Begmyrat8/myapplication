@@ -1,22 +1,28 @@
-package com.example.myapplication;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+package com.example.myapplication.Activities;
 
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.myapplication.Adaptors.CategoryAdaptor;
+import com.example.myapplication.Models.CategoryModel;
 import com.example.myapplication.Datebase.DatabaseAccess;
+import com.example.myapplication.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     CategoryAdaptor Adaptor;
     DatabaseAccess databaseAccess;
     RecyclerView Recycler;
-    ImageView imageView;
+    ImageView imageView, lang;
     ImageButton add_button, delete;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +38,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         databaseAccess = DatabaseAccess.getInstances(this.getApplicationContext());
         databaseAccess.open();
+        loadLocale();
 
         Recycler = findViewById(R.id.category_list);
         Recycler.setHasFixedSize(true);
 
         delete = findViewById(R.id.delete);
+        lang = findViewById(R.id.lang);
         imageView = findViewById(R.id.imageView);
         add_button = findViewById(R.id.add_category_btn);
 
+        lang.setOnClickListener(v -> {
+            showChangeLanguageDialog();
+        });
+
         delete.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Delete all?")
+            builder.setTitle(getString(R.string.delete_all))
                     .setCancelable(true)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getText(R.string.Yes), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             databaseAccess.clearAllDataFromTable("category");
@@ -55,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     })
 
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getText(R.string.No), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
@@ -71,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         add_button.setOnClickListener(view -> {
 
-            Intent intent = new Intent(this, Activity.class);
+            Intent intent = new Intent(this, AddDessertActivity.class);
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
 
@@ -107,4 +119,45 @@ public class MainActivity extends AppCompatActivity {
 
         setRecycler(List);
     }
+
+    private void showChangeLanguageDialog() {
+        String[] genders = {"ENG","RUS"};
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.Select_language));
+        builder .setSingleChoiceItems(genders, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                if (i == 0){
+                    setLocale("en");
+                    recreate();
+                }
+                if (i == 1){
+                    setLocale("ru");
+                    recreate();
+                }
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    private void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config =  new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        SharedPreferences.Editor editor = getSharedPreferences("Setting",MODE_PRIVATE).edit();
+        editor.putString("My_lang", lang);
+        editor.apply();
+    }
+
+
+    public void loadLocale(){
+        SharedPreferences pref = getSharedPreferences("Setting", android.app.Activity.MODE_PRIVATE);
+        String language = pref.getString("My_lang","");
+        setLocale(language);
+    }
+
+
 }

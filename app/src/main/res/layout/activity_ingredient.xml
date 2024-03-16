@@ -34,7 +34,8 @@
             android:src="@drawable/add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/todo" />
 
 
     </androidx.cardview.widget.CardView>
@@ -49,7 +50,8 @@
         android:src="@drawable/home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/buttons"
-        app:layout_constraintTop_toBottomOf="@+id/List" />
+        app:layout_constraintTop_toBottomOf="@+id/List"
+        android:contentDescription="@string/todo" />
 
     <ImageButton
         android:id="@+id/delete"
@@ -60,7 +62,8 @@
         android:src="@drawable/delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttons"
-        app:layout_constraintTop_toBottomOf="@+id/List" />
+        app:layout_constraintTop_toBottomOf="@+id/List"
+        android:contentDescription="@string/todo" />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -76,7 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
-        tools:listitem="@layout/item_list" />
+        tools:listitem="@layout/ingredients_model" />
 
 
 

@@ -1,70 +1,64 @@
-package com.example.myapplication;
+package com.example.myapplication.Activities;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
+import com.example.myapplication.R;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import java.io.ByteArrayOutputStream;
 
-public class ChangeActivity extends AppCompatActivity {
+public class ChangeDessertActivity extends AppCompatActivity {
 
     SQLiteDatabase database;
-    EditText edit_title, edit_gram, edit_price;
-    String title, id, gram, price;
+    EditText edit_title;
+    String title, id;
     byte [] img;
-    ImageView imageView, edit_image;
+    ImageView imageView, edit_image, lang;
     Toolbar toolbar;
     Button save_btn;
-    Cursor c = null;
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_change);
-
+        setContentView(R.layout.activity_change_dessert);
         DatabaseAccess databaseAccess = DatabaseAccess.getInstances(this);
         databaseAccess.open();
         DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this);
         database = dbHelper.getWritableDatabase();
 
-        edit_image = findViewById(R.id.edit_image);
+        lang = findViewById(R.id.lang);
+        edit_image = findViewById(R.id.dessert_image);
         imageView = findViewById(R.id.imageView);
         toolbar = findViewById(R.id.toolbar);
-        edit_title = findViewById(R.id.edit_title);
-        edit_gram = findViewById(R.id.edit_gram);
-        edit_price = findViewById(R.id.edit_price);
-        save_btn = findViewById(R.id.save_product);
-        toolbar.setSubtitle("Change");
-        toolbar.setSubtitleTextColor(getColor(R.color.white));
-        toolbar.setBackgroundColor(getColor(R.color.black));
+        edit_title = findViewById(R.id.set_dessert_name);
+        save_btn = findViewById(R.id.save_dessert);
+
+        lang.setVisibility(View.INVISIBLE);
+        toolbar.setSubtitle(getString(R.string.change));
 
         imageView.setOnClickListener(v -> {
 
-            Intent intent = new Intent(this, IngredientActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
         });
@@ -82,9 +76,6 @@ public class ChangeActivity extends AppCompatActivity {
 
             ContentValues contentValues = new ContentValues();
             contentValues.put("title", edit_title.getText().toString());
-            contentValues.put("gram", edit_gram.getText().toString());
-            contentValues.put("price", edit_price.getText().toString());
-
             try {
                 contentValues.put("image", ImageViewToByte(edit_image));
 
@@ -104,18 +95,14 @@ public class ChangeActivity extends AppCompatActivity {
     }
     void get_and_set_intent_data(){
 
-        if (getIntent().hasExtra("id") && getIntent().hasExtra("title") && getIntent().hasExtra("gram") && getIntent().hasExtra("price") && getIntent().hasExtra("image")){
+        if (getIntent().hasExtra("id") && getIntent().hasExtra("title")  && getIntent().hasExtra("image")){
 
             id = getIntent().getStringExtra("id");
             title = getIntent().getStringExtra("title");
-            gram = getIntent().getStringExtra("gram");
-            price = getIntent().getStringExtra("price");
             img = getIntent().getByteArrayExtra("image");
 
 
             edit_title.setText(title);
-            edit_gram.setText(gram);
-            edit_price.setText(price);
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             edit_image.setImageBitmap(bitmap);
 
@@ -124,6 +111,7 @@ public class ChangeActivity extends AppCompatActivity {
         }
 
     }
+
     private byte [] ImageViewToByte(ImageView set_image){
         Bitmap bitmap =((BitmapDrawable)set_image.getDrawable()).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
