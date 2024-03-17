@@ -30,6 +30,7 @@ public class IngredientActivity extends AppCompatActivity {
     DatabaseAccess databaseAccess;
     RecyclerView Recycler;
     String categoryName;
+    String categoryId;
     Toolbar toolbar;
     ImageView lang, imageView;
     ImageButton add_button, delete, home;
@@ -61,7 +62,9 @@ public class IngredientActivity extends AppCompatActivity {
 
         });
 
-        categoryName = getIntent().getStringExtra("categoryName");
+        categoryName = getIntent().getStringExtra("dessertName");
+        categoryId = getIntent().getStringExtra("dessertId");
+        System.out.println(categoryId + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
         home.setOnClickListener(v -> {
             Intent intent = new Intent(this, MainActivity.class);
@@ -78,7 +81,7 @@ public class IngredientActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             databaseAccess.clearAllDataFromTable("list");
 
-                            List = databaseAccess.getCategoryData(categoryName);
+                            List = databaseAccess.getCategoryData(categoryId);
                             setRecycler(List);
                         }
                     })
@@ -101,6 +104,7 @@ public class IngredientActivity extends AppCompatActivity {
         add_button.setOnClickListener(view -> {
 
             Intent intent = new Intent(this, AddIngredientsActivity.class);
+            intent.putExtra("categoryId", categoryId);
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
 
@@ -108,7 +112,7 @@ public class IngredientActivity extends AppCompatActivity {
 
 
 
-        List = databaseAccess.getCategoryData(categoryName);
+        List = databaseAccess.getCategoryData(categoryId);
 
         setRecycler(List);
     }
@@ -132,9 +136,8 @@ public class IngredientActivity extends AppCompatActivity {
         Recycler = findViewById(R.id.List);
         Recycler.setHasFixedSize(true);
 
-        List = databaseAccess.getCategoryData(categoryName);
+        List = databaseAccess.getCategoryData(categoryId);
 
         setRecycler(List);
     }
-
 }

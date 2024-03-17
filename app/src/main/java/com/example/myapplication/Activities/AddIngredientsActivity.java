@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -37,9 +38,11 @@ public class AddIngredientsActivity extends AppCompatActivity {
     String COL_Price = "price";
     String COL_GRAM_PRICE = "gram_price";
     String COL_IMAGE = "image";
-    String COL_CATEGORY_NAME = "category_name";
+    String COL_CATEGORY_ID = "dessert_id";
+    String category_id;
     ImageView imageView, set_image, lang;
-    EditText set_title, set_gram,  set_price, set_category_name;
+    EditText set_title, set_gram,   set_category_name;
+    AutoCompleteTextView set_price;
     Toolbar toolbar;
     private SQLiteDatabase database;
     DatabaseAccess databaseAccess;
@@ -50,6 +53,9 @@ public class AddIngredientsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_ingredients);
+
+
+        category_id = getIntent().getStringExtra("categoryId");
 
         databaseAccess = DatabaseAccess.getInstances(this.getApplicationContext());
         databaseAccess.open();
@@ -81,7 +87,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
             contentValues.put(COL_GRAM, set_gram.getText().toString());
             contentValues.put(COL_Price, set_price.getText().toString());
             contentValues.put(COL_GRAM_PRICE, set_price.getText().toString());
-            contentValues.put(COL_CATEGORY_NAME,set_category_name.getText().toString());
+            contentValues.put(COL_CATEGORY_ID, category_id);
             try {
                 contentValues.put(COL_IMAGE, ImageViewToByte(set_image));
 

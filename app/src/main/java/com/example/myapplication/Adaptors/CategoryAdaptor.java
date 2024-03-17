@@ -15,13 +15,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.example.myapplication.Activities.ChangeDessertActivity;
-import com.example.myapplication.Activities.ChangeIngredientsActivity;
 import com.example.myapplication.Activities.IngredientActivity;
-import com.example.myapplication.Models.CategoryModel;
 import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
+import com.example.myapplication.Models.CategoryModel;
 import com.example.myapplication.R;
 
 import java.util.List;
@@ -90,7 +88,8 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.Catego
         holder.itemView.setOnClickListener(v -> {
 
             Intent intent = new Intent(context, IngredientActivity.class);
-            intent.putExtra("categoryName",String.valueOf(categories.get(position).getTitle()));
+            intent.putExtra("dessertName", categoryName);
+            intent.putExtra("dessertId", String.valueOf(categories.get(position).getId()));
             context.startActivity(intent);
         });
     }

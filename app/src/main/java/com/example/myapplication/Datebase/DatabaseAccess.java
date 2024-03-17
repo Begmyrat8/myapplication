@@ -158,8 +158,8 @@ public class DatabaseAccess {
         }
         return stringArrayList;
     }
-    public List<Model> getCategoryData(String categoryName) {
-        c = database.rawQuery("select * from list where category_name ='" + categoryName + "';" , null);
+    public List<Model> getCategoryData(String categoryId) {
+        c = database.rawQuery("select * from list where dessert_id ='" + categoryId + "';" , null);
         List<Model> stringArrayList = new ArrayList<>();
         while (c.moveToNext()) {
             int id = c.getInt(0);
