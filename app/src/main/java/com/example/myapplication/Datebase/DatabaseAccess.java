@@ -5,10 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.widget.ImageView;
 
 import com.example.myapplication.Models.CategoryModel;
 import com.example.myapplication.Models.Model;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +55,13 @@ public class DatabaseAccess {
         }
     }
 
+    private byte [] ImageViewToByte(ImageView set_image){
+        Bitmap bitmap =((BitmapDrawable)set_image.getDrawable()).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
+        byte [] bytes = stream.toByteArray();
+        return bytes;
+    }
 
 
     public String getWordByTitle(String title){
@@ -137,9 +148,10 @@ public class DatabaseAccess {
             int gram = c.getInt(4);
             double gram_price = c.getDouble(5);
             byte[] image = c.getBlob(6);
+            int thing = c.getInt(7);
 
 
-            stringArrayList.add(new Model(id, title, kg, price, gram, gram_price, image));
+            stringArrayList.add(new Model(id, title, kg, price, gram, gram_price, image, thing));
         }
         return stringArrayList;
     }
@@ -163,16 +175,18 @@ public class DatabaseAccess {
         List<Model> stringArrayList = new ArrayList<>();
         while (c.moveToNext()) {
             int id = c.getInt(0);
-            String title = c.getString(1);
-            int kg = c.getInt(2);
-            double price = c.getDouble(3);
-            int gram = c.getInt(4);
-            double gram_price = c.getDouble(5);
-            byte[] image = c.getBlob(6);
+            String title = c.getString(2);
+            int kg = c.getInt(3);
+            double price = c.getDouble(4);
+            int gram = c.getInt(5);
+            double gram_price = c.getDouble(6);
+            byte[] image = c.getBlob(7);
+            int thing = c.getInt(8);
 
 
 
-            stringArrayList.add(new Model(id, title, kg, price, gram, gram_price, image));
+
+            stringArrayList.add(new Model(id, title, kg, price, gram, gram_price, image, thing));
         }
         return stringArrayList;
     }

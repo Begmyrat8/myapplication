@@ -61,10 +61,7 @@ public class AddDessertActivity extends AppCompatActivity {
         toolbar.setSubtitle(getString(R.string.add));
 
         imageView.setOnClickListener(v -> {
-
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
+            finish();
         });
 
 
@@ -79,7 +76,7 @@ public class AddDessertActivity extends AppCompatActivity {
                 contentValues.put(COL_IMAGE, ImageViewToByte(image));
 
             }catch (Exception e){
-                image.setImageResource(R.drawable.baseline_cake_24);
+                image.setImageResource(R.drawable.baseline_add_a_white_photo);
                 contentValues.put(COL_IMAGE, String.valueOf(image));
             }
 

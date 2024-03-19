@@ -54,7 +54,7 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.Catego
 
 
         String categoryName = categories.get(position).getTitle();
-        holder.categoryTitle.setText(categoryName);
+        holder.dessertTitle.setText(categoryName);
 
         holder.sum.setText(String.format("%s",databaseAccess.getSumPrice() + " TMT "));
 
@@ -63,7 +63,7 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.Catego
         byte[] image =  categories.get(position).getImage();
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
         if (bitmap == null){
-            holder.categoryImage.setImageResource(R.drawable.baseline_cake_24);
+            holder.categoryImage.setImageResource(R.drawable.baseline_add_a_white_photo);
         }else {
             holder.categoryImage.setImageBitmap(bitmap);
 
@@ -103,13 +103,13 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.Catego
 
         ImageView categoryImage;
         ImageButton delete_btn, change_dessert;
-        TextView categoryTitle, sum, weight;
+        TextView dessertTitle, sum, weight;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
 
             categoryImage = itemView.findViewById(R.id.word_lang);
-            categoryTitle = itemView.findViewById(R.id.name);
+            dessertTitle = itemView.findViewById(R.id.name);
             sum = itemView.findViewById(R.id.sum);
             weight = itemView.findViewById(R.id.weight);
             delete_btn = itemView.findViewById(R.id.words_fav);

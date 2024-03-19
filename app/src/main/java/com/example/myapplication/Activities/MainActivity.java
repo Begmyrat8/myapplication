@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         add_button = findViewById(R.id.add_category_btn);
 
+        lang.setVisibility(View.INVISIBLE);
         lang.setOnClickListener(v -> {
             showChangeLanguageDialog();
         });
@@ -62,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
                             databaseAccess.clearAllDataFromTable("category");
 
                             List = databaseAccess.getCategoryList();
-
                             setRecycler(List);
+
                         }
                     })
 
@@ -94,6 +95,21 @@ public class MainActivity extends AppCompatActivity {
         List = databaseAccess.getCategoryList();
 
         setRecycler(List);
+        if (List.isEmpty()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Please, add dessert")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            Intent intent = new Intent(MainActivity.this, AddDessertActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
     }
     private void setRecycler(List<CategoryModel> categoryList) {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this,RecyclerView.VERTICAL,false);
@@ -116,8 +132,8 @@ public class MainActivity extends AppCompatActivity {
         Recycler.setHasFixedSize(true);
 
         List = databaseAccess.getCategoryList();
-
         setRecycler(List);
+
     }
 
     private void showChangeLanguageDialog() {
@@ -151,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("My_lang", lang);
         editor.apply();
     }
-
 
     public void loadLocale(){
         SharedPreferences pref = getSharedPreferences("Setting", android.app.Activity.MODE_PRIVATE);

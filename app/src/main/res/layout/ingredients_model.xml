@@ -89,19 +89,17 @@
 
                     <TextView
                         android:id="@+id/gram"
-                        android:layout_width="150dp"
+                        android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:gravity="end"
                         android:text="@string/gram"
                         android:textColor="@color/white"
-
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-
                         android:id="@+id/hint_gram"
-                        android:layout_width="50dp"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:text="@string/gram"
@@ -222,8 +220,8 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="5dp"
-                android:src="@drawable/baseline_black_cake"
-                android:background="@color/white"
+                android:src="@drawable/baseline_add_a_white_photo"
+                android:background="@drawable/edit_text_border"
                 android:importantForAccessibility="no"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/containers"

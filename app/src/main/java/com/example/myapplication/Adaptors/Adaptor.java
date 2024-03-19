@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -62,14 +61,28 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
         holder.kg.setText(1 + " kg ");
 
+
         String price = String.valueOf(list.get(position).getPrice());
         holder.price.setText(price + " TMT ");
 
         double gram = list.get(position).getGram();
-        if (gram >= 1000){
-            holder.gram.setText(gram / 1000 +"kg");
+        int thing = list.get(position).getThing();
+        if (gram == 0) {
+            if (thing == 0) {
+                holder.thing.setText(" gram/thing ");
+                holder.gram.setText(0 + " gram/thing ");
+                holder.kg.setText(1 + "kg/thing");
+            }else {
+                holder.thing.setText("thing");
+                holder.gram.setText(thing + " thing ");
+                holder.kg.setText(1 + "thing");
+            }
         }else {
-            holder.gram.setText(gram + " g ");
+            if (gram >= 1000) {
+                holder.gram.setText(gram / 1000 + "kg");
+            } else {
+                holder.gram.setText(gram + " g ");
+            }
         }
         double gram_price = list.get(position).getGram_price();
         holder.gram_price.setText(gram_price / 1000 + " TMT ");
@@ -79,7 +92,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         byte[] image =  list.get(position).getImage();
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
         if (bitmap == null){
-            holder.img.setImageResource(R.drawable.baseline_black_cake);
+            holder.img.setImageResource(R.drawable.baseline_add_a_white_photo);
         }else {
             holder.img.setImageBitmap(bitmap);
 
@@ -93,6 +106,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             intent.putExtra("gram", String.valueOf(list.get(position).getGram()));
             intent.putExtra("price", String.valueOf(list.get(position).getPrice()));
             intent.putExtra("image", list.get(position).getImage());
+            intent.putExtra("thing", String.valueOf(list.get(position).getThing()));
             context.startActivity(intent);
 
 
@@ -114,7 +128,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     public static  class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       TextView title,  price, kg, gram, gram_price;
+       TextView title,  price, kg, gram, gram_price, thing;
        ImageView img;
        ImageButton change_btn, delete_btn;
 
@@ -123,6 +137,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            thing = itemView.findViewById(R.id.hint_gram);
             kg = itemView.findViewById(R.id.kg);
             title = itemView.findViewById(R.id.title_edit_text);
             price = itemView.findViewById(R.id.price);

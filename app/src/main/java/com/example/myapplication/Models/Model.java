@@ -5,19 +5,20 @@ public class Model {
     String title;
     int kg;
     double price;
-    double gram;
+    int gram;
     double gram_price;
     byte [] image;
+    int thing;
 
 
-    public Model(int id, String title, int kg, double price, double gram, double gram_price,byte[] image) {
+    public Model(int id, String title, int kg, double price, int gram, double gram_price, byte[] image, int thing) {
         this.id = id;
         this.title = title;
         this.kg = kg;
         this.price = price;
         this.gram = gram;
         this.gram_price = gram_price;
-
+        this.thing = thing;
         this.image = image;
 
     }
@@ -53,7 +54,7 @@ public class Model {
         this.price = price;
     }
 
-    public double getGram() {
+    public int getGram() {
         return gram;
     }
 
@@ -78,5 +79,11 @@ public class Model {
         this.image = image;
     }
 
+    public void setThing(int thing) {
+        this.thing = thing;
+    }
 
+    public int getThing() {
+        return thing;
+    }
 }

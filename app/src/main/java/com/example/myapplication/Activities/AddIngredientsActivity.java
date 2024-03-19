@@ -1,7 +1,6 @@
 package com.example.myapplication.Activities;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,9 +10,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -26,6 +26,7 @@ import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.R;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
 
@@ -41,8 +42,10 @@ public class AddIngredientsActivity extends AppCompatActivity {
     String COL_CATEGORY_ID = "dessert_id";
     String category_id;
     ImageView imageView, set_image, lang;
-    EditText set_title, set_gram,   set_category_name;
-    AutoCompleteTextView set_price;
+    TextInputEditText set_title, set_gram, set_price;
+    AutoCompleteTextView autoComplete;
+    ArrayAdapter<String> adapterItem;
+    String[] item = {"gram","thing"};
     Toolbar toolbar;
     private SQLiteDatabase database;
     DatabaseAccess databaseAccess;
@@ -63,18 +66,27 @@ public class AddIngredientsActivity extends AppCompatActivity {
         DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this);
         database = dbHelper.getWritableDatabase();
 
+
         findView();
         insertData();
         imagePick();
 
         lang.setVisibility(View.INVISIBLE);
+        adapterItem = new ArrayAdapter<String>(this,R.layout.item_list,item);
+        autoComplete.setAdapter(adapterItem);
+
         toolbar.setSubtitle(getString(R.string.add));
 
         imageView.setOnClickListener(v -> {
+            finish();
 
-            Intent intent = new Intent(this, IngredientActivity.class);
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
+        });
+        autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                set_gram.setHint(item);
+            }
         });
 
 
@@ -84,15 +96,19 @@ public class AddIngredientsActivity extends AppCompatActivity {
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(COL_TITLE, set_title.getText().toString());
-            contentValues.put(COL_GRAM, set_gram.getText().toString());
             contentValues.put(COL_Price, set_price.getText().toString());
             contentValues.put(COL_GRAM_PRICE, set_price.getText().toString());
             contentValues.put(COL_CATEGORY_ID, category_id);
+            if (autoComplete.getText().toString().equals("thing")){
+                contentValues.put("thing", set_gram.getText().toString());
+            }else {
+                contentValues.put(COL_GRAM, set_gram.getText().toString());
+            }
             try {
                 contentValues.put(COL_IMAGE, ImageViewToByte(set_image));
 
             }catch (Exception e){
-                set_image.setImageResource(R.drawable.baseline_black_cake);
+                set_image.setImageResource(R.drawable.baseline_add_a_white_photo);
                 contentValues.put(COL_IMAGE, String.valueOf(set_image));
             }
 
@@ -106,7 +122,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
     private void findView(){
 
         lang = findViewById(R.id.lang);
-        set_category_name = findViewById(R.id.set_category_name);
+        autoComplete = findViewById(R.id.autoComplete);
         imageView = findViewById(R.id.imageView);
         toolbar = findViewById(R.id.toolbar);
         set_title = findViewById(R.id.set_title);
@@ -123,6 +139,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
         byte [] bytes = stream.toByteArray();
         return bytes;
     }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void imagePick(){
         set_image.setOnClickListener(v -> {

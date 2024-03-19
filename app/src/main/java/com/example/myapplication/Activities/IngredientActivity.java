@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -33,7 +34,7 @@ public class IngredientActivity extends AppCompatActivity {
     String categoryId;
     Toolbar toolbar;
     ImageView lang, imageView;
-    ImageButton add_button, delete, home;
+    ImageButton add_button, delete;
 
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
@@ -49,27 +50,17 @@ public class IngredientActivity extends AppCompatActivity {
 
         imageView = findViewById(R.id.imageView);
         lang = findViewById(R.id.lang);
-        home = findViewById(R.id.home_btn);
         delete = findViewById(R.id.delete);
         toolbar = findViewById(R.id.toolbar);
         add_button = findViewById(R.id.add_btn);
 
         lang.setVisibility(View.INVISIBLE);
         imageView.setOnClickListener(v -> {
-
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
+            finish();
         });
 
         categoryName = getIntent().getStringExtra("dessertName");
         categoryId = getIntent().getStringExtra("dessertId");
-        System.out.println(categoryId + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-
-        home.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-        });
 
         delete.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -98,7 +89,7 @@ public class IngredientActivity extends AppCompatActivity {
 
         });
 
-        toolbar.setSubtitle(categoryName);
+        toolbar.setSubtitle("Ingredients for " + categoryName);
 
 
         add_button.setOnClickListener(view -> {
@@ -113,15 +104,40 @@ public class IngredientActivity extends AppCompatActivity {
 
 
         List = databaseAccess.getCategoryData(categoryId);
-
         setRecycler(List);
+
+        if (List.isEmpty()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Do you want add ingredient for " + categoryName + " ?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            Intent intent = new Intent(IngredientActivity.this, AddIngredientsActivity.class);
+                            intent.putExtra("categoryId", categoryId);
+                            startActivity(intent);
+                        }
+                    })
+
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
     }
+    @SuppressLint("ResourceAsColor")
     private void setRecycler(List<Model> categoryList) {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this,RecyclerView.VERTICAL,false);
         Recycler.setLayoutManager(manager);
 
         Adaptor = new Adaptor(this, categoryList);
         Recycler.setAdapter(Adaptor);
+
 
     }
 

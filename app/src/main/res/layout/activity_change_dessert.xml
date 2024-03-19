@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/blue"
     tools:context=".Activities.ChangeDessertActivity">
 
     <include
@@ -18,7 +18,7 @@
         android:id="@+id/input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/black"
+        android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/dessert_image"
         app:layout_constraintTop_toBottomOf="@+id/include">
@@ -28,9 +28,9 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_margin="10dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:background="@drawable/edit_text_black_border"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:background="@drawable/edit_text_border"
             android:gravity="start"
             android:hint="@string/title"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,9 +43,9 @@
         android:id="@+id/dessert_image"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_margin="10dp"
-        android:src="@drawable/baseline_black_cake"
-        android:background="@drawable/edit_text_black_border"
+        android:layout_margin="5dp"
+        android:src="@drawable/baseline_add_a_white_photo"
+        android:background="@drawable/edit_text_border"
         app:layout_constraintBottom_toBottomOf="@+id/input_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"

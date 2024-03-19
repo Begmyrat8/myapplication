@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    tools:context=".MainActivity">
+    android:background="@color/blue"
+    tools:context=".Activities.MainActivity">
 
     <include
         android:id="@+id/include"
@@ -18,11 +19,10 @@
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         app:cardCornerRadius="30dp"
-        android:layout_margin="3dp"
-        android:backgroundTint="@color/white"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintEnd_toStartOf="@id/delete">
 
 
         <ImageButton
@@ -41,39 +41,26 @@
 
 
     <ImageButton
-        android:id="@+id/home_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/home"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/buttons2"
-        app:layout_constraintTop_toBottomOf="@+id/category_list"
-        android:contentDescription="@string/todo"/>
-
-    <ImageButton
         android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
         android:background="@android:color/transparent"
+        android:contentDescription="@string/todo"
         android:src="@drawable/delete"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttons2"
-        app:layout_constraintTop_toBottomOf="@+id/category_list"
-        android:contentDescription="@string/todo"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/category_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="5dp"
         android:padding="5dp"
+        android:layout_marginBottom="5dp"
         android:scrollbarSize="5dp"
         android:scrollbars="vertical"
-        android:background="@color/white"
+        android:background="@color/blue"
         app:layout_constraintBottom_toTopOf="@id/buttons2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

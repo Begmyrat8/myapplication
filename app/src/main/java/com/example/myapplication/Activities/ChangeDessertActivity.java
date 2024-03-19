@@ -57,10 +57,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
         toolbar.setSubtitle(getString(R.string.change));
 
         imageView.setOnClickListener(v -> {
-
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
+           finish();
         });
         edit_image.setOnClickListener(v -> {
             ImagePicker.with(this)
@@ -80,7 +77,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
                 contentValues.put("image", ImageViewToByte(edit_image));
 
             }catch (Exception e){
-                edit_image.setImageResource(R.drawable.baseline_cake_24);
+                edit_image.setImageResource(R.drawable.baseline_add_a_white_photo);
                 contentValues.put("image", String.valueOf(edit_image));
             }
 

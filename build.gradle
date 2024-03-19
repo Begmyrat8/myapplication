@@ -7,7 +7,7 @@ buildscript {
         agp_version4 = agp_version3
         agp_version5 = '8.0.2'
         agp_version6 = '8.0.2'
-        agp_version7 = '8.2.2'
+        agp_version7 = '8.3.0'
         agp_version8 = '8.3.0'
     }
     repositories {

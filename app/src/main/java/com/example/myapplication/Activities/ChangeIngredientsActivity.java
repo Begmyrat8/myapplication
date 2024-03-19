@@ -12,6 +12,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,8 +36,11 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
     SQLiteDatabase database;
     EditText edit_title, edit_gram, edit_price;
-    String title, id, gram, price;
+    String title, id, gram, price, thing;
     byte [] img;
+    AutoCompleteTextView autoComplete;
+    ArrayAdapter<String> adapterItem;
+    String[] item = {"gram","thing"};
     ImageView imageView, edit_image, lang;
     Toolbar toolbar;
     Button save_btn;
@@ -52,6 +58,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this);
         database = dbHelper.getWritableDatabase();
 
+        autoComplete = findViewById(R.id.autoComplete2);
         lang = findViewById(R.id.lang);
         edit_image = findViewById(R.id.edit_image);
         imageView = findViewById(R.id.imageView);
@@ -64,11 +71,19 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         lang.setVisibility(View.INVISIBLE);
         toolbar.setSubtitle(getString(R.string.change));
 
+        adapterItem = new ArrayAdapter<String>(this,R.layout.item_list,item);
+        autoComplete.setAdapter(adapterItem);
+
+
         imageView.setOnClickListener(v -> {
-
-            Intent intent = new Intent(this, IngredientActivity.class);
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
+            finish();
+        });
+        autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                edit_gram.setHint(item);
+            }
         });
         edit_image.setOnClickListener(v -> {
             ImagePicker.with(this)
@@ -84,14 +99,19 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
             ContentValues contentValues = new ContentValues();
             contentValues.put("title", edit_title.getText().toString());
-            contentValues.put("gram", edit_gram.getText().toString());
             contentValues.put("price", edit_price.getText().toString());
 
+            if (autoComplete.getText().toString().equals("thing")){
+                contentValues.put("thing", edit_gram.getText().toString());
+                contentValues.put("gram", 0);
+            }else {
+                contentValues.put("gram", edit_gram.getText().toString());
+            }
             try {
                 contentValues.put("image", ImageViewToByte(edit_image));
 
             }catch (Exception e){
-                edit_image.setImageResource(R.drawable.baseline_black_cake);
+                edit_image.setImageResource(R.drawable.baseline_add_a_white_photo);
                 contentValues.put("image", String.valueOf(edit_image));
             }
 
@@ -106,17 +126,18 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     }
     void get_and_set_intent_data(){
 
-        if (getIntent().hasExtra("id") && getIntent().hasExtra("title") && getIntent().hasExtra("gram") && getIntent().hasExtra("price") && getIntent().hasExtra("image")){
+        if (getIntent().hasExtra("id") && getIntent().hasExtra("title") && getIntent().hasExtra("gram") && getIntent().hasExtra("price") && getIntent().hasExtra("image") && getIntent().hasExtra("thing")){
 
             id = getIntent().getStringExtra("id");
             title = getIntent().getStringExtra("title");
             gram = getIntent().getStringExtra("gram");
             price = getIntent().getStringExtra("price");
             img = getIntent().getByteArrayExtra("image");
+            thing = getIntent().getStringExtra("thing");
 
 
             edit_title.setText(title);
-            edit_gram.setText(gram);
+            edit_gram.setText(thing);
             edit_price.setText(price);
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             edit_image.setImageBitmap(bitmap);
