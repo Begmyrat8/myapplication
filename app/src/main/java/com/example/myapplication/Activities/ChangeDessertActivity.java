@@ -53,8 +53,10 @@ public class ChangeDessertActivity extends AppCompatActivity {
         edit_title = findViewById(R.id.set_dessert_name);
         save_btn = findViewById(R.id.save_dessert);
 
+        get_and_set_intent_data();
+
         lang.setVisibility(View.INVISIBLE);
-        toolbar.setSubtitle(getString(R.string.change));
+        toolbar.setSubtitle(getString(R.string.change) + " " + title);
 
         imageView.setOnClickListener(v -> {
            finish();
@@ -67,8 +69,6 @@ public class ChangeDessertActivity extends AppCompatActivity {
                     .start();
         });
 
-        get_and_set_intent_data();
-
         save_btn.setOnClickListener(view -> {
 
             ContentValues contentValues = new ContentValues();
@@ -77,7 +77,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
                 contentValues.put("image", ImageViewToByte(edit_image));
 
             }catch (Exception e){
-                edit_image.setImageResource(R.drawable.baseline_add_a_white_photo);
+                edit_image.setImageResource(R.drawable.baseline_add_a_photo_24);
                 contentValues.put("image", String.valueOf(edit_image));
             }
 

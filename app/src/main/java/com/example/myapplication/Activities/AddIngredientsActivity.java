@@ -1,7 +1,13 @@
 package com.example.myapplication.Activities;
 
+import static java.lang.Double.*;
+import static java.lang.Integer.parseInt;
+import static java.lang.String.valueOf;
+
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -27,6 +33,7 @@ import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.R;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayOutputStream;
 
@@ -43,6 +50,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
     String category_id;
     ImageView imageView, set_image, lang;
     TextInputEditText set_title, set_gram, set_price;
+    TextInputLayout textInputLayout2;
     AutoCompleteTextView autoComplete;
     ArrayAdapter<String> adapterItem;
     String[] item = {"gram","thing"};
@@ -85,7 +93,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                set_gram.setHint(item);
+                textInputLayout2.setHint(item);
             }
         });
 
@@ -96,31 +104,73 @@ public class AddIngredientsActivity extends AppCompatActivity {
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(COL_TITLE, set_title.getText().toString());
-            contentValues.put(COL_Price, set_price.getText().toString());
-            contentValues.put(COL_GRAM_PRICE, set_price.getText().toString());
-            contentValues.put(COL_CATEGORY_ID, category_id);
-            if (autoComplete.getText().toString().equals("thing")){
-                contentValues.put("thing", set_gram.getText().toString());
+            if (set_title.getText().toString().isEmpty()){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Please, add title")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                              dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }else {
-                contentValues.put(COL_GRAM, set_gram.getText().toString());
-            }
-            try {
-                contentValues.put(COL_IMAGE, ImageViewToByte(set_image));
+                contentValues.put(COL_Price, set_price.getText().toString());
+                contentValues.put(COL_CATEGORY_ID, category_id);
+                if (set_price.getText().toString().isEmpty()) {
+                    set_price.setText("0 ");
+                    double a = parseDouble(valueOf(set_price.getText()));
+                    contentValues.put(COL_GRAM, set_gram.getText().toString());
+                    contentValues.put(COL_GRAM_PRICE, a / 1000);
+                } else {
+                    double a = parseDouble(valueOf(set_price.getText()));
+                    double b = parseDouble(valueOf(set_gram.getText()));
+                    if (autoComplete.getText().toString().equals("thing")) {
 
-            }catch (Exception e){
-                set_image.setImageResource(R.drawable.baseline_add_a_white_photo);
-                contentValues.put(COL_IMAGE, String.valueOf(set_image));
-            }
+                        contentValues.put("thing", set_gram.getText().toString());
 
-            Long result = database.insert("list", null, contentValues);
-            if (result != null){
-                Toast.makeText(this, getText(R.string.saved), Toast.LENGTH_SHORT).show();
-            }
+                        double c = a * b;
+                        contentValues.put(COL_GRAM_PRICE, c);
 
+                    } else if (autoComplete.getText().toString().equals("gram")){
+                        contentValues.put(COL_GRAM_PRICE, a / 1000);
+                        contentValues.put(COL_GRAM, set_gram.getText().toString());
+                    }
+                }
+                if (autoComplete.getText().toString().isEmpty()){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Please, order gram or thing")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+                try {
+                    contentValues.put(COL_IMAGE, ImageViewToByte(set_image));
+
+                } catch (Exception e) {
+                    set_image.setImageResource(R.drawable.baseline_add_a_photo_24);
+                    contentValues.put(COL_IMAGE, valueOf(set_image));
+                }
+
+                Long result = database.insert("list", null, contentValues);
+                if (result != null) {
+                    Toast.makeText(this, getText(R.string.saved), Toast.LENGTH_SHORT).show();
+                }
+
+            }
         });
     }
     private void findView(){
 
+        textInputLayout2 = findViewById(R.id.textInputLayout2);
         lang = findViewById(R.id.lang);
         autoComplete = findViewById(R.id.autoComplete);
         imageView = findViewById(R.id.imageView);

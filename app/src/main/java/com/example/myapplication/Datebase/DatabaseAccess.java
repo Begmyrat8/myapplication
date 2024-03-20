@@ -101,7 +101,7 @@ public class DatabaseAccess {
         String sQuery = "select sum(gram_price) from list";
         c = database.rawQuery(sQuery,null);
         if (c.moveToFirst()){
-            sAmount = String.valueOf(c.getDouble(0) / 1000);
+            sAmount = String.valueOf(c.getDouble(0));
         }else {
             sAmount = "0";
         }

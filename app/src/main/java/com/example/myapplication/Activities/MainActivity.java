@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             databaseAccess.clearAllDataFromTable("category");
+                            databaseAccess.clearAllDataFromTable("list");
 
                             List = databaseAccess.getCategoryList();
                             setRecycler(List);

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue"
+    android:background="@color/white"
     tools:context=".Activities.AddIngredientsActivity">
 
     <include
@@ -19,7 +19,7 @@
         android:id="@+id/input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image"
         app:layout_constraintTop_toBottomOf="@+id/include">
@@ -29,9 +29,9 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_margin="10dp"
-            android:background="@drawable/edit_text_border"
+            android:background="@drawable/edit_text_black_border"
             android:gravity="start"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:hint="@string/title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,8 +44,9 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="10dp"
-        android:src="@drawable/baseline_add_a_white_photo"
-        android:background="@drawable/edit_text_border"
+        android:padding="5dp"
+        android:src="@drawable/baseline_add_a_photo_24"
+        android:background="@drawable/edit_text_black_border"
         app:layout_constraintBottom_toBottomOf="@+id/input_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"

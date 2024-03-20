@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue"
+    android:background="@color/white"
     tools:context=".Activities.AddIngredientsActivity">
 
     <include
@@ -19,7 +19,7 @@
         android:id="@+id/input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include">
 
@@ -28,9 +28,9 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_margin="10dp"
-            android:background="@drawable/edit_text_border"
+            android:background="@drawable/edit_text_black_border"
             android:gravity="start|center"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:hint="@string/title"
             android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,7 @@
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_margin="10dp"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/black"
         app:layout_constraintEnd_toStartOf="@+id/textInputLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/set_image">
@@ -54,11 +54,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:background="@drawable/edit_text_border"
+            android:background="@drawable/edit_text_black_border"
             android:gravity="start"
-            android:textColorHint="@color/white"
+            android:textColorHint="@color/black"
             android:inputType="numberDecimal"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -68,10 +68,10 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="150dp"
+        android:layout_width="200dp"
         android:layout_height="70dp"
         android:layout_margin="5dp"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/textInputLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textInputLayout2">
@@ -81,22 +81,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center|start"
-            android:textColor="@color/white"
-            android:background="@drawable/edit_text_border"
+            android:textColor="@color/black"
+            android:hint="gram or thing"
+            android:textColorHint="@color/black"
             android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout11"
-        android:layout_width="220dp"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
         android:layout_margin="10dp"
-        android:background="@drawable/edit_text_border"
-        android:textColorHint="@color/white"
+        android:background="@drawable/edit_text_black_border"
+        android:textColorHint="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/set_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/set_image">
+        app:layout_constraintStart_toEndOf="@+id/set_image"
+        app:layout_constraintTop_toBottomOf="@+id/input_layout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/set_price"
@@ -106,7 +108,7 @@
             android:gravity="start|center"
             android:hint="@string/price"
             android:inputType="numberDecimal"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_layout" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -114,12 +116,12 @@
 
     <ImageView
         android:id="@+id/set_image"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
         android:layout_margin="10dp"
-        android:background="@drawable/edit_text_border"
-        android:src="@drawable/baseline_add_a_white_photo"
-        app:layout_constraintEnd_toStartOf="@+id/textInputLayout11"
+        android:background="@drawable/edit_text_black_border"
+        android:padding="5dp"
+        android:src="@drawable/baseline_add_a_photo_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_layout" />
 

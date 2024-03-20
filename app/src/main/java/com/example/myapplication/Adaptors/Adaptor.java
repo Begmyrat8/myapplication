@@ -59,40 +59,42 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         String Name = list.get(position).getTitle();
         holder.title.setText(Name);
 
-        holder.kg.setText(1 + " kg ");
 
 
-        String price = String.valueOf(list.get(position).getPrice());
-        holder.price.setText(price + " TMT ");
+        double price = list.get(position).getPrice();
+        if (price == 0){
+            holder.price.setText(0 + " TMT ");
+        }else {
+            holder.price.setText(price + " TMT ");
+        }
 
-        double gram = list.get(position).getGram();
+        int gram = list.get(position).getGram();
         int thing = list.get(position).getThing();
+        double gram_price = list.get(position).getGram_price();
         if (gram == 0) {
             if (thing == 0) {
-                holder.thing.setText(" gram/thing ");
-                holder.gram.setText(0 + " gram/thing ");
-                holder.kg.setText(1 + "kg/thing");
+                holder.hint_gram.setText("gram/ " + Name);
+                holder.gram.setText(0 + " gram/ " + Name);
+                holder.hint_price.setText("kg/ " + Name);
             }else {
-                holder.thing.setText("thing");
-                holder.gram.setText(thing + " thing ");
-                holder.kg.setText(1 + "thing");
+                holder.hint_gram.setText(Name);
+                holder.gram.setText(thing + " " + Name);
+                holder.hint_price.setText("1 " + Name +"/price");
+                holder.gram_price.setText(gram_price + " TMT ");
             }
         }else {
-            if (gram >= 1000) {
-                holder.gram.setText(gram / 1000 + "kg");
-            } else {
-                holder.gram.setText(gram + " g ");
-            }
+            holder.gram.setText(gram + " g ");
+            holder.gram_price.setText(gram_price  + " TMT ");
         }
-        double gram_price = list.get(position).getGram_price();
-        holder.gram_price.setText(gram_price / 1000 + " TMT ");
+
+
 
 
 
         byte[] image =  list.get(position).getImage();
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
         if (bitmap == null){
-            holder.img.setImageResource(R.drawable.baseline_add_a_white_photo);
+            holder.img.setImageResource(R.drawable.baseline_add_a_photo_24);
         }else {
             holder.img.setImageBitmap(bitmap);
 
@@ -103,10 +105,11 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             Intent intent = new Intent(context, ChangeIngredientsActivity.class);
             intent.putExtra("id", String.valueOf(list.get(position).getId()));
             intent.putExtra("title", String.valueOf(list.get(position).getTitle()));
-            intent.putExtra("gram", String.valueOf(list.get(position).getGram()));
             intent.putExtra("price", String.valueOf(list.get(position).getPrice()));
             intent.putExtra("image", list.get(position).getImage());
             intent.putExtra("thing", String.valueOf(list.get(position).getThing()));
+            intent.putExtra("gram", String.valueOf(list.get(position).getGram()) );
+
             context.startActivity(intent);
 
 
@@ -128,7 +131,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     public static  class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       TextView title,  price, kg, gram, gram_price, thing;
+       TextView title,  price, kg, gram, gram_price, hint_gram, hint_price;
        ImageView img;
        ImageButton change_btn, delete_btn;
 
@@ -137,8 +140,8 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            thing = itemView.findViewById(R.id.hint_gram);
-            kg = itemView.findViewById(R.id.kg);
+            hint_price = itemView.findViewById(R.id.hint_price);
+            hint_gram = itemView.findViewById(R.id.hint_gram);
             title = itemView.findViewById(R.id.title_edit_text);
             price = itemView.findViewById(R.id.price);
             gram = itemView.findViewById(R.id.gram);

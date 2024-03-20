@@ -2,7 +2,9 @@ package com.example.myapplication.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -58,7 +60,7 @@ public class AddDessertActivity extends AppCompatActivity {
         imagePick();
 
         lang.setVisibility(View.INVISIBLE);
-        toolbar.setSubtitle(getString(R.string.add));
+        toolbar.setSubtitle("Add dessert");
 
         imageView.setOnClickListener(v -> {
             finish();
@@ -71,20 +73,32 @@ public class AddDessertActivity extends AppCompatActivity {
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(COL_TITLE, set_name.getText().toString());
+            if (set_name.getText().toString().isEmpty()){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Please, add title")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
 
-            try {
-                contentValues.put(COL_IMAGE, ImageViewToByte(image));
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }else {
+                try {
+                    contentValues.put(COL_IMAGE, ImageViewToByte(image));
 
-            }catch (Exception e){
-                image.setImageResource(R.drawable.baseline_add_a_white_photo);
-                contentValues.put(COL_IMAGE, String.valueOf(image));
+                } catch (Exception e) {
+                    image.setImageResource(R.drawable.baseline_add_a_photo_24);
+                    contentValues.put(COL_IMAGE, String.valueOf(image));
+                }
+
+                Long result = database.insert("category", null, contentValues);
+                if (result != null) {
+                    Toast.makeText(this, getText(R.string.saved), Toast.LENGTH_SHORT).show();
+                }
             }
-
-            Long result = database.insert("category", null, contentValues);
-            if (result != null){
-                Toast.makeText(this, getText(R.string.saved), Toast.LENGTH_SHORT).show();
-            }
-
         });
     }
     private void findView(){

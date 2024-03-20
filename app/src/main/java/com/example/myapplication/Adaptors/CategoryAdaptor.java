@@ -63,7 +63,7 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.Catego
         byte[] image =  categories.get(position).getImage();
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
         if (bitmap == null){
-            holder.categoryImage.setImageResource(R.drawable.baseline_add_a_white_photo);
+            holder.categoryImage.setImageResource(R.drawable.baseline_add_a_photo_24);
         }else {
             holder.categoryImage.setImageBitmap(bitmap);
 
