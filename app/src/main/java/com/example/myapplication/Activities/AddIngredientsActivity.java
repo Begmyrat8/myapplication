@@ -102,6 +102,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
     private void insertData (){
         add_product.setOnClickListener(view -> {
 
+            set_price.setText("");
             ContentValues contentValues = new ContentValues();
             contentValues.put(COL_TITLE, set_title.getText().toString());
             if (set_title.getText().toString().isEmpty()){
@@ -116,41 +117,37 @@ public class AddIngredientsActivity extends AppCompatActivity {
 
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
-            }else {
-                contentValues.put(COL_Price, set_price.getText().toString());
-                contentValues.put(COL_CATEGORY_ID, category_id);
-                if (set_price.getText().toString().isEmpty()) {
-                    set_price.setText("0 ");
-                    double a = parseDouble(valueOf(set_price.getText()));
-                    contentValues.put(COL_GRAM, set_gram.getText().toString());
+            }
+            contentValues.put(COL_Price, set_price.getText().toString());
+            contentValues.put(COL_CATEGORY_ID, category_id);
+            if (autoComplete.getText().toString().isEmpty()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Please, order gram or thing")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+            if (set_price.getText().toString().isEmpty()) {
+                set_price.setText("0 ");
+                double a = parseDouble(valueOf(set_price.getText()));
+                contentValues.put(COL_GRAM, set_gram.getText().toString());
+                contentValues.put(COL_GRAM_PRICE, a / 1000);
+            } else {
+                double a = parseDouble(valueOf(set_price.getText()));
+                double b = parseDouble(valueOf(set_gram.getText()));
+                if (autoComplete.getText().toString().equals("thing")) {
+                    contentValues.put("thing", set_gram.getText().toString());
+                    double c = a * b;
+                    contentValues.put(COL_GRAM_PRICE, c);
+                } else if (autoComplete.getText().toString().equals("gram")) {
                     contentValues.put(COL_GRAM_PRICE, a / 1000);
-                } else {
-                    double a = parseDouble(valueOf(set_price.getText()));
-                    double b = parseDouble(valueOf(set_gram.getText()));
-                    if (autoComplete.getText().toString().equals("thing")) {
-
-                        contentValues.put("thing", set_gram.getText().toString());
-
-                        double c = a * b;
-                        contentValues.put(COL_GRAM_PRICE, c);
-
-                    } else if (autoComplete.getText().toString().equals("gram")){
-                        contentValues.put(COL_GRAM_PRICE, a / 1000);
-                        contentValues.put(COL_GRAM, set_gram.getText().toString());
-                    }
-                }
-                if (autoComplete.getText().toString().isEmpty()){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("Please, order gram or thing")
-                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
+                    contentValues.put(COL_GRAM, set_gram.getText().toString());
                 }
                 try {
                     contentValues.put(COL_IMAGE, ImageViewToByte(set_image));
@@ -164,8 +161,8 @@ public class AddIngredientsActivity extends AppCompatActivity {
                 if (result != null) {
                     Toast.makeText(this, getText(R.string.saved), Toast.LENGTH_SHORT).show();
                 }
-
             }
+
         });
     }
     private void findView(){
