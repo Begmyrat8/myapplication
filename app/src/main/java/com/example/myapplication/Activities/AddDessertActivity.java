@@ -1,10 +1,7 @@
 package com.example.myapplication.Activities;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
-import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -35,8 +32,7 @@ public class AddDessertActivity extends AppCompatActivity {
     Button add_btn;
     String COL_TITLE = "title";
     String COL_IMAGE = "image";
-
-    ImageView imageView, image, lang;
+    ImageView imageView, image, lang, delete;
     EditText set_name;
     Toolbar toolbar;
     private SQLiteDatabase database;
@@ -59,6 +55,7 @@ public class AddDessertActivity extends AppCompatActivity {
         insertData();
         imagePick();
 
+        delete.setVisibility(View.GONE);
         lang.setVisibility(View.INVISIBLE);
         toolbar.setSubtitle("Add dessert");
 
@@ -73,19 +70,7 @@ public class AddDessertActivity extends AppCompatActivity {
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(COL_TITLE, set_name.getText().toString());
-            if (set_name.getText().toString().isEmpty()){
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Please, add title")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
 
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }else {
                 try {
                     contentValues.put(COL_IMAGE, ImageViewToByte(image));
 
@@ -98,7 +83,7 @@ public class AddDessertActivity extends AppCompatActivity {
                 if (result != null) {
                     Toast.makeText(this, getText(R.string.saved), Toast.LENGTH_SHORT).show();
                 }
-            }
+
         });
     }
     private void findView(){
@@ -108,6 +93,8 @@ public class AddDessertActivity extends AppCompatActivity {
         set_name = findViewById(R.id.set_name);
         add_btn = findViewById(R.id.set);
         image = findViewById(R.id.image);
+        delete = findViewById(R.id.delete);
+
 
     }
     private byte [] ImageViewToByte(ImageView set_image){

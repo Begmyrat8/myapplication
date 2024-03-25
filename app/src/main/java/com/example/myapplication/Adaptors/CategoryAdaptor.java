@@ -1,5 +1,6 @@
 package com.example.myapplication.Adaptors;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Activities.ChangeDessertActivity;
 import com.example.myapplication.Activities.IngredientActivity;
+import com.example.myapplication.Activities.MainActivity;
 import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.Models.CategoryModel;
@@ -44,6 +46,7 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.Catego
         return new CategoryViewHolder(categoryItems);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         databaseHelper = new DatabaseOpenHelper(context);
@@ -72,8 +75,8 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.Catego
 
             database.delete("category","id="+categories.get(position).getId(),null);
             categories.remove(position);
-            notifyDataSetChanged();
-
+            notifyItemRemoved(position);
+            ((MainActivity) context).refreshMainActivity();
 
         });
 

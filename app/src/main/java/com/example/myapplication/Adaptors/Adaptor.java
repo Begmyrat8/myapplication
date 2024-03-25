@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Activities.ChangeIngredientsActivity;
+import com.example.myapplication.Activities.IngredientActivity;
 import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.Models.Model;
@@ -33,6 +34,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
     DatabaseOpenHelper databaseHelper;
 
 
+
     public Adaptor(Context context, List<Model> list) {
         this.context = context;
         this.list = list;
@@ -45,7 +47,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         return new CategoryViewHolder(categoryItems);
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "NotifyDataSetChanged", "ResourceAsColor"})
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         databaseHelper = new DatabaseOpenHelper(context);
@@ -58,6 +60,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
         String Name = list.get(position).getTitle();
         holder.title.setText(Name);
+
 
 
 
@@ -76,6 +79,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
                 holder.hint_gram.setText("gram/ " + Name);
                 holder.gram.setText(0 + " gram/ " + Name);
                 holder.hint_price.setText("kg/ " + Name);
+                holder.gram_price.setText("0 TMT");
             }else {
                 holder.hint_gram.setText(Name);
                 holder.gram.setText(thing + " " + Name);
@@ -86,7 +90,6 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             holder.gram.setText(gram + " g ");
             holder.gram_price.setText(gram_price  + " TMT ");
         }
-
 
 
 
@@ -118,10 +121,12 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
             database.delete("list","id="+list.get(position).getId(),null);
             list.remove(position);
-            notifyDataSetChanged();
+            notifyItemRemoved(position);
 
+            ((IngredientActivity) context).refresh();
 
         });
+
     }
 
     @Override
@@ -131,7 +136,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     public static  class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       TextView title,  price, kg, gram, gram_price, hint_gram, hint_price;
+       TextView title,  price, gram, gram_price, hint_gram, hint_price;
        ImageView img;
        ImageButton change_btn, delete_btn;
 
@@ -150,5 +155,9 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             img = itemView.findViewById(R.id.avatar);
             delete_btn = itemView.findViewById(R.id.delete_btn);
         }
+    }
+
+    public boolean isEmpty() {
+        return list.isEmpty();
     }
 }

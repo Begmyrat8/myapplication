@@ -1,11 +1,6 @@
 package com.example.myapplication.Activities;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,6 +15,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.R;
@@ -33,7 +32,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
     EditText edit_title;
     String title, id;
     byte [] img;
-    ImageView imageView, edit_image, lang;
+    ImageView imageView, edit_image, lang, delete;
     Toolbar toolbar;
     Button save_btn;
     @SuppressLint("MissingInflatedId")
@@ -52,9 +51,11 @@ public class ChangeDessertActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         edit_title = findViewById(R.id.set_dessert_name);
         save_btn = findViewById(R.id.save_dessert);
+        delete = findViewById(R.id.delete);
 
         get_and_set_intent_data();
 
+        delete.setVisibility(View.GONE);
         lang.setVisibility(View.INVISIBLE);
         toolbar.setSubtitle(getString(R.string.change) + " " + title);
 
@@ -101,7 +102,11 @@ public class ChangeDessertActivity extends AppCompatActivity {
 
             edit_title.setText(title);
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
-            edit_image.setImageBitmap(bitmap);
+            if (bitmap == null){
+                edit_image.setImageResource(R.drawable.baseline_add_a_photo_24);
+            }else {
+                edit_image.setImageBitmap(bitmap);
+            }
 
         }else {
             Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();

@@ -8,10 +8,12 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,9 +31,11 @@ public class MainActivity extends AppCompatActivity {
     java.util.List<CategoryModel> List = new ArrayList<>();
     CategoryAdaptor Adaptor;
     DatabaseAccess databaseAccess;
+    ConstraintLayout empty;
     RecyclerView Recycler;
-    ImageView imageView, lang;
-    ImageButton add_button, delete;
+    ImageView imageView, lang, delete;
+    ImageButton add_button;
+    Button add_dessert;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +47,14 @@ public class MainActivity extends AppCompatActivity {
         Recycler = findViewById(R.id.category_list);
         Recycler.setHasFixedSize(true);
 
+        add_dessert = findViewById(R.id.add_dessert);
         delete = findViewById(R.id.delete);
         lang = findViewById(R.id.lang);
         imageView = findViewById(R.id.imageView);
         add_button = findViewById(R.id.add_category_btn);
+        empty = findViewById(R.id.empty);
 
-        lang.setVisibility(View.INVISIBLE);
+        lang.setVisibility(View.GONE);
         lang.setOnClickListener(v -> {
             showChangeLanguageDialog();
         });
@@ -66,6 +72,13 @@ public class MainActivity extends AppCompatActivity {
                             List = databaseAccess.getCategoryList();
                             setRecycler(List);
 
+                            if (List.isEmpty()) {
+                                Recycler.setVisibility(View.GONE);
+                                empty.setVisibility(View.VISIBLE);
+                            }else {
+                                Recycler.setVisibility(View.VISIBLE);
+                                empty.setVisibility(View.GONE);
+                            }
                         }
                     })
 
@@ -91,25 +104,22 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        add_dessert.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AddDessertActivity.class);
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        });
 
 
         List = databaseAccess.getCategoryList();
 
         setRecycler(List);
         if (List.isEmpty()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Please, add dessert")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            Intent intent = new Intent(MainActivity.this, AddDessertActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+           Recycler.setVisibility(View.GONE);
+           empty.setVisibility(View.VISIBLE);
+        }else {
+            Recycler.setVisibility(View.VISIBLE);
+            empty.setVisibility(View.GONE);
         }
     }
     private void setRecycler(List<CategoryModel> categoryList) {
@@ -135,6 +145,13 @@ public class MainActivity extends AppCompatActivity {
         List = databaseAccess.getCategoryList();
         setRecycler(List);
 
+        if (List.isEmpty()) {
+            Recycler.setVisibility(View.GONE);
+            empty.setVisibility(View.VISIBLE);
+        }else {
+            Recycler.setVisibility(View.VISIBLE);
+            empty.setVisibility(View.GONE);
+        }
     }
 
     private void showChangeLanguageDialog() {
@@ -174,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
         String language = pref.getString("My_lang","");
         setLocale(language);
     }
-
+    public void refreshMainActivity(){
+        recreate();
+    }
 
 }

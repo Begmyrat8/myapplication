@@ -4,10 +4,7 @@ import static java.lang.Double.parseDouble;
 import static java.lang.String.valueOf;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
-import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -37,7 +34,6 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Objects;
 
 public class ChangeIngredientsActivity extends AppCompatActivity {
 
@@ -49,7 +45,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     TextInputLayout textInputLayout22;
     ArrayAdapter<String> adapterItem;
     String[] item = {"gram","thing"};
-    ImageView imageView, edit_image, lang;
+    ImageView imageView, edit_image, lang, delete;
     Toolbar toolbar;
     Button save_btn;
 
@@ -76,10 +72,12 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         edit_gram = findViewById(R.id.edit_gram);
         edit_price = findViewById(R.id.edit_price);
         save_btn = findViewById(R.id.save_product);
+        delete = findViewById(R.id.delete);
 
         get_and_set_intent_data();
 
-        lang.setVisibility(View.INVISIBLE);
+        lang.setVisibility(View.GONE);
+        delete.setVisibility(View.GONE);
         toolbar.setSubtitle(getString(R.string.change));
 
         adapterItem = new ArrayAdapter<String>(this,R.layout.item_list,item);
@@ -110,68 +108,44 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
             ContentValues contentValues = new ContentValues();
             contentValues.put("title", edit_title.getText().toString());
-            if (edit_title.getText().toString().isEmpty()){
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Please, add title")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
+            contentValues.put("price", edit_price.getText().toString());
+            try {
+                contentValues.put("image", ImageViewToByte(edit_image));
 
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }else {
-                contentValues.put("price", edit_price.getText().toString());
-                if (edit_price.getText().toString().isEmpty()) {
-                    edit_price.setText("0 ");
+            } catch (Exception e) {
+                edit_image.setImageResource(R.drawable.baseline_add_a_photo_24);
+                contentValues.put("image", String.valueOf(edit_image));
+            }
+
+            if (edit_price.getText().toString().isEmpty() || edit_gram.getText().toString().isEmpty()) {
+                contentValues.put("gram", 0);
+                contentValues.put("price", 0);
+            } else {
+                double a = parseDouble(valueOf(edit_price.getText()));
+                if (autoComplete.getText().toString().equals("thing")) {
+                    contentValues.put("thing", edit_gram.getText().toString());
+                    contentValues.put("gram", 0);
+
+                    double b = parseDouble(valueOf(edit_gram.getText()));
+                    double c = a * b;
+                    contentValues.put("gram_price", c);
+
                 } else {
-                    double a = parseDouble(valueOf(edit_price.getText()));
-                    if (autoComplete.getText().toString().equals("thing")) {
-                        contentValues.put("thing", edit_gram.getText().toString());
-                        contentValues.put("gram", 0);
-
-                        double b = parseDouble(valueOf(edit_gram.getText()));
-                        double c = a * b;
-                        contentValues.put("gram_price", c);
-
-                    } else {
-                        contentValues.put("gram_price", a / 1000);
-                        contentValues.put("gram", edit_gram.getText().toString());
-                        contentValues.put("thing", 0);
-                    }
-                }
-                if (autoComplete.getText().toString().isEmpty()){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("Please, order gram or thing")
-                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                }
-
-                try {
-                    contentValues.put("image", ImageViewToByte(edit_image));
-
-                } catch (Exception e) {
-                    edit_image.setImageResource(R.drawable.baseline_add_a_photo_24);
-                    contentValues.put("image", String.valueOf(edit_image));
-                }
-
-                long result = database.update("list", contentValues, "id=" + id, null);
-                if (result == -1) {
-                    Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
-
+                    contentValues.put("gram_price", a / 1000);
+                    contentValues.put("gram", edit_gram.getText().toString());
+                    contentValues.put("thing", 0);
                 }
             }
+
+
+            long result = database.update("list", contentValues, "id=" + id, null);
+            if (result == -1) {
+                Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
+
+            }
+
         });
     }
     @SuppressLint("SetTextI18n")
@@ -188,8 +162,10 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
             if (gram.equals("0")){
                 edit_gram.setText(thing);
+                autoComplete.setText(item[0],false);
             }else {
                 edit_gram.setText(gram);
+                autoComplete.setText(item[1],true);
             }
 
 
