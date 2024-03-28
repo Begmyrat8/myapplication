@@ -9,7 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.widget.ImageView;
 
-import com.example.myapplication.Models.CategoryModel;
+import com.example.myapplication.Models.DessertModel;
 import com.example.myapplication.Models.Model;
 
 import java.io.ByteArrayOutputStream;
@@ -111,7 +111,7 @@ public class DatabaseAccess {
     }
     public String getSumGram(){
         String sAmount;
-        String sQuery = "select sum(gram) from list";
+        String sQuery = "select sum(value) from list";
         c = database.rawQuery(sQuery,null);
         if (c.moveToFirst()){
             sAmount = String.valueOf(c.getDouble(0) /1000);
@@ -143,21 +143,20 @@ public class DatabaseAccess {
         while (c.moveToNext()) {
             int id = c.getInt(0);
             String title = c.getString(1);
-            int kg = c.getInt(2);
-            double price = c.getDouble(3);
-            int gram = c.getInt(4);
-            double gram_price = c.getDouble(5);
-            byte[] image = c.getBlob(6);
-            int thing = c.getInt(7);
+            double price = c.getDouble(2);
+            String units = c.getString(3);
+            double gram_price = c.getDouble(4);
+            byte[] image = c.getBlob(5);
+            int value = c.getInt(6);
 
 
-            stringArrayList.add(new Model(id, title, kg, price, gram, gram_price, image, thing));
+            stringArrayList.add(new Model(id, title, price, units, gram_price, image, value));
         }
         return stringArrayList;
     }
-    public List<CategoryModel> getCategoryList() {
-        c = database.rawQuery("select * from category", null);
-        List<CategoryModel> stringArrayList = new ArrayList<>();
+    public List<DessertModel> getDessertList() {
+        c = database.rawQuery("select * from dessert", null);
+        List<DessertModel> stringArrayList = new ArrayList<>();
         while (c.moveToNext()) {
             int id = c.getInt(0);
             String title = c.getString(1);
@@ -166,27 +165,26 @@ public class DatabaseAccess {
             double sum = c.getDouble(4);
 
 
-            stringArrayList.add(new CategoryModel(id, title, sum, weight, image));
+            stringArrayList.add(new DessertModel(id, title, sum, weight, image));
         }
         return stringArrayList;
     }
-    public List<Model> getCategoryData(String categoryId) {
-        c = database.rawQuery("select * from list where dessert_id ='" + categoryId + "';" , null);
+    public List<Model> getDessertData(String dessertId) {
+        c = database.rawQuery("select * from list where dessert_id ='" + dessertId + "';" , null);
         List<Model> stringArrayList = new ArrayList<>();
         while (c.moveToNext()) {
             int id = c.getInt(0);
             String title = c.getString(2);
-            int kg = c.getInt(3);
-            double price = c.getDouble(4);
-            int gram = c.getInt(5);
-            double gram_price = c.getDouble(6);
-            byte[] image = c.getBlob(7);
-            int thing = c.getInt(8);
+            double price = c.getDouble(3);
+            String units = c.getString(4);
+            double gram_price = c.getDouble(5);
+            byte[] image = c.getBlob(6);
+            int value = c.getInt(7);
 
 
 
 
-            stringArrayList.add(new Model(id, title, kg, price, gram, gram_price, image, thing));
+            stringArrayList.add(new Model(id, title, price, units, gram_price, image, value));
         }
         return stringArrayList;
     }

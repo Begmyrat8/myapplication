@@ -12,7 +12,7 @@
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,7 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
-            android:layout_margin="5dp"
             app:cardCornerRadius="10dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,7 +81,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:padding="5dp"
-                    android:background="@drawable/edit_text_black_border"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/title_and_btn">
 
@@ -199,7 +197,6 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
                     android:padding="5dp"
-                    android:background="@drawable/edit_text_black_border"
                     android:importantForAccessibility="no"
                     android:src="@drawable/baseline_add_a_photo_24"
                     app:layout_constraintBottom_toBottomOf="parent"

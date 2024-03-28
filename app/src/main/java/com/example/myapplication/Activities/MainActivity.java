@@ -17,8 +17,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Adaptors.CategoryAdaptor;
-import com.example.myapplication.Models.CategoryModel;
+import com.example.myapplication.Adaptors.DessertAdaptor;
+import com.example.myapplication.Models.DessertModel;
 import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.R;
 
@@ -28,8 +28,8 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    java.util.List<CategoryModel> List = new ArrayList<>();
-    CategoryAdaptor Adaptor;
+    java.util.List<DessertModel> List = new ArrayList<>();
+    DessertAdaptor Adaptor;
     DatabaseAccess databaseAccess;
     ConstraintLayout empty;
     RecyclerView Recycler;
@@ -66,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton(getText(R.string.Yes), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            databaseAccess.clearAllDataFromTable("category");
+                            databaseAccess.clearAllDataFromTable("dessert");
                             databaseAccess.clearAllDataFromTable("list");
 
-                            List = databaseAccess.getCategoryList();
+                            List = databaseAccess.getDessertList();
                             setRecycler(List);
 
                             if (List.isEmpty()) {
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        List = databaseAccess.getCategoryList();
+        List = databaseAccess.getDessertList();
 
         setRecycler(List);
         if (List.isEmpty()) {
@@ -122,11 +122,11 @@ public class MainActivity extends AppCompatActivity {
             empty.setVisibility(View.GONE);
         }
     }
-    private void setRecycler(List<CategoryModel> categoryList) {
+    private void setRecycler(List<DessertModel> categoryList) {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this,RecyclerView.VERTICAL,false);
         Recycler.setLayoutManager(manager);
 
-        Adaptor = new CategoryAdaptor(this, categoryList);
+        Adaptor = new DessertAdaptor(this, categoryList);
         Recycler.setAdapter(Adaptor);
 
     }
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         Recycler = findViewById(R.id.category_list);
         Recycler.setHasFixedSize(true);
 
-        List = databaseAccess.getCategoryList();
+        List = databaseAccess.getDessertList();
         setRecycler(List);
 
         if (List.isEmpty()) {

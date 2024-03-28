@@ -19,7 +19,10 @@
         android:id="@+id/input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:textColorHint="@color/black"
+        app:boxStrokeColor="@color/orange"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include">
 
@@ -27,10 +30,8 @@
             android:id="@+id/set_title"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/edit_text_black_border"
-            android:gravity="start|center"
             android:textColor="@color/black"
+            android:gravity="start|center"
             android:hint="@string/title"
             android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,11 +42,15 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout2"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_margin="10dp"
+        android:hint="how much"
         android:textColorHint="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/textInputLayout"
+        app:boxStrokeColor="@color/orange"
+        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout11"
+        app:layout_constraintEnd_toStartOf="@+id/textInputLayout11"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/set_image">
 
@@ -54,11 +59,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:background="@drawable/edit_text_black_border"
-            android:gravity="start"
-            android:textColorHint="@color/black"
+            android:gravity="start|center"
             android:inputType="numberDecimal"
             android:textColor="@color/black"
+            android:textColorHint="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -67,46 +71,46 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="200dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_margin="5dp"
         android:textColorHint="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout2"
+        app:boxStrokeColor="@color/orange"
+        app:layout_constraintBottom_toBottomOf="@+id/set_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textInputLayout2">
+        app:layout_constraintStart_toEndOf="@+id/set_image"
+        app:layout_constraintTop_toBottomOf="@+id/input_layout">
 
         <AutoCompleteTextView
             android:id="@+id/autoComplete"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center|start"
+            android:hint="select unit"
+            android:inputType="none"
             android:textColor="@color/black"
-            android:hint="gram or thing"
-            android:textColorHint="@color/black"
-            android:inputType="none" />
+            android:textColorHint="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout11"
-        android:layout_width="0dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="150dp"
         android:layout_height="70dp"
         android:layout_margin="10dp"
-        android:background="@drawable/edit_text_black_border"
         android:textColorHint="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/set_image"
+        app:boxStrokeColor="@color/orange"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/set_image"
-        app:layout_constraintTop_toBottomOf="@+id/input_layout">
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/set_price"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
             android:gravity="start|center"
-            android:hint="@string/price"
+            android:hint="price"
             android:inputType="numberDecimal"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -116,14 +120,39 @@
 
     <ImageView
         android:id="@+id/set_image"
-        android:layout_width="80dp"
-        android:layout_height="100dp"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
         android:layout_margin="10dp"
         android:background="@drawable/edit_text_black_border"
-        android:padding="5dp"
+        android:padding="10dp"
         android:src="@drawable/baseline_add_a_photo_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_layout" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/buttons2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="4dp"
+        android:backgroundTint="@color/orange"
+        app:cardCornerRadius="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/set_image"
+        app:layout_constraintEnd_toStartOf="@+id/textInputLayout">
+
+
+        <ImageButton
+            android:id="@+id/add_ingredient_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/add_product"

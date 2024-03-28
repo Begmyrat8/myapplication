@@ -24,6 +24,7 @@ import com.example.myapplication.Models.Model;
 import com.example.myapplication.R;
 
 import java.util.List;
+import java.util.Objects;
 
 public class
 Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
@@ -58,11 +59,12 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
 
 
-        String Name = list.get(position).getTitle();
-        holder.title.setText(Name);
-
-
-
+        String name = list.get(position).getTitle();
+        if (name.isEmpty()){
+            holder.title.setText("Untitled");
+        }else {
+            holder.title.setText(name);
+        }
 
         double price = list.get(position).getPrice();
         if (price == 0){
@@ -71,23 +73,44 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             holder.price.setText(price + " TMT ");
         }
 
-        int gram = list.get(position).getGram();
-        int thing = list.get(position).getThing();
+        int value = list.get(position).getValue();
+        String units = list.get(position).getUnits();
         double gram_price = list.get(position).getGram_price();
-        if (gram == 0) {
-            if (thing == 0) {
-                holder.hint_gram.setText("gram/ " + Name);
-                holder.gram.setText(0 + " gram/ " + Name);
-                holder.hint_price.setText("kg/ " + Name);
+
+        if (value == 0) {
+            if (units == null) {
+                holder.hint_unit.setText("unit");
+                holder.value.setText("0");
+                holder.hint_price.setText("unit/price");
                 holder.gram_price.setText("0 TMT");
             }else {
-                holder.hint_gram.setText(Name);
-                holder.gram.setText(thing + " " + Name);
-                holder.hint_price.setText("1 " + Name +"/price");
+                if (units.equals("gram")){
+                    holder.hint_price.setText("1 kg /price");
+                }else {
+                    holder.hint_price.setText("1 " + units +"/price");
+                }
+                if (units.equals("milliliter")){
+                    holder.hint_price.setText("1 liter/price");
+                }else {
+                    holder.hint_price.setText("1 " + units +"/price");
+                }
+                holder.hint_unit.setText(units);
+                holder.value.setText(value + " " + name);
                 holder.gram_price.setText(gram_price + " TMT ");
             }
         }else {
-            holder.gram.setText(gram + " g ");
+            if (Objects.equals(units, "gram")){
+                holder.hint_price.setText("1 kg /price");
+            }else {
+                holder.hint_price.setText("1 " + units +"/price");
+            }
+            if (Objects.equals(units, "milliliter")){
+                holder.hint_price.setText("1 liter/price");
+            }else {
+                holder.hint_price.setText("1 " + units +"/price");
+            }
+            holder.hint_unit.setText(units);
+            holder.value.setText(value + units);
             holder.gram_price.setText(gram_price  + " TMT ");
         }
 
@@ -108,10 +131,10 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             Intent intent = new Intent(context, ChangeIngredientsActivity.class);
             intent.putExtra("id", String.valueOf(list.get(position).getId()));
             intent.putExtra("title", String.valueOf(list.get(position).getTitle()));
+            intent.putExtra("value", String.valueOf(list.get(position).getValue()));
             intent.putExtra("price", String.valueOf(list.get(position).getPrice()));
             intent.putExtra("image", list.get(position).getImage());
-            intent.putExtra("thing", String.valueOf(list.get(position).getThing()));
-            intent.putExtra("gram", String.valueOf(list.get(position).getGram()) );
+            intent.putExtra("units", String.valueOf(list.get(position).getUnits()));
 
             context.startActivity(intent);
 
@@ -136,7 +159,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     public static  class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       TextView title,  price, gram, gram_price, hint_gram, hint_price;
+       TextView title,  price, value, gram_price, hint_unit, hint_price;
        ImageView img;
        ImageButton change_btn, delete_btn;
 
@@ -146,10 +169,10 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             super(itemView);
 
             hint_price = itemView.findViewById(R.id.hint_price);
-            hint_gram = itemView.findViewById(R.id.hint_gram);
+            hint_unit = itemView.findViewById(R.id.hint_gram);
             title = itemView.findViewById(R.id.title_edit_text);
             price = itemView.findViewById(R.id.price);
-            gram = itemView.findViewById(R.id.gram);
+            value = itemView.findViewById(R.id.gram);
             gram_price = itemView.findViewById(R.id.gram_price);
             change_btn = itemView.findViewById(R.id.change_btn);
             img = itemView.findViewById(R.id.avatar);

@@ -1,7 +1,9 @@
 package com.example.myapplication.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -34,6 +37,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
     byte [] img;
     ImageView imageView, edit_image, lang, delete;
     Toolbar toolbar;
+    ImageButton delete_btn, change_dessert_img;
     Button save_btn;
     @SuppressLint("MissingInflatedId")
     @Override
@@ -45,6 +49,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
         DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this);
         database = dbHelper.getWritableDatabase();
 
+        delete_btn = findViewById(R.id.words_fav);
         lang = findViewById(R.id.lang);
         edit_image = findViewById(R.id.dessert_image);
         imageView = findViewById(R.id.imageView);
@@ -52,6 +57,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
         edit_title = findViewById(R.id.set_dessert_name);
         save_btn = findViewById(R.id.save_dessert);
         delete = findViewById(R.id.delete);
+        change_dessert_img = findViewById(R.id.change_dessert_img);
 
         get_and_set_intent_data();
 
@@ -62,12 +68,37 @@ public class ChangeDessertActivity extends AppCompatActivity {
         imageView.setOnClickListener(v -> {
            finish();
         });
-        edit_image.setOnClickListener(v -> {
+        change_dessert_img.setOnClickListener(v -> {
             ImagePicker.with(this)
                     .crop()	    			//Crop image(Optional), Check Customization for more option
                     .compress(1024)			//Final image size will be less than 1 MB(Optional)
                     .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
                     .start();
+        });
+
+        delete_btn.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Do you want delete?")
+                    .setCancelable(true)
+                    .setPositiveButton(getText(R.string.Yes), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            database.delete("dessert","id="+ id,null);
+                            databaseAccess.clearAllDataFromTable("list");
+                            finish();
+                        }
+                    })
+
+                    .setNegativeButton(getText(R.string.No), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+
         });
 
         save_btn.setOnClickListener(view -> {

@@ -1,12 +1,12 @@
 package com.example.myapplication.Models;
 
-public class CategoryModel {
+public class DessertModel {
     int id;
     String title;
     double sum;
     double weight;
     byte [] image;
-    public CategoryModel(int id, String title, double sum, double weight, byte[] image){
+    public DessertModel(int id, String title, double sum, double weight, byte[] image){
         this.id = id;
         this.title = title;
         this.sum = sum;

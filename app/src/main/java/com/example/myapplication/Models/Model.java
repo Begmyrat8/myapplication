@@ -5,37 +5,29 @@ public class Model {
     String title;
     int kg;
     double price;
-    int gram;
+    String units;
     double gram_price;
     byte [] image;
-    int thing;
+    int value;
 
 
-    public Model(int id, String title, int kg, double price, int gram, double gram_price, byte[] image, int thing) {
+    public Model(int id, String title, double price, String units, double gram_price, byte[] image, int value) {
         this.id = id;
         this.title = title;
-        this.kg = kg;
         this.price = price;
-        this.gram = gram;
+        this.units = units;
         this.gram_price = gram_price;
-        this.thing = thing;
+        this.value = value;
         this.image = image;
 
     }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getKg() {
-        return kg;
-    }
-
-    public void setKg(int kg) {
-        this.kg = kg;
     }
 
     public String getTitle() {
@@ -50,26 +42,9 @@ public class Model {
         return price;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public int getGram() {
-        return gram;
-    }
-
-    public void setGram_price(double gram_price) {
-        this.gram_price = gram_price;
-    }
-
     public double getGram_price() {
         return gram_price;
     }
-
-    public void setGram(int gram) {
-        this.gram = gram;
-    }
-
 
     public byte[] getImage() {
         return image;
@@ -79,11 +54,19 @@ public class Model {
         this.image = image;
     }
 
-    public void setThing(int thing) {
-        this.thing = thing;
+    public void setValue(int value) {
+        this.value = value;
     }
 
-    public int getThing() {
-        return thing;
+    public int getValue() {
+        return value;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
     }
 }

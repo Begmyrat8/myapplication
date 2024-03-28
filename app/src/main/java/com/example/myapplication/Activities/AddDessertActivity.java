@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class AddDessertActivity extends AppCompatActivity {
     ImageView imageView, image, lang, delete;
     EditText set_name;
     Toolbar toolbar;
+    ImageButton add_img;
     private SQLiteDatabase database;
     DatabaseAccess databaseAccess;
 
@@ -79,7 +81,7 @@ public class AddDessertActivity extends AppCompatActivity {
                     contentValues.put(COL_IMAGE, String.valueOf(image));
                 }
 
-                Long result = database.insert("category", null, contentValues);
+                Long result = database.insert("dessert", null, contentValues);
                 if (result != null) {
                     Toast.makeText(this, getText(R.string.saved), Toast.LENGTH_SHORT).show();
                 }
@@ -94,7 +96,7 @@ public class AddDessertActivity extends AppCompatActivity {
         add_btn = findViewById(R.id.set);
         image = findViewById(R.id.image);
         delete = findViewById(R.id.delete);
-
+        add_img = findViewById(R.id.add_dessert_img);
 
     }
     private byte [] ImageViewToByte(ImageView set_image){
@@ -106,7 +108,7 @@ public class AddDessertActivity extends AppCompatActivity {
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void imagePick(){
-        image.setOnClickListener(v -> {
+        add_img.setOnClickListener(v -> {
 
             pickFromGallery();
 

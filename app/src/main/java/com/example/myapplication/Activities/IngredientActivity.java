@@ -77,7 +77,7 @@ public class IngredientActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             databaseAccess.clearAllDataFromTable("list");
 
-                            List = databaseAccess.getCategoryData(categoryId);
+                            List = databaseAccess.getDessertData(categoryId);
                             setRecycler(List);
                             if (Adaptor.isEmpty()) {
                                 Recycler.setVisibility(View.GONE);
@@ -113,14 +113,15 @@ public class IngredientActivity extends AppCompatActivity {
 
         });
         add_ingredient.setOnClickListener(view -> {
-            Intent intent = new Intent(this, AddDessertActivity.class);
+            Intent intent = new Intent(this, AddIngredientsActivity.class);
+            intent.putExtra("categoryId", categoryId);
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
         });
 
 
 
-        List = databaseAccess.getCategoryData(categoryId);
+        List = databaseAccess.getDessertData(categoryId);
         setRecycler(List);
 
         if (Adaptor.isEmpty()) {
@@ -153,7 +154,7 @@ public class IngredientActivity extends AppCompatActivity {
         Recycler = findViewById(R.id.List);
         Recycler.setHasFixedSize(true);
 
-        List = databaseAccess.getCategoryData(categoryId);
+        List = databaseAccess.getDessertData(categoryId);
 
         setRecycler(List);
         if (Adaptor.isEmpty()) {
