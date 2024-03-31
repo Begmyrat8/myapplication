@@ -122,7 +122,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
                 contentValues.put(COL_IMAGE, ImageViewToByte(set_image));
 
             } catch (Exception e) {
-                set_image.setImageResource(R.drawable.baseline_add_a_photo_24);
+
                 contentValues.put(COL_IMAGE, valueOf(set_image));
             }
 

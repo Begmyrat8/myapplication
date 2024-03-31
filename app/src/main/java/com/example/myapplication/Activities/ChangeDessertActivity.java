@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -37,9 +38,10 @@ public class ChangeDessertActivity extends AppCompatActivity {
     byte [] img;
     ImageView imageView, edit_image, lang, delete;
     Toolbar toolbar;
+    TextView empty_change_img;
     ImageButton delete_btn, change_dessert_img;
     Button save_btn;
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
         DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this);
         database = dbHelper.getWritableDatabase();
 
+        empty_change_img = findViewById(R.id.empty_change_img);
         delete_btn = findViewById(R.id.words_fav);
         lang = findViewById(R.id.lang);
         edit_image = findViewById(R.id.dessert_image);
@@ -97,6 +100,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
                     });
 
             AlertDialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(false);
             alertDialog.show();
 
         });
@@ -134,8 +138,10 @@ public class ChangeDessertActivity extends AppCompatActivity {
             edit_title.setText(title);
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             if (bitmap == null){
-                edit_image.setImageResource(R.drawable.baseline_add_a_photo_24);
+                edit_image.setVisibility(View.INVISIBLE);
+                empty_change_img.setVisibility(View.VISIBLE);
             }else {
+                empty_change_img.setVisibility(View.INVISIBLE);
                 edit_image.setImageBitmap(bitmap);
             }
 

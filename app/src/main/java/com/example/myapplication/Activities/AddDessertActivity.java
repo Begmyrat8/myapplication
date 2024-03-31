@@ -77,7 +77,6 @@ public class AddDessertActivity extends AppCompatActivity {
                     contentValues.put(COL_IMAGE, ImageViewToByte(image));
 
                 } catch (Exception e) {
-                    image.setImageResource(R.drawable.baseline_add_a_photo_24);
                     contentValues.put(COL_IMAGE, String.valueOf(image));
                 }
 

@@ -62,15 +62,18 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
             holder.dessertTitle.setText(dessertName);
         }
 
-        holder.sum.setText(String.format("%s",databaseAccess.getSumPrice() + " TMT "));
+        holder.sum.setText(String.format("%s",databaseAccess.getSumPrice() + " TMT"));
 
-        holder.weight.setText(String.format("%s", databaseAccess.getSumGram()  + " kg "));
+        holder.weight.setText(String.format("%s", databaseAccess.getSumGram()  + " kg"));
 
         byte[] image =  desserts.get(position).getImage();
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
         if (bitmap == null){
-            holder.dessertImage.setImageResource(R.drawable.baseline_add_a_photo_24);
+            holder.dessertImage.setVisibility(View.INVISIBLE);
+            holder.empty_img.setVisibility(View.VISIBLE);
         }else {
+            holder.empty_img.setVisibility(View.INVISIBLE);
+            holder.dessertImage.setVisibility(View.VISIBLE);
             holder.dessertImage.setImageBitmap(bitmap);
 
         }
@@ -102,11 +105,12 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
         ImageView dessertImage;
         ImageButton  change_dessert;
-        TextView dessertTitle, sum, weight;
+        TextView dessertTitle, sum, weight, empty_img;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            empty_img = itemView.findViewById(R.id.empty_img);
             dessertImage = itemView.findViewById(R.id.word_lang);
             dessertTitle = itemView.findViewById(R.id.name);
             sum = itemView.findViewById(R.id.sum);

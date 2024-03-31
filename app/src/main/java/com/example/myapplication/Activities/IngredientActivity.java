@@ -97,6 +97,7 @@ public class IngredientActivity extends AppCompatActivity {
                     });
 
             AlertDialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(false);
             alertDialog.show();
 
         });

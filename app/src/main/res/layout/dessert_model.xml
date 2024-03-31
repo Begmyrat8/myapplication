@@ -29,11 +29,23 @@
                 android:layout_height="60dp"
                 android:layout_marginStart="10dp"
                 android:contentDescription="@string/todo"
+                android:visibility="invisible"
                 android:src="@drawable/baseline_add_a_photo_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/empty_img"
+                android:layout_width="45dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                android:text="No img"
+                android:textColor="@color/black"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/name"

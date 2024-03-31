@@ -74,7 +74,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        android:layout_margin="5dp"
+        android:layout_marginStart="20dp"
         android:textColorHint="@color/black"
         app:boxStrokeColor="@color/orange"
         app:layout_constraintBottom_toBottomOf="@+id/set_image"
@@ -125,17 +125,15 @@
         android:layout_margin="10dp"
         android:background="@drawable/edit_text_black_border"
         android:padding="10dp"
-        android:src="@drawable/baseline_add_a_photo_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_layout" />
 
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttons2"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="4dp"
-        android:backgroundTint="@color/orange"
-        app:cardCornerRadius="30dp"
+        android:layout_marginEnd="10dp"
+        android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/set_image"
         app:layout_constraintEnd_toStartOf="@+id/textInputLayout">
 
@@ -144,15 +142,14 @@
             android:id="@+id/add_ingredient_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
+            android:background="@drawable/baseline_add_a_photo_24"
             android:contentDescription="@string/todo"
-            android:src="@drawable/add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
-    </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/add_product"

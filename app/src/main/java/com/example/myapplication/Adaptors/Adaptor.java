@@ -120,8 +120,11 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         byte[] image =  list.get(position).getImage();
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
         if (bitmap == null){
-            holder.img.setImageResource(R.drawable.baseline_add_a_photo_24);
+            holder.img.setVisibility(View.INVISIBLE);
+            holder.empty_ingredient_img.setVisibility(View.VISIBLE);
         }else {
+            holder.img.setVisibility(View.VISIBLE);
+            holder.empty_ingredient_img.setVisibility(View.INVISIBLE);
             holder.img.setImageBitmap(bitmap);
 
         }
@@ -159,7 +162,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     public static  class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       TextView title,  price, value, gram_price, hint_unit, hint_price;
+       TextView title,  price, value, gram_price, hint_unit, hint_price, empty_ingredient_img;
        ImageView img;
        ImageButton change_btn, delete_btn;
 
@@ -177,6 +180,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             change_btn = itemView.findViewById(R.id.change_btn);
             img = itemView.findViewById(R.id.avatar);
             delete_btn = itemView.findViewById(R.id.delete_btn);
+            empty_ingredient_img = itemView.findViewById(R.id.empty_ingredients_img);
         }
     }
 
