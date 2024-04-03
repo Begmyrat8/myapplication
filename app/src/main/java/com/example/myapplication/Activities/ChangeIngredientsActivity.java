@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -50,6 +51,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     Toolbar toolbar;
     ImageButton change_ingredient_img;
     Button save_btn;
+    TextView empty_ingredient_img;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -77,6 +79,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         save_btn = findViewById(R.id.save_product);
         delete = findViewById(R.id.delete);
         change_ingredient_img = findViewById(R.id.change_ingredient_img);
+        empty_ingredient_img = findViewById(R.id.empty_ingredients_img);
 
         get_and_set_intent_data();
 
@@ -124,9 +127,9 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             contentValues.put("price", edit_price.getText().toString());
             try {
                 contentValues.put("image", ImageViewToByte(edit_image));
+                empty_ingredient_img.setVisibility(View.GONE);
 
             } catch (Exception e) {
-                edit_image.setImageResource(R.drawable.baseline_add_a_photo_24);
                 contentValues.put("image", String.valueOf(edit_image));
             }
 
@@ -212,8 +215,11 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             if (bitmap == null){
-                edit_image.setImageResource(R.drawable.baseline_add_a_photo_24);
+                edit_image.setVisibility(View.INVISIBLE);
+                empty_ingredient_img.setVisibility(View.VISIBLE);
             }else {
+                edit_image.setVisibility(View.VISIBLE);
+                empty_ingredient_img.setVisibility(View.INVISIBLE);
                 edit_image.setImageBitmap(bitmap);
             }
 

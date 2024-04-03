@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -35,6 +36,7 @@ public class AddDessertActivity extends AppCompatActivity {
     String COL_IMAGE = "image";
     ImageView imageView, image, lang, delete;
     EditText set_name;
+    TextView set_dessert_size, set_portion_size;
     Toolbar toolbar;
     ImageButton add_img;
     private SQLiteDatabase database;
@@ -72,18 +74,33 @@ public class AddDessertActivity extends AppCompatActivity {
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(COL_TITLE, set_name.getText().toString());
-
-                try {
-                    contentValues.put(COL_IMAGE, ImageViewToByte(image));
-
-                } catch (Exception e) {
-                    contentValues.put(COL_IMAGE, String.valueOf(image));
+            if (set_dessert_size.getText().toString().isEmpty() || set_portion_size.getText().toString().isEmpty()){
+                if (set_dessert_size.getText().toString().isEmpty()){
+                    contentValues.put("dessert_size", 0);
+                }else {
+                    contentValues.put("portion_size", 0);
                 }
+            }else {
+                contentValues.put("dessert_size", set_dessert_size.getText().toString());
+                contentValues.put("portion_size", set_portion_size.getText().toString());
 
-                Long result = database.insert("dessert", null, contentValues);
-                if (result != null) {
-                    Toast.makeText(this, getText(R.string.saved), Toast.LENGTH_SHORT).show();
-                }
+                double a = Double.parseDouble(String.valueOf(set_dessert_size.getText()));
+                double b = Double.parseDouble(String.valueOf(set_portion_size.getText()));
+
+                contentValues.put("portion", a / b);
+            }
+
+            try {
+                contentValues.put(COL_IMAGE, ImageViewToByte(image));
+
+            } catch (Exception e) {
+                contentValues.put(COL_IMAGE, String.valueOf(image));
+            }
+
+            Long result = database.insert("dessert", null, contentValues);
+            if (result != null) {
+                Toast.makeText(this, getText(R.string.saved), Toast.LENGTH_SHORT).show();
+            }
 
         });
     }
@@ -96,6 +113,9 @@ public class AddDessertActivity extends AppCompatActivity {
         image = findViewById(R.id.image);
         delete = findViewById(R.id.delete);
         add_img = findViewById(R.id.add_dessert_img);
+        set_dessert_size = findViewById(R.id.set_dessert_size);
+        set_portion_size = findViewById(R.id.set_portion_size);
+
 
     }
     private byte [] ImageViewToByte(ImageView set_image){

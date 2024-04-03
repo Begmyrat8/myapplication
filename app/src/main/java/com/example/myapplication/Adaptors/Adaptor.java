@@ -23,6 +23,7 @@ import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.Models.Model;
 import com.example.myapplication.R;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -56,7 +57,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
         DatabaseAccess databaseAccess = DatabaseAccess.getInstances(context.getApplicationContext());
         databaseAccess.open();
-
+        DecimalFormat decimalFormat = new DecimalFormat();
 
 
         String name = list.get(position).getTitle();
@@ -70,7 +71,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         if (price == 0){
             holder.price.setText(0 + " TMT ");
         }else {
-            holder.price.setText(price + " TMT ");
+            holder.price.setText(decimalFormat.format(price) + " TMT ");
         }
 
         int value = list.get(position).getValue();
@@ -95,8 +96,8 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
                     holder.hint_price.setText("1 " + units +"/price");
                 }
                 holder.hint_unit.setText(units);
-                holder.value.setText(value + " " + name);
-                holder.gram_price.setText(gram_price + " TMT ");
+                holder.value.setText(decimalFormat.format(value) + " " + name);
+                holder.gram_price.setText(decimalFormat.format(gram_price) + " TMT ");
             }
         }else {
             if (Objects.equals(units, "gram")){
@@ -110,8 +111,8 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
                 holder.hint_price.setText("1 " + units +"/price");
             }
             holder.hint_unit.setText(units);
-            holder.value.setText(value + units);
-            holder.gram_price.setText(gram_price  + " TMT ");
+            holder.value.setText(decimalFormat.format(value) + units);
+            holder.gram_price.setText(decimalFormat.format(gram_price)  + " TMT ");
         }
 
 
@@ -121,10 +122,10 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
         if (bitmap == null){
             holder.img.setVisibility(View.INVISIBLE);
-            holder.empty_ingredient_img.setVisibility(View.VISIBLE);
+            holder.empty_avatar.setVisibility(View.VISIBLE);
         }else {
+            holder.empty_avatar.setVisibility(View.INVISIBLE);
             holder.img.setVisibility(View.VISIBLE);
-            holder.empty_ingredient_img.setVisibility(View.INVISIBLE);
             holder.img.setImageBitmap(bitmap);
 
         }
@@ -162,7 +163,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     public static  class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       TextView title,  price, value, gram_price, hint_unit, hint_price, empty_ingredient_img;
+       TextView title,  price, value, gram_price, hint_unit, hint_price, empty_avatar;
        ImageView img;
        ImageButton change_btn, delete_btn;
 
@@ -180,7 +181,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             change_btn = itemView.findViewById(R.id.change_btn);
             img = itemView.findViewById(R.id.avatar);
             delete_btn = itemView.findViewById(R.id.delete_btn);
-            empty_ingredient_img = itemView.findViewById(R.id.empty_ingredients_img);
+            empty_avatar = itemView.findViewById(R.id.empty_avatar);
         }
     }
 

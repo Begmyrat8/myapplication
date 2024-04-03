@@ -96,9 +96,9 @@ public class DatabaseAccess {
 
         }
     }
-    public String getSumPrice(){
+    public String getSumPrice(String dessertId){
         String sAmount;
-        String sQuery = "select sum(gram_price) from list";
+        String sQuery = "select sum(gram_price) from list where dessert_id ='" + dessertId + "';";
         c = database.rawQuery(sQuery,null);
         if (c.moveToFirst()){
             sAmount = String.valueOf(c.getDouble(0));
@@ -109,9 +109,9 @@ public class DatabaseAccess {
 
         return sAmount;
     }
-    public String getSumGram(){
+    public String getSumGram(String dessertId){
         String sAmount;
-        String sQuery = "select sum(value) from list";
+        String sQuery = "select sum(value) from list where dessert_id ='" + dessertId + "';";
         c = database.rawQuery(sQuery,null);
         if (c.moveToFirst()){
             sAmount = String.valueOf(c.getDouble(0) /1000);
@@ -163,9 +163,12 @@ public class DatabaseAccess {
             byte[] image = c.getBlob(2);
             double weight = c.getDouble(3);
             double sum = c.getDouble(4);
+            double dessert_size = c.getDouble(5);
+            double portion = c.getDouble(6);
+            double portion_size = c.getDouble(8);
+            double portion_price = c.getDouble(7);
 
-
-            stringArrayList.add(new DessertModel(id, title, sum, weight, image));
+            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size,portion_price));
         }
         return stringArrayList;
     }

@@ -23,6 +23,7 @@ import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.Models.DessertModel;
 import com.example.myapplication.R;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.CategoryViewHolder> {
@@ -45,7 +46,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
         return new CategoryViewHolder(categoryItems);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         databaseHelper = new DatabaseOpenHelper(context);
@@ -53,8 +54,10 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
         DatabaseAccess databaseAccess = DatabaseAccess.getInstances(context.getApplicationContext());
         databaseAccess.open();
+        DecimalFormat decimalFormat = new DecimalFormat();
 
 
+        String id = String.valueOf(desserts.get(position).getId());
         String dessertName = desserts.get(position).getTitle();
         if (dessertName.isEmpty()){
             holder.dessertTitle.setText("Untitled");
@@ -62,12 +65,35 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
             holder.dessertTitle.setText(dessertName);
         }
 
-        holder.sum.setText(String.format("%s",databaseAccess.getSumPrice() + " TMT"));
 
-        holder.weight.setText(String.format("%s", databaseAccess.getSumGram()  + " kg"));
+
+        double sum = Double.parseDouble(String.format("%s", databaseAccess.getSumPrice(id)));
+        holder.sum.setText(decimalFormat.format(sum )+ " TMT");
+
+        double weight = Double.parseDouble(String.format("%s", databaseAccess.getSumGram(id)));
+        holder.weight.setText(decimalFormat.format(weight)  + " kg");
+
+        double portion_size = Double.parseDouble(String.valueOf(desserts.get(position).getPortion_size()));
+        holder.portion_size.setText(decimalFormat.format(portion_size) + " cm");
+
+        double portion = Double.parseDouble(String.valueOf(desserts.get(position).getPortion()));
+        holder.portion.setText(decimalFormat.format(portion) + "");
+
+        if (portion == 0 && sum == 0){
+            holder.portion_price.setText("0 TMT");
+        }else {
+            double portion_price = sum / portion;
+            holder.portion_price.setText(decimalFormat.format(portion_price) + " TMT");
+
+        }
+
+
+        double dessert_size = Double.parseDouble(String.valueOf(desserts.get(position).getDessert_size()));
+        holder.dessert_size.setText(decimalFormat.format(dessert_size) + " cm");
 
         byte[] image =  desserts.get(position).getImage();
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+
         if (bitmap == null){
             holder.dessertImage.setVisibility(View.INVISIBLE);
             holder.empty_img.setVisibility(View.VISIBLE);
@@ -84,6 +110,8 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
             intent.putExtra("id", String.valueOf(desserts.get(position).getId()));
             intent.putExtra("title", String.valueOf(desserts.get(position).getTitle()));
             intent.putExtra("image", desserts.get(position).getImage());
+            intent.putExtra("portion_size", String.valueOf(desserts.get(position).getPortion_size()));
+            intent.putExtra("dessert_size", String.valueOf(desserts.get(position).getDessert_size()));
             context.startActivity(intent);
         });
 
@@ -105,7 +133,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
         ImageView dessertImage;
         ImageButton  change_dessert;
-        TextView dessertTitle, sum, weight, empty_img;
+        TextView dessertTitle, sum, weight, empty_img, portion, portion_price, dessert_size, portion_size;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -116,6 +144,10 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
             sum = itemView.findViewById(R.id.sum);
             weight = itemView.findViewById(R.id.weight);
             change_dessert = itemView.findViewById(R.id.change_dessert);
+            portion = itemView.findViewById(R.id.portion);
+            portion_price = itemView.findViewById(R.id.portion_price);
+            dessert_size = itemView.findViewById(R.id.dessert_size);
+            portion_size = itemView.findViewById(R.id.portion_size);
         }
     }
 }

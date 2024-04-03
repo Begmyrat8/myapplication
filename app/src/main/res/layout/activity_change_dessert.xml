@@ -29,29 +29,30 @@
             android:background="@drawable/edit_text_black_border"
             android:contentDescription="@string/todo"
             android:padding="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/input_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_layout" />
 
         <TextView
             android:id="@+id/empty_change_img"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/edit_text_black_border"
+            android:gravity="center|start"
+            android:padding="5dp"
             android:text="No img"
             android:textColor="@color/black"
-            android:padding="5dp"
-            android:gravity="center|start"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="@+id/input_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_layout" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/buttons2"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginTop="65dp"
+            android:layout_marginTop="41dp"
             android:background="@android:color/white"
-            android:layout_marginEnd="3dp"
             app:layout_constraintEnd_toStartOf="@+id/input_layout"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -79,10 +80,9 @@
             android:layout_marginStart="10dp"
             android:textColorHint="@color/black"
             app:boxStrokeColor="@color/orange"
-            app:layout_constraintBottom_toBottomOf="@+id/dessert_image"
-            app:layout_constraintEnd_toStartOf="@+id/words_fav"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/dessert_image"
-            app:layout_constraintTop_toBottomOf="@+id/words_fav">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/set_dessert_name"
@@ -96,14 +96,57 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageButton
-            android:id="@+id/words_fav"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout2"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_clear_black_24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="5dp"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/orange"
+            app:layout_constraintEnd_toEndOf="@+id/input_layout"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/update_dessert_size"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="start|center"
+                android:hint="dessert size"
+                android:inputType="numberDecimal"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout3"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/orange"
+            app:layout_constraintEnd_toStartOf="@+id/input_layout2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/update_portion_size"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="start|center"
+                android:inputType="numberDecimal"
+                android:hint="portion size"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -116,4 +159,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

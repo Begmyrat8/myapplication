@@ -115,7 +115,6 @@ public class AddIngredientsActivity extends AppCompatActivity {
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(COL_TITLE, set_title.getText().toString());
-
             contentValues.put(COL_CATEGORY_ID, category_id);
 
             try {

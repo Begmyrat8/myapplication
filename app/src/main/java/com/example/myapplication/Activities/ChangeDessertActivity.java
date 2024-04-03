@@ -27,19 +27,21 @@ import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.R;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DecimalFormat;
 
 public class ChangeDessertActivity extends AppCompatActivity {
 
     SQLiteDatabase database;
-    EditText edit_title;
-    String title, id;
+    TextInputEditText edit_title, update_dessert_size, update_portion_size;
+    String title, id, dessert_size, portion_size;
     byte [] img;
     ImageView imageView, edit_image, lang, delete;
     Toolbar toolbar;
     TextView empty_change_img;
-    ImageButton delete_btn, change_dessert_img;
+    ImageButton change_dessert_img;
     Button save_btn;
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
@@ -52,7 +54,6 @@ public class ChangeDessertActivity extends AppCompatActivity {
         database = dbHelper.getWritableDatabase();
 
         empty_change_img = findViewById(R.id.empty_change_img);
-        delete_btn = findViewById(R.id.words_fav);
         lang = findViewById(R.id.lang);
         edit_image = findViewById(R.id.dessert_image);
         imageView = findViewById(R.id.imageView);
@@ -61,10 +62,11 @@ public class ChangeDessertActivity extends AppCompatActivity {
         save_btn = findViewById(R.id.save_dessert);
         delete = findViewById(R.id.delete);
         change_dessert_img = findViewById(R.id.change_dessert_img);
+        update_dessert_size = findViewById(R.id.update_dessert_size);
+        update_portion_size = findViewById(R.id.update_portion_size);
 
         get_and_set_intent_data();
 
-        delete.setVisibility(View.GONE);
         lang.setVisibility(View.INVISIBLE);
         toolbar.setSubtitle(getString(R.string.change) + " " + title);
 
@@ -79,7 +81,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
                     .start();
         });
 
-        delete_btn.setOnClickListener(v -> {
+        delete.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Do you want delete?")
                     .setCancelable(true)
@@ -109,15 +111,31 @@ public class ChangeDessertActivity extends AppCompatActivity {
 
             ContentValues contentValues = new ContentValues();
             contentValues.put("title", edit_title.getText().toString());
+            if (update_dessert_size.getText().toString().isEmpty() || update_portion_size.getText().toString().isEmpty()){
+                if (update_dessert_size.getText().toString().isEmpty()){
+                    contentValues.put("dessert_size", 0);
+                }else {
+                    contentValues.put("portion_size", 0);
+                }
+            }else {
+                contentValues.put("dessert_size", update_dessert_size.getText().toString());
+                contentValues.put("portion_size", update_portion_size.getText().toString());
+
+                double a = Double.parseDouble(String.valueOf(update_dessert_size.getText()));
+                double b = Double.parseDouble(String.valueOf(update_portion_size.getText()));
+
+                contentValues.put("portion", a / b);
+            }
+
             try {
                 contentValues.put("image", ImageViewToByte(edit_image));
+                empty_change_img.setVisibility(View.GONE);
 
             }catch (Exception e){
-                edit_image.setImageResource(R.drawable.baseline_add_a_photo_24);
                 contentValues.put("image", String.valueOf(edit_image));
             }
 
-            long result = database.update("list", contentValues,"id="+id ,null);
+            long result = database.update("dessert", contentValues,"id="+id ,null);
             if (result == -1){
                 Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
             }else {
@@ -128,19 +146,26 @@ public class ChangeDessertActivity extends AppCompatActivity {
     }
     void get_and_set_intent_data(){
 
-        if (getIntent().hasExtra("id") && getIntent().hasExtra("title")  && getIntent().hasExtra("image")){
+        if (getIntent().hasExtra("id") && getIntent().hasExtra("title")  && getIntent().hasExtra("image") && getIntent().hasExtra("portion_size") && getIntent().hasExtra("dessert_size")){
+
+            DecimalFormat decimalFormat = new DecimalFormat();
 
             id = getIntent().getStringExtra("id");
             title = getIntent().getStringExtra("title");
             img = getIntent().getByteArrayExtra("image");
-
+            portion_size = getIntent().getStringExtra("portion_size");
+            dessert_size = getIntent().getStringExtra("dessert_size");
 
             edit_title.setText(title);
+            update_portion_size.setText(portion_size);
+            update_dessert_size.setText(dessert_size);
+
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             if (bitmap == null){
                 edit_image.setVisibility(View.INVISIBLE);
                 empty_change_img.setVisibility(View.VISIBLE);
             }else {
+                edit_image.setVisibility(View.VISIBLE);
                 empty_change_img.setVisibility(View.INVISIBLE);
                 edit_image.setImageBitmap(bitmap);
             }
