@@ -111,7 +111,7 @@ public class DatabaseAccess {
     }
     public String getSumGram(String dessertId){
         String sAmount;
-        String sQuery = "select sum(value) from list where dessert_id ='" + dessertId + "';";
+        String sQuery = "select sum(value) from list where dessert_id ='" + dessertId + "' and units != 'piece'";
         c = database.rawQuery(sQuery,null);
         if (c.moveToFirst()){
             sAmount = String.valueOf(c.getDouble(0) /1000);

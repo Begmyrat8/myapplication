@@ -27,39 +27,39 @@
                 android:id="@+id/name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_margin="10dp"
                 android:gravity="center_vertical|start"
                 android:text="@string/name"
                 android:textColor="@color/black"
                 android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/word_lang"
                 app:layout_constraintEnd_toStartOf="@+id/change_dessert"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/word_lang"
+                app:layout_constraintTop_toTopOf="@+id/word_lang" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/result"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/word_lang"
-                app:layout_constraintTop_toBottomOf="@+id/name">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/word_lang">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout2"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:padding="5dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
                         android:id="@+id/sum"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="75dp"
+                        android:layout_height="19dp"
                         android:background="@android:color/transparent"
                         android:gravity="end"
                         android:text="1000 TMT"
@@ -71,7 +71,7 @@
                     <TextView
                         android:id="@+id/weight"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="19dp"
                         android:background="@android:color/transparent"
                         android:gravity="end"
                         android:text="0 kg"
@@ -84,7 +84,7 @@
                     <TextView
                         android:id="@+id/dessert_size"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="19dp"
                         android:background="@android:color/transparent"
                         android:gravity="end"
                         android:text="0 sm"
@@ -131,17 +131,17 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
-                    android:layout_height="70dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:padding="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
                         android:id="@+id/portion"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="19dp"
                         android:background="@android:color/transparent"
                         android:gravity="end"
                         android:text="0"
@@ -153,7 +153,7 @@
                     <TextView
                         android:id="@+id/portion_size"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="19dp"
                         android:layout_marginTop="5dp"
                         android:background="@android:color/transparent"
                         android:gravity="end"
@@ -167,7 +167,7 @@
                     <TextView
                         android:id="@+id/portion_price"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="19dp"
                         android:background="@android:color/transparent"
                         android:gravity="end"
                         android:text="1000 TMT"
@@ -226,32 +226,31 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/todo"
                 android:src="@drawable/edit"
-                app:layout_constraintBottom_toBottomOf="@+id/name"
+                app:layout_constraintBottom_toTopOf="@+id/name"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/name" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/word_lang"
-                android:layout_width="75dp"
-                android:layout_height="0dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:contentDescription="@string/todo"
-                android:src="@drawable/baseline_add_a_photo_24"
+                android:background="@drawable/edit_text_black_border"
                 android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/result"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/result" />
+                app:layout_constraintStart_toStartOf="@+id/result"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/empty_img"
-                android:layout_width="75dp"
-                android:layout_height="0dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/edit_text_black_border"
                 android:gravity="center"
                 android:text="No img"
                 android:textColor="@color/black"
                 android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/result"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/result" />
+                app:layout_constraintStart_toStartOf="@+id/result"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

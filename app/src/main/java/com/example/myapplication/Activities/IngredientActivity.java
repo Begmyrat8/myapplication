@@ -5,6 +5,7 @@ import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Adaptors.Adaptor;
 import com.example.myapplication.Datebase.DatabaseAccess;
+import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.Models.Model;
 import com.example.myapplication.R;
 
@@ -32,13 +34,13 @@ public class IngredientActivity extends AppCompatActivity {
     DatabaseAccess databaseAccess;
     RecyclerView Recycler;
     ConstraintLayout empty;
-    String categoryName;
-    String categoryId;
+    String dessertName;
+    String dessertId;
     Toolbar toolbar;
     ImageView lang, imageView, delete;
     ImageButton add_button;
     Button add_ingredient;
-
+    SQLiteDatabase database;
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,8 @@ public class IngredientActivity extends AppCompatActivity {
 
         databaseAccess = DatabaseAccess.getInstances(this.getApplicationContext());
         databaseAccess.open();
+        DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this);
+        database = dbHelper.getWritableDatabase();
 
         Recycler = findViewById(R.id.List);
         Recycler.setHasFixedSize(true);
@@ -64,8 +68,8 @@ public class IngredientActivity extends AppCompatActivity {
             finish();
         });
 
-        categoryName = getIntent().getStringExtra("dessertName");
-        categoryId = getIntent().getStringExtra("dessertId");
+        dessertName = getIntent().getStringExtra("dessertName");
+        dessertId = getIntent().getStringExtra("dessertId");
 
         delete.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -75,9 +79,9 @@ public class IngredientActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            databaseAccess.clearAllDataFromTable("list");
+                            database.delete("list","dessert_id=" + dessertId, null);
 
-                            List = databaseAccess.getDessertData(categoryId);
+                            List = databaseAccess.getDessertData(dessertId);
                             setRecycler(List);
                             if (Adaptor.isEmpty()) {
                                 Recycler.setVisibility(View.GONE);
@@ -102,27 +106,27 @@ public class IngredientActivity extends AppCompatActivity {
 
         });
 
-        toolbar.setSubtitle("Ingredients for " + categoryName);
+        toolbar.setSubtitle("Ingredients for " + dessertName);
 
 
         add_button.setOnClickListener(view -> {
 
             Intent intent = new Intent(this, AddIngredientsActivity.class);
-            intent.putExtra("categoryId", categoryId);
+            intent.putExtra("dessertId", dessertId);
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
 
         });
         add_ingredient.setOnClickListener(view -> {
             Intent intent = new Intent(this, AddIngredientsActivity.class);
-            intent.putExtra("categoryId", categoryId);
+            intent.putExtra("dessertId", dessertId);
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
         });
 
 
 
-        List = databaseAccess.getDessertData(categoryId);
+        List = databaseAccess.getDessertData(dessertId);
         setRecycler(List);
 
         if (Adaptor.isEmpty()) {
@@ -155,7 +159,7 @@ public class IngredientActivity extends AppCompatActivity {
         Recycler = findViewById(R.id.List);
         Recycler.setHasFixedSize(true);
 
-        List = databaseAccess.getDessertData(categoryId);
+        List = databaseAccess.getDessertData(dessertId);
 
         setRecycler(List);
         if (Adaptor.isEmpty()) {

@@ -172,7 +172,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
                 Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
-
+                finish();
             }
 
         });

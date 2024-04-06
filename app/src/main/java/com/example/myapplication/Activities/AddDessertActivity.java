@@ -100,6 +100,7 @@ public class AddDessertActivity extends AppCompatActivity {
             Long result = database.insert("dessert", null, contentValues);
             if (result != null) {
                 Toast.makeText(this, getText(R.string.saved), Toast.LENGTH_SHORT).show();
+                finish();
             }
 
         });

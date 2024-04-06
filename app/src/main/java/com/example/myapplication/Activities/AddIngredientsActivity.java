@@ -65,7 +65,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_ingredients);
 
 
-        category_id = getIntent().getStringExtra("categoryId");
+        category_id = getIntent().getStringExtra("dessertId");
 
         databaseAccess = DatabaseAccess.getInstances(this.getApplicationContext());
         databaseAccess.open();
@@ -173,6 +173,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
             Long result = database.insert("list", null, contentValues);
             if (result != null) {
                 Toast.makeText(this, getText(R.string.saved), Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
