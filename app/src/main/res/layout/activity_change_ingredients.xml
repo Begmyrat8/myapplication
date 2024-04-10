@@ -99,7 +99,7 @@
         android:textColorHint="@color/black"
         app:boxStrokeColor="@color/orange"
         app:layout_constraintBottom_toBottomOf="@+id/buttons2"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/input_layout"
         app:layout_constraintStart_toEndOf="@+id/edit_image"
         app:layout_constraintTop_toBottomOf="@+id/input_layout">
 
@@ -115,22 +115,9 @@
 
     <ImageView
         android:id="@+id/edit_image"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="80dp"
-        android:padding="10dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/edit_text_black_border"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_layout" />
-
-    <TextView
-        android:id="@+id/empty_ingredients_img"
-        android:layout_width="100dp"
-        android:layout_height="80dp"
-        android:padding="10dp"
-        android:text="No img"
-        android:gravity="center"
-        android:textColor="@color/black"
+        android:padding="5dp"
         android:layout_margin="10dp"
         android:background="@drawable/edit_text_black_border"
         app:layout_constraintStart_toStartOf="parent"

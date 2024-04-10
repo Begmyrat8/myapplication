@@ -1,7 +1,6 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="20dp"
@@ -26,7 +25,7 @@
             <TextView
                 android:id="@+id/name"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_margin="10dp"
                 android:gravity="center_vertical|start"
                 android:text="@string/name"
@@ -226,7 +225,6 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/todo"
                 android:src="@drawable/edit"
-                app:layout_constraintBottom_toTopOf="@+id/name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -234,23 +232,25 @@
                 android:id="@+id/word_lang"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:contentDescription="@string/todo"
                 android:background="@drawable/edit_text_black_border"
+                android:contentDescription="@string/todo"
+                android:padding="3dp"
                 android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="@+id/result"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/change_dessert" />
 
             <TextView
                 android:id="@+id/empty_img"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:padding="3dp"
                 android:background="@drawable/edit_text_black_border"
                 android:gravity="center"
                 android:text="No img"
                 android:textColor="@color/black"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@+id/result"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/change_dessert" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

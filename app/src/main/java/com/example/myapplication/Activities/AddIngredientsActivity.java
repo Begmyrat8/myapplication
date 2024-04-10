@@ -6,6 +6,7 @@ import static java.lang.String.valueOf;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -112,68 +113,13 @@ public class AddIngredientsActivity extends AppCompatActivity {
     }
     private void insertData (){
         add_product.setOnClickListener(view -> {
+            boolean inserted = insertTitleIfNotExists(set_title.getText().toString());
 
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(COL_TITLE, set_title.getText().toString());
-            contentValues.put(COL_CATEGORY_ID, category_id);
-
-            try {
-                contentValues.put(COL_IMAGE, ImageViewToByte(set_image));
-
-            } catch (Exception e) {
-
-                contentValues.put(COL_IMAGE, valueOf(set_image));
-            }
-
-            if (set_price.getText().toString().isEmpty() || set_value.getText().toString().isEmpty()){
-
-                if (set_price.getText().toString().isEmpty()){
-                    contentValues.put(COL_PRICE, 0);
-                }else {
-                    contentValues.put(COL_PRICE, set_price.getText().toString());
-                }
-                if (set_value.getText().toString().isEmpty()){
-                    contentValues.put(COL_VALUE, 0);
-                }else {
-                    contentValues.put(COL_VALUE, set_value.getText().toString());
-                }
-                if (autoComplete.getText().toString().equals("piece")) {
-                    contentValues.put(COL_UNIT, item[1]);
-
-                } else if (autoComplete.getText().toString().equals("gram")){
-                    contentValues.put(COL_UNIT, item[0]);
-                }else if (autoComplete.getText().toString().equals("milliliter")){
-                    contentValues.put(COL_UNIT, item[2]);
-                }
-            }else {
-                contentValues.put(COL_PRICE, set_price.getText().toString());
-                contentValues.put(COL_VALUE, set_value.getText().toString());
-                double a = parseDouble(valueOf(set_price.getText()));
-                double b = parseDouble(valueOf(set_value.getText()));
-                double c = a * b;
-                if (autoComplete.getText().toString().equals("piece")) {
-                    contentValues.put(COL_GRAM_PRICE, c);
-                    contentValues.put(COL_UNIT, item[1]);
-
-                } else if (autoComplete.getText().toString().equals("gram")){
-                    double v = b /1000;
-                    double r = v * a ;
-                    contentValues.put(COL_GRAM_PRICE, r);
-                    contentValues.put(COL_UNIT, item[0]);
-                }else if (autoComplete.getText().toString().equals("milliliter")){
-                    double v = b /1000;
-                    double r = v * a ;
-                    contentValues.put(COL_GRAM_PRICE, r);
-                    contentValues.put(COL_UNIT, item[2]);
-                }
-            }
-
-
-
-            Long result = database.insert("list", null, contentValues);
-            if (result != null) {
-                Toast.makeText(this, getText(R.string.saved), Toast.LENGTH_SHORT).show();
+            if(inserted) {
+                Toast.makeText(this, "Save successfully", Toast.LENGTH_SHORT).show();
                 finish();
+            } else {
+                Toast.makeText(this, "Ingredient already exists", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -215,9 +161,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
 
     private void pickFromGallery() {
         ImagePicker.with(this)
-                .crop()	    			//Crop image(Optional), Check Customization for more option
-                .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                .crop(1f,1f)
                 .start();
 
     }
@@ -228,6 +172,77 @@ public class AddIngredientsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Uri uri = data.getData();
         set_image.setImageURI(uri);
+    }
+    private boolean insertTitleIfNotExists(String title) {
+        // Check if the title exists in the database
+        Cursor cursor = database.rawQuery("SELECT * FROM " + "dessert" + " WHERE " + "title" + " = ?", new String[]{title});
+        if (cursor.getCount() > 0) {
+            cursor.close();
+            return false; // Title already exists
+        }
+
+        // Insert
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_TITLE, set_title.getText().toString());
+        contentValues.put(COL_CATEGORY_ID, category_id);
+
+        try {
+            contentValues.put(COL_IMAGE, ImageViewToByte(set_image));
+
+        } catch (Exception e) {
+
+            contentValues.put(COL_IMAGE, valueOf(set_image));
+        }
+
+        if (set_price.getText().toString().isEmpty() || set_value.getText().toString().isEmpty()){
+
+            if (set_price.getText().toString().isEmpty()){
+                contentValues.put(COL_PRICE, 0);
+            }else {
+                contentValues.put(COL_PRICE, set_price.getText().toString());
+            }
+            if (set_value.getText().toString().isEmpty()){
+                contentValues.put(COL_VALUE, 0);
+            }else {
+                contentValues.put(COL_VALUE, set_value.getText().toString());
+            }
+            if (autoComplete.getText().toString().equals("piece")) {
+                contentValues.put(COL_UNIT, item[1]);
+
+            } else if (autoComplete.getText().toString().equals("gram")){
+                contentValues.put(COL_UNIT, item[0]);
+            }else if (autoComplete.getText().toString().equals("milliliter")){
+                contentValues.put(COL_UNIT, item[2]);
+            }
+        }else {
+            contentValues.put(COL_PRICE, set_price.getText().toString());
+            contentValues.put(COL_VALUE, set_value.getText().toString());
+            double a = parseDouble(valueOf(set_price.getText()));
+            double b = parseDouble(valueOf(set_value.getText()));
+            double c = a * b;
+            if (autoComplete.getText().toString().equals("piece")) {
+                contentValues.put(COL_GRAM_PRICE, c);
+                contentValues.put(COL_UNIT, item[1]);
+
+            } else if (autoComplete.getText().toString().equals("gram")){
+                double v = b /1000;
+                double r = v * a ;
+                contentValues.put(COL_GRAM_PRICE, r);
+                contentValues.put(COL_UNIT, item[0]);
+            }else if (autoComplete.getText().toString().equals("milliliter")){
+                double v = b /1000;
+                double r = v * a ;
+                contentValues.put(COL_GRAM_PRICE, r);
+                contentValues.put(COL_UNIT, item[2]);
+            }
+        }
+
+
+
+        database.insert("list", null, contentValues);
+
+        cursor.close();
+        return true; // Title inserted successfully
     }
 
 }

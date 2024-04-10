@@ -3,6 +3,7 @@ package com.example.myapplication.Activities;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -71,36 +72,13 @@ public class AddDessertActivity extends AppCompatActivity {
     }
     private void insertData (){
         add_btn.setOnClickListener(view -> {
+            boolean inserted = insertTitleIfNotExists(set_name.getText().toString());
 
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(COL_TITLE, set_name.getText().toString());
-            if (set_dessert_size.getText().toString().isEmpty() || set_portion_size.getText().toString().isEmpty()){
-                if (set_dessert_size.getText().toString().isEmpty()){
-                    contentValues.put("dessert_size", 0);
-                }else {
-                    contentValues.put("portion_size", 0);
-                }
-            }else {
-                contentValues.put("dessert_size", set_dessert_size.getText().toString());
-                contentValues.put("portion_size", set_portion_size.getText().toString());
-
-                double a = Double.parseDouble(String.valueOf(set_dessert_size.getText()));
-                double b = Double.parseDouble(String.valueOf(set_portion_size.getText()));
-
-                contentValues.put("portion", a / b);
-            }
-
-            try {
-                contentValues.put(COL_IMAGE, ImageViewToByte(image));
-
-            } catch (Exception e) {
-                contentValues.put(COL_IMAGE, String.valueOf(image));
-            }
-
-            Long result = database.insert("dessert", null, contentValues);
-            if (result != null) {
-                Toast.makeText(this, getText(R.string.saved), Toast.LENGTH_SHORT).show();
+            if(inserted) {
+                Toast.makeText(this, "Save successfully", Toast.LENGTH_SHORT).show();
                 finish();
+            } else {
+                Toast.makeText(this, "Dessert already exists", Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -139,9 +117,7 @@ public class AddDessertActivity extends AppCompatActivity {
 
     private void pickFromGallery() {
         ImagePicker.with(this)
-                .crop()	    			//Crop image(Optional), Check Customization for more option
-                .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                .crop(1f, 1f)
                 .start();
 
     }
@@ -153,5 +129,43 @@ public class AddDessertActivity extends AppCompatActivity {
         Uri uri = data.getData();
         image.setImageURI(uri);
     }
+    private boolean insertTitleIfNotExists(String title) {
+        // Check if the title exists in the database
+        Cursor cursor = database.rawQuery("SELECT * FROM " + "dessert" + " WHERE " + "title" + " = ?", new String[]{title});
+        if (cursor.getCount() > 0) {
+            cursor.close();
+            return false; // Title already exists
+        }
 
+        // Insert the title
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_TITLE, set_name.getText().toString());
+        if (set_dessert_size.getText().toString().isEmpty() || set_portion_size.getText().toString().isEmpty()){
+            if (set_dessert_size.getText().toString().isEmpty()){
+                contentValues.put("dessert_size", 0);
+            }else {
+                contentValues.put("portion_size", 0);
+            }
+        }else {
+            contentValues.put("dessert_size", set_dessert_size.getText().toString());
+            contentValues.put("portion_size", set_portion_size.getText().toString());
+
+            double a = Double.parseDouble(String.valueOf(set_dessert_size.getText()));
+            double b = Double.parseDouble(String.valueOf(set_portion_size.getText()));
+
+            contentValues.put("portion", a / b);
+        }
+
+        try {
+            contentValues.put(COL_IMAGE, ImageViewToByte(image));
+
+        } catch (Exception e) {
+            contentValues.put(COL_IMAGE, String.valueOf(image));
+        }
+
+        database.insert("dessert", null, contentValues);
+
+        cursor.close();
+        return true; // Title inserted successfully
+    }
 }

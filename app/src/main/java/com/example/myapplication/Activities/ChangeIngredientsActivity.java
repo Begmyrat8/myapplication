@@ -51,7 +51,6 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     Toolbar toolbar;
     ImageButton change_ingredient_img;
     Button save_btn;
-    TextView empty_ingredient_img;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -79,7 +78,6 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         save_btn = findViewById(R.id.save_product);
         delete = findViewById(R.id.delete);
         change_ingredient_img = findViewById(R.id.change_ingredient_img);
-        empty_ingredient_img = findViewById(R.id.empty_ingredients_img);
 
         get_and_set_intent_data();
 
@@ -113,9 +111,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
         change_ingredient_img.setOnClickListener(v -> {
             ImagePicker.with(this)
-                    .crop()	    			//Crop image(Optional), Check Customization for more option
-                    .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                    .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                    .crop(1f, 1f)
                     .start();
         });
 
@@ -127,7 +123,6 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             contentValues.put("price", edit_price.getText().toString());
             try {
                 contentValues.put("image", ImageViewToByte(edit_image));
-                empty_ingredient_img.setVisibility(View.GONE);
 
             } catch (Exception e) {
                 contentValues.put("image", String.valueOf(edit_image));
@@ -200,7 +195,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
                 }else {
                     textInputLayout22.setHint("how much " + item[2]);
-                    edit_value.setText(units);
+                    edit_value.setText(value);
                     autoComplete.setText(item[2], false);
                 }
             }else{
@@ -214,14 +209,11 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             edit_price.setText(price);
 
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
-            if (bitmap == null){
-                edit_image.setVisibility(View.INVISIBLE);
-                empty_ingredient_img.setVisibility(View.VISIBLE);
-            }else {
-                edit_image.setVisibility(View.VISIBLE);
-                empty_ingredient_img.setVisibility(View.INVISIBLE);
+            if (bitmap != null){
                 edit_image.setImageBitmap(bitmap);
             }
+
+
 
         }else {
             Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();

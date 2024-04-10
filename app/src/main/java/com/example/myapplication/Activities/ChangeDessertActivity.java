@@ -39,7 +39,6 @@ public class ChangeDessertActivity extends AppCompatActivity {
     byte [] img;
     ImageView imageView, edit_image, lang, delete;
     Toolbar toolbar;
-    TextView empty_change_img;
     ImageButton change_dessert_img;
     Button save_btn;
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
@@ -51,8 +50,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
         databaseAccess.open();
         DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this);
         database = dbHelper.getWritableDatabase();
-
-        empty_change_img = findViewById(R.id.empty_change_img);
+        
         lang = findViewById(R.id.lang);
         edit_image = findViewById(R.id.dessert_image);
         imageView = findViewById(R.id.imageView);
@@ -74,9 +72,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
         });
         change_dessert_img.setOnClickListener(v -> {
             ImagePicker.with(this)
-                    .crop()	    			//Crop image(Optional), Check Customization for more option
-                    .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                    .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                    .crop(1f, 1f)
                     .start();
         });
 
@@ -128,7 +124,6 @@ public class ChangeDessertActivity extends AppCompatActivity {
 
             try {
                 contentValues.put("image", ImageViewToByte(edit_image));
-                empty_change_img.setVisibility(View.GONE);
 
             }catch (Exception e){
                 contentValues.put("image", String.valueOf(edit_image));
@@ -160,12 +155,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
             update_dessert_size.setText(dessert_size);
 
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
-            if (bitmap == null){
-                edit_image.setVisibility(View.INVISIBLE);
-                empty_change_img.setVisibility(View.VISIBLE);
-            }else {
-                edit_image.setVisibility(View.VISIBLE);
-                empty_change_img.setVisibility(View.INVISIBLE);
+            if (bitmap != null){
                 edit_image.setImageBitmap(bitmap);
             }
 

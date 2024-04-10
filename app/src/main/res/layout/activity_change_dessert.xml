@@ -33,18 +33,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/input_layout" />
 
-        <TextView
-            android:id="@+id/empty_change_img"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/edit_text_black_border"
-            android:gravity="center|start"
-            android:padding="5dp"
-            android:text="No img"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/input_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/input_layout" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
