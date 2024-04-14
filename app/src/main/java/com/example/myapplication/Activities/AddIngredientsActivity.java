@@ -20,6 +20,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -32,7 +33,6 @@ import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.R;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayOutputStream;
 
@@ -49,9 +49,10 @@ public class AddIngredientsActivity extends AppCompatActivity {
     String category_id;
     ImageView imageView, set_image, lang, delete;
     TextInputEditText set_title, set_value, set_price;
-    TextInputLayout textInputLayout2, textInputLayout11;
+    TextView  textInputLayout11;
     AutoCompleteTextView autoComplete;
     ArrayAdapter<String> adapterItem;
+    TextView textview7;
     String[] item = {"gram","piece","milliliter"};
     Toolbar toolbar;
     ImageButton add_ingredient_img;
@@ -95,15 +96,15 @@ public class AddIngredientsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                textInputLayout2.setHint("how much " + item);
+                textview7.setText("how much " + item);
                 if (autoComplete.getText().toString().equals("gram")){
-                    textInputLayout11.setHint("1 kg price");
+                    textInputLayout11.setText("1 kg price");
                 }
                 if (autoComplete.getText().toString().equals("milliliter")){
-                    textInputLayout11.setHint("1 liter price");
+                    textInputLayout11.setText("1 liter price");
                 }
                 if (autoComplete.getText().toString().equals("piece")){
-                    textInputLayout11.setHint("1 piece price");
+                    textInputLayout11.setText("1 piece price");
                 }
             }
         });
@@ -125,8 +126,8 @@ public class AddIngredientsActivity extends AppCompatActivity {
     }
     private void findView(){
 
-        textInputLayout11 = findViewById(R.id.textInputLayout11);
-        textInputLayout2 = findViewById(R.id.textInputLayout2);
+        textInputLayout11 = findViewById(R.id.textView99);
+        textview7 = findViewById(R.id.textView7);
         lang = findViewById(R.id.lang);
         autoComplete = findViewById(R.id.autoComplete);
         imageView = findViewById(R.id.imageView);
@@ -175,7 +176,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
     }
     private boolean insertTitleIfNotExists(String title) {
         // Check if the title exists in the database
-        Cursor cursor = database.rawQuery("SELECT * FROM " + "dessert" + " WHERE " + "title" + " = ?", new String[]{title});
+        Cursor cursor = database.rawQuery("SELECT * FROM " + "list" + " WHERE " + "title" + " = ?", new String[]{title});
         if (cursor.getCount() > 0) {
             cursor.close();
             return false; // Title already exists

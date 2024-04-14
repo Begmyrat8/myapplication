@@ -13,53 +13,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/input_layout"
+        app:layout_constraintTop_toBottomOf="@+id/edit_image" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/black"
         android:layout_margin="10dp"
+        android:textColorHint="@color/black"
         app:boxStrokeColor="@color/orange"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include">
+        app:layout_constraintTop_toBottomOf="@+id/textView6">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_title"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:gravity="start|center"
+            android:inputType="text"
             android:textColor="@color/black"
-            android:hint="@string/title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        android:layout_width="150dp"
-        android:layout_height="70dp"
-        android:layout_margin="10dp"
-        android:textColorHint="@color/black"
-        app:boxStrokeColor="@color/orange"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_price"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="start|center"
-            android:hint="@string/price"
-            android:inputType="numberDecimal"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/input_layout" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/textView77"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="How much"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout22"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout11" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout22"
@@ -67,21 +63,19 @@
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_margin="10dp"
-        android:hint="how much"
         android:textColorHint="@color/black"
         app:boxStrokeColor="@color/orange"
-        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
-        app:layout_constraintEnd_toStartOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_image">
+        app:layout_constraintTop_toBottomOf="@+id/textView77">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_gram"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:gravity="center|start"
-            android:inputType="numberDecimal"
+            android:gravity="start|center"
+            android:inputType="numberSigned"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -90,48 +84,93 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Select unit"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/input_layout" />
+
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout3"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:id="@+id/textInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        android:layout_marginStart="20dp"
+        android:layout_margin="10dp"
         android:textColorHint="@color/black"
         app:boxStrokeColor="@color/orange"
-        app:layout_constraintBottom_toBottomOf="@+id/buttons2"
-        app:layout_constraintEnd_toEndOf="@+id/input_layout"
-        app:layout_constraintStart_toEndOf="@+id/edit_image"
-        app:layout_constraintTop_toBottomOf="@+id/input_layout">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8">
 
         <AutoCompleteTextView
             android:id="@+id/autoComplete2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="select unit"
+            android:gravity="center|start"
             android:inputType="none"
             android:textColor="@color/black"
             android:textColorHint="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Price"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout11"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout11"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_margin="10dp"
+        android:textColorHint="@color/black"
+        app:boxStrokeColor="@color/orange"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_price"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start|center"
+            android:inputType="numberDecimal"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
     <ImageView
         android:id="@+id/edit_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:padding="5dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/edit_text_black_border"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edit_text_orange_border"
+        android:padding="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_layout" />
-
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttons2"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="10dp"
         android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/edit_image"
-        app:layout_constraintEnd_toStartOf="@+id/textInputLayout3">
+        app:layout_constraintEnd_toEndOf="@+id/edit_image">
 
 
         <ImageButton
@@ -147,9 +186,11 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <Button
         android:id="@+id/save_product"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
         android:layout_height="50dp"
         android:text="@string/save"
         android:textColor="@color/white"

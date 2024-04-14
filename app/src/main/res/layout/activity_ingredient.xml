@@ -90,6 +90,7 @@
             android:id="@+id/textView2"
             android:layout_width="0dp"
             android:layout_height="30dp"
+            android:layout_margin="10dp"
             android:gravity="center"
             android:text="No ingredients"
             android:textColor="@color/black"

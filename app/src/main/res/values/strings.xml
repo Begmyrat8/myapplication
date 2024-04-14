@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Dessert Prices</string>
-    <string name="title">title</string>
+    <string name="title">Title</string>
     <string name="kg_price">kg/price</string>
     <string name="gram">gram</string>
     <string name="dessert_name">dessert name</string>

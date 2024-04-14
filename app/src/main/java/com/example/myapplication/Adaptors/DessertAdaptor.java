@@ -131,9 +131,9 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
     public static final class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView dessertImage;
+        ImageView dessertImage, empty_img;
         ImageButton  change_dessert;
-        TextView dessertTitle, sum, weight, empty_img, portion, portion_price, dessert_size, portion_size;
+        TextView dessertTitle, sum, weight, portion, portion_price, dessert_size, portion_size;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);

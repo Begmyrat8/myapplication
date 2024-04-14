@@ -111,7 +111,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
                 holder.hint_price.setText("1 " + units +"/price");
             }
             holder.hint_unit.setText(units);
-            holder.value.setText(decimalFormat.format(value) + units);
+            holder.value.setText(decimalFormat.format(value) +" " + units);
             holder.gram_price.setText(decimalFormat.format(gram_price)  + " TMT ");
         }
 
@@ -163,8 +163,8 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     public static  class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       TextView title,  price, value, gram_price, hint_unit, hint_price, empty_avatar;
-       ImageView img;
+       TextView title,  price, value, gram_price, hint_unit, hint_price;
+       ImageView img, empty_avatar;
        ImageButton change_btn, delete_btn;
 
 

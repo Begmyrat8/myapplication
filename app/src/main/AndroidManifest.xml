@@ -21,7 +21,7 @@
         <activity
             android:name=".Activities.ChangeDessertActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".Activities.MainActivity"
             android:exported="true">
@@ -34,11 +34,11 @@
         <activity
             android:name=".Activities.ChangeIngredientsActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".Activities.AddIngredientsActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -54,7 +54,7 @@
         <activity
             android:name=".Activities.AddDessertActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

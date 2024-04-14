@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -157,6 +156,8 @@ public class ChangeDessertActivity extends AppCompatActivity {
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             if (bitmap != null){
                 edit_image.setImageBitmap(bitmap);
+            }else {
+                edit_image.setImageResource(R.drawable.noun_cake_6710939);
             }
 
         }else {

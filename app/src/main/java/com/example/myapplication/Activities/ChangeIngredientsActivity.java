@@ -33,7 +33,6 @@ import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.R;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayOutputStream;
 
@@ -44,13 +43,14 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     String title, id,  value, price, units;
     byte [] img;
     AutoCompleteTextView autoComplete;
-    TextInputLayout textInputLayout22, textInputLayout;
+    TextView textInputLayout;
     ArrayAdapter<String> adapterItem;
     String[] item = {"gram","piece","milliliter"};
     ImageView imageView, edit_image, lang, delete;
     Toolbar toolbar;
     ImageButton change_ingredient_img;
     Button save_btn;
+    TextView textView77;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -65,8 +65,8 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this);
         database = dbHelper.getWritableDatabase();
 
-        textInputLayout = findViewById(R.id.textInputLayout);
-        textInputLayout22 = findViewById(R.id.textInputLayout22);
+        textInputLayout = findViewById(R.id.textView9);
+        textView77 = findViewById(R.id.textView77);
         autoComplete = findViewById(R.id.autoComplete2);
         lang = findViewById(R.id.lang);
         edit_image = findViewById(R.id.edit_image);
@@ -96,15 +96,15 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                textInputLayout22.setHint("how much " + item);
+                textView77.setText("How much " + item);
                 if (autoComplete.getText().toString().equals("gram")){
-                    textInputLayout.setHint("1 kg price");
+                    textInputLayout.setText("1 kg price");
                 }
                 if (autoComplete.getText().toString().equals("milliliter")){
-                    textInputLayout.setHint("1 liter price");
+                    textInputLayout.setText("1 liter price");
                 }
                 if (autoComplete.getText().toString().equals("piece")){
-                    textInputLayout.setHint("1 piece price");
+                    textInputLayout.setText("1 piece price");
                 }
             }
         });
@@ -186,20 +186,20 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
             if (value.equals("0")){
                 if (units == null){
-                    textInputLayout22.setHint("how much");
+                    textView77.setText("How much");
                     autoComplete.setText(" ");
                 }else if (units == "piece"){
-                    textInputLayout22.setHint(item[1]);
+                    textView77.setText(item[1]);
                     edit_value.setText(units);
                     autoComplete.setText(item[1], false);
 
                 }else {
-                    textInputLayout22.setHint("how much " + item[2]);
+                    textView77.setText("How much " + item[2]);
                     edit_value.setText(value);
                     autoComplete.setText(item[2], false);
                 }
             }else{
-                textInputLayout22.setHint(units);
+                textView77.setText(units);
                 edit_value.setText(value);
                 autoComplete.setText(units,false);
             }
@@ -211,6 +211,8 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             if (bitmap != null){
                 edit_image.setImageBitmap(bitmap);
+            }else {
+                edit_image.setImageResource(R.drawable.noun_cake_6710939);
             }
 
 

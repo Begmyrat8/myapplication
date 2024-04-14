@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
     android:layout_marginBottom="20dp"
     app:cardCornerRadius="10dp">
 
@@ -15,26 +16,28 @@
             android:id="@+id/c"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="4dp"
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.454">
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_margin="10dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="5dp"
                 android:gravity="center_vertical|start"
                 android:text="@string/name"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/word_lang"
+                app:layout_constraintBottom_toBottomOf="@+id/change_dessert"
                 app:layout_constraintEnd_toStartOf="@+id/change_dessert"
-                app:layout_constraintStart_toEndOf="@+id/word_lang"
-                app:layout_constraintTop_toTopOf="@+id/word_lang" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/change_dessert" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,8 +47,8 @@
                 android:layout_margin="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/word_lang">
+                app:layout_constraintStart_toEndOf="@+id/word_lang"
+                app:layout_constraintTop_toBottomOf="@+id/change_dessert">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout2"
@@ -57,12 +60,13 @@
 
                     <TextView
                         android:id="@+id/sum"
-                        android:layout_width="75dp"
-                        android:layout_height="19dp"
+                        android:layout_width="90dp"
+                        android:layout_height="0dp"
                         android:background="@android:color/transparent"
-                        android:gravity="end"
+                        android:gravity="end|center"
                         android:text="1000 TMT"
                         android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/hint_sum"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/hint_sum"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -70,9 +74,9 @@
                     <TextView
                         android:id="@+id/weight"
                         android:layout_width="0dp"
-                        android:layout_height="19dp"
+                        android:layout_height="0dp"
                         android:background="@android:color/transparent"
-                        android:gravity="end"
+                        android:gravity="end|center"
                         android:text="0 kg"
                         android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="@+id/hint_weight"
@@ -83,44 +87,42 @@
                     <TextView
                         android:id="@+id/dessert_size"
                         android:layout_width="0dp"
-                        android:layout_height="19dp"
+                        android:layout_height="0dp"
                         android:background="@android:color/transparent"
-                        android:gravity="end"
+                        android:gravity="end|center"
                         android:text="0 sm"
                         android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/hint_dessert_size"
                         app:layout_constraintEnd_toEndOf="@+id/sum"
                         app:layout_constraintStart_toEndOf="@+id/hint_dessert_size"
                         app:layout_constraintTop_toTopOf="@+id/hint_dessert_size" />
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/hint_sum"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:gravity="start"
-                        android:text="dessert price"
-                        android:textColor="@color/grey"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/noun_cake_purchase_6251397"
                         app:layout_constraintStart_toStartOf="@+id/hint_weight"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/hint_weight"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginTop="5dp"
-                        android:background="@android:color/transparent"
+                        android:src="@drawable/noun_weight_scale_4683187"
                         android:gravity="start"
                         android:text="dessert weight"
                         android:textColor="@color/grey"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/hint_sum" />
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/hint_dessert_size"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginTop="5dp"
-                        android:background="@android:color/transparent"
+                        android:src="@drawable/noun_ice_cream_4517503"
                         android:gravity="start"
                         android:text="dessert size"
                         android:textColor="@color/grey"
@@ -130,9 +132,9 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_height="0dp"
                     android:padding="5dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
                     app:layout_constraintTop_toTopOf="parent">
@@ -140,11 +142,12 @@
                     <TextView
                         android:id="@+id/portion"
                         android:layout_width="0dp"
-                        android:layout_height="19dp"
+                        android:layout_height="0dp"
                         android:background="@android:color/transparent"
-                        android:gravity="end"
+                        android:gravity="end|center"
                         android:text="0"
                         android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/hint_portion"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/hint_portion"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -152,12 +155,13 @@
                     <TextView
                         android:id="@+id/portion_size"
                         android:layout_width="0dp"
-                        android:layout_height="19dp"
+                        android:layout_height="0dp"
                         android:layout_marginTop="5dp"
                         android:background="@android:color/transparent"
-                        android:gravity="end"
+                        android:gravity="end|center"
                         android:text="0 sm"
                         android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/hint_portion_size"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/hint_portion_size"
                         app:layout_constraintTop_toBottomOf="@+id/portion" />
@@ -166,48 +170,47 @@
                     <TextView
                         android:id="@+id/portion_price"
                         android:layout_width="0dp"
-                        android:layout_height="19dp"
+                        android:layout_height="0dp"
                         android:background="@android:color/transparent"
-                        android:gravity="end"
+                        android:gravity="end|center"
                         android:text="1000 TMT"
                         android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/hint_piece_price"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/hint_piece_price"
                         app:layout_constraintTop_toTopOf="@+id/hint_piece_price" />
 
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/hint_portion"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:background="@android:color/transparent"
                         android:gravity="start"
-                        android:text="portion"
+                        android:src="@drawable/noun_cake_6710630"
                         android:textColor="@color/grey"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/hint_portion_size"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginTop="5dp"
-                        android:background="@android:color/transparent"
                         android:gravity="start"
-                        android:text="portion size"
+                        android:src="@drawable/noun_1528_2072982"
                         android:textColor="@color/grey"
                         app:layout_constraintStart_toStartOf="@+id/hint_portion"
                         app:layout_constraintTop_toBottomOf="@+id/hint_portion" />
 
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/hint_piece_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginTop="5dp"
-                        android:background="@android:color/transparent"
                         android:gravity="start"
-                        android:text="portion price"
+                        android:src="@drawable/noun_dividend_3988799"
                         android:textColor="@color/grey"
                         app:layout_constraintStart_toStartOf="@+id/hint_portion"
                         app:layout_constraintTop_toBottomOf="@+id/hint_portion_size" />
@@ -221,7 +224,7 @@
             <ImageButton
                 android:id="@+id/change_dessert"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/todo"
                 android:src="@drawable/edit"
@@ -230,26 +233,30 @@
 
             <ImageView
                 android:id="@+id/word_lang"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@drawable/edit_text_black_border"
+                android:layout_width="90dp"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/edit_text_orange_border"
                 android:contentDescription="@string/todo"
                 android:padding="3dp"
                 android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="@+id/result"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/change_dessert" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/empty_img"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:padding="3dp"
-                android:background="@drawable/edit_text_black_border"
+                android:layout_width="90dp"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/edit_text_orange_border"
                 android:gravity="center"
-                android:text="No img"
+                android:padding="3dp"
+                android:src="@drawable/noun_cake_6710939"
                 android:textColor="@color/black"
                 android:visibility="visible"
-                app:layout_constraintStart_toStartOf="@+id/result"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/change_dessert" />
 
 
