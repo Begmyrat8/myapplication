@@ -45,7 +45,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     AutoCompleteTextView autoComplete;
     TextView textInputLayout;
     ArrayAdapter<String> adapterItem;
-    String[] item = {"gram","piece","milliliter"};
+    String[] item = {String.valueOf(R.string.gram),getString(R.string.piece),getString(R.string.milliliter)};
     ImageView imageView, edit_image, lang, delete;
     Toolbar toolbar;
     ImageButton change_ingredient_img;
@@ -93,18 +93,19 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             finish();
         });
         autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                textView77.setText("How much " + item);
+                textView77.setText(R.string.how_many + item);
                 if (autoComplete.getText().toString().equals("gram")){
-                    textInputLayout.setText("1 kg price");
+                    textInputLayout.setText("1 " + R.string.kg + " " + R.string.price);
                 }
                 if (autoComplete.getText().toString().equals("milliliter")){
-                    textInputLayout.setText("1 liter price");
+                    textInputLayout.setText("1 " + R.string.liter + " " + R.string.price);
                 }
                 if (autoComplete.getText().toString().equals("piece")){
-                    textInputLayout.setText("1 piece price");
+                    textInputLayout.setText("1 " + R.string.piece + " " + R.string.price);
                 }
             }
         });
@@ -186,7 +187,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
             if (value.equals("0")){
                 if (units == null){
-                    textView77.setText("How much");
+                    textView77.setText(R.string.how_many);
                     autoComplete.setText(" ");
                 }else if (units == "piece"){
                     textView77.setText(item[1]);
@@ -194,7 +195,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
                     autoComplete.setText(item[1], false);
 
                 }else {
-                    textView77.setText("How much " + item[2]);
+                    textView77.setText( R.string.how_many + " " + item[2]);
                     edit_value.setText(value);
                     autoComplete.setText(item[2], false);
                 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dessert Prices</string>
+    <string name="title">Title</string>
+    <string name="kg_price">Kg/price</string>
+    <string name="gram">Gram</string>
+    <string name="dessert_name">dessert name</string>
+    <string name="price">Price</string>
+    <string name="save">Save</string>
+    <string name="todo">TODO</string>
+    <string name="sum">Sum</string>
+    <string name="weight">Weight</string>
+    <string name="name">Name</string>
+    <string name="kg">Kg</string>
+    <string name="unit_price">Unit price</string>
+
+    <string name="rus"> Rus</string>
+    <string name="eng"> Eng</string>
+
+    <string name="add"> Add</string>
+    <string name="change">Change</string>
+    <string name="delete_all">Delete all?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="select_language">Select language</string>
+
+    <string name="saved">Saved</string>
+    <string name="changed">Changed</string>
+
+    <string name="no_dessert">No dessert</string>
+    <string name="add_dessert">Add dessert</string>
+    <string name="sm">sm</string>
+    <string name="dessert_size">Dessert size</string>
+    <string name="portion_size">Portion size</string>
+    <string name="select_unit">Select unit</string>
+    <string name="how_many">How many</string>
+    <string name="no_ingredients">No ingredient</string>
+    <string name="add_ingredients">Add ingredient</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="dessert_already_exists">Dessert already exists</string>
+    <string name="ingredient_already_exists">Ingredient already exists</string>
+    <string name="do_you_want_delete">Do you want delete?</string>
+    <string name="piece">Piece</string>
+    <string name="milliliter">Milliliter</string>
+    <string name="liter">liter</string>
+</resources>

@@ -21,6 +21,7 @@ import com.example.myapplication.Adaptors.DessertAdaptor;
 import com.example.myapplication.Models.DessertModel;
 import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +35,22 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout empty;
     RecyclerView Recycler;
     ImageView imageView, lang, delete;
-    ImageButton add_button;
+    FloatingActionButton add_button;
     Button add_dessert;
+    SharedPreferences prefs = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         databaseAccess = DatabaseAccess.getInstances(this.getApplicationContext());
         databaseAccess.open();
+        prefs = getSharedPreferences("com.mycompany.myAppName", MODE_PRIVATE);
+
+        if (prefs.getBoolean("firstrun", true)) {
+            startActivity(new Intent(MainActivity.this, LanguageActivity.class));
+            finish();
+        }
+
         loadLocale();
 
         Recycler = findViewById(R.id.category_list);
@@ -51,10 +60,9 @@ public class MainActivity extends AppCompatActivity {
         delete = findViewById(R.id.delete);
         lang = findViewById(R.id.lang);
         imageView = findViewById(R.id.imageView);
-        add_button = findViewById(R.id.add_category_btn);
+        add_button = findViewById(R.id.buttons2);
         empty = findViewById(R.id.empty);
 
-        lang.setVisibility(View.GONE);
         lang.setOnClickListener(v -> {
             showChangeLanguageDialog();
         });
@@ -63,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.delete_all))
                     .setCancelable(true)
-                    .setPositiveButton(getText(R.string.Yes), new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getText(R.string.yes), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             databaseAccess.clearAllDataFromTable("dessert");
@@ -82,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     })
 
-                    .setNegativeButton(getText(R.string.No), new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getText(R.string.no), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
@@ -157,22 +165,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showChangeLanguageDialog() {
-        String[] genders = {"ENG","RUS"};
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.Select_language));
-        builder .setSingleChoiceItems(genders, -1, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                if (i == 0){
-                    setLocale("en");
-                    recreate();
-                }
-                if (i == 1){
-                    setLocale("ru");
-                    recreate();
-                }
-                dialog.dismiss();
+        String[] genders = {"ENG","RUS","TKM"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.select_language));
+        builder .setSingleChoiceItems(genders, -1, (dialog, i) -> {
+            if (i == 0){
+                setLocale("en");
+                recreate();
+            }else if (i == 1){
+                setLocale("ru");
+                recreate();
+            }else if (i == 2){
+                setLocale("");
+                recreate();
             }
+            dialog.dismiss();
         });
         builder.show();
     }

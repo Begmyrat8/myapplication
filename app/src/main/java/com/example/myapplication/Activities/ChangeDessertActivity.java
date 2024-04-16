@@ -63,8 +63,8 @@ public class ChangeDessertActivity extends AppCompatActivity {
 
         get_and_set_intent_data();
 
-        lang.setVisibility(View.INVISIBLE);
-        toolbar.setSubtitle(getString(R.string.change) + " " + title);
+        lang.setVisibility(View.GONE);
+        toolbar.setSubtitle(getString(R.string.change));
 
         imageView.setOnClickListener(v -> {
            finish();
@@ -77,9 +77,9 @@ public class ChangeDessertActivity extends AppCompatActivity {
 
         delete.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Do you want delete?")
+            builder.setTitle(R.string.do_you_want_delete)
                     .setCancelable(true)
-                    .setPositiveButton(getText(R.string.Yes), new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getText(R.string.yes), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             database.delete("dessert","id="+ id,null);
@@ -88,7 +88,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
                         }
                     })
 
-                    .setNegativeButton(getText(R.string.No), new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getText(R.string.no), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();

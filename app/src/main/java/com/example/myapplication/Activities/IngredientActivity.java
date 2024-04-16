@@ -23,6 +23,7 @@ import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.Models.Model;
 import com.example.myapplication.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class IngredientActivity extends AppCompatActivity {
     String dessertId;
     Toolbar toolbar;
     ImageView lang, imageView, delete;
-    ImageButton add_button;
+    FloatingActionButton add_button;
     Button add_ingredient;
     SQLiteDatabase database;
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
@@ -60,7 +61,7 @@ public class IngredientActivity extends AppCompatActivity {
         lang = findViewById(R.id.lang);
         delete = findViewById(R.id.delete);
         toolbar = findViewById(R.id.toolbar);
-        add_button = findViewById(R.id.add_btn);
+        add_button = findViewById(R.id.buttons);
         empty = findViewById(R.id.empty_ingredients);
 
         lang.setVisibility(View.GONE);
@@ -73,10 +74,10 @@ public class IngredientActivity extends AppCompatActivity {
 
         delete.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Delete all?")
+            builder.setTitle(R.string.delete_all)
                     .setCancelable(true)
 
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             database.delete("list","dessert_id=" + dessertId, null);
@@ -93,7 +94,7 @@ public class IngredientActivity extends AppCompatActivity {
                         }
                     })
 
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
@@ -106,7 +107,7 @@ public class IngredientActivity extends AppCompatActivity {
 
         });
 
-        toolbar.setSubtitle("Ingredients for " + dessertName);
+        toolbar.setSubtitle(R.string.ingredients);
 
 
         add_button.setOnClickListener(view -> {

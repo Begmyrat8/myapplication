@@ -1,5 +1,7 @@
 package com.example.myapplication.Activities;
 
+import static com.example.myapplication.R.string.dessert_already_exists;
+
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -61,8 +63,8 @@ public class AddDessertActivity extends AppCompatActivity {
         imagePick();
 
         delete.setVisibility(View.GONE);
-        lang.setVisibility(View.INVISIBLE);
-        toolbar.setSubtitle("Add dessert");
+        lang.setVisibility(View.GONE);
+        toolbar.setSubtitle(R.string.add_dessert);
 
         imageView.setOnClickListener(v -> {
             finish();
@@ -75,10 +77,10 @@ public class AddDessertActivity extends AppCompatActivity {
             boolean inserted = insertTitleIfNotExists(set_name.getText().toString());
 
             if(inserted) {
-                Toast.makeText(this, "Save successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
                 finish();
             } else {
-                Toast.makeText(this, "Dessert already exists", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
             }
 
         });

@@ -81,7 +81,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
         imagePick();
 
         delete.setVisibility(View.GONE);
-        lang.setVisibility(View.INVISIBLE);
+        lang.setVisibility(View.GONE);
         adapterItem = new ArrayAdapter<String>(this,R.layout.item_list,item);
         autoComplete.setAdapter(adapterItem);
 

@@ -33,7 +33,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:textColorHint="@color/black"
-        app:boxStrokeColor="@color/orange"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6">
 
@@ -54,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="How much"
+        android:text="@string/how_many"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
@@ -67,7 +66,6 @@
         android:layout_height="70dp"
         android:layout_margin="10dp"
         android:textColorHint="@color/black"
-        app:boxStrokeColor="@color/orange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7">
@@ -92,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Select unit"
+        android:text="@string/select_unit"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout"
@@ -105,7 +103,6 @@
         android:layout_height="70dp"
         android:layout_margin="10dp"
         android:textColorHint="@color/black"
-        app:boxStrokeColor="@color/orange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8">
@@ -125,7 +122,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Price"
+        android:text="@string/price"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout11"
@@ -139,7 +136,6 @@
         android:layout_height="70dp"
         android:layout_margin="10dp"
         android:textColorHint="@color/black"
-        app:boxStrokeColor="@color/orange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView99">

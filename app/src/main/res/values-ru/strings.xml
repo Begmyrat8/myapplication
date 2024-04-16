@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dessert Prices</string>
+    <string name="title">Названия</string>
+    <string name="kg_price">Кг/цена</string>
+    <string name="gram">Грам</string>
+    <string name="dessert_name">Названия десерта</string>
+    <string name="price">Цена</string>
+    <string name="save">Сохранить</string>
+    <string name="todo">TODO</string>
+    <string name="sum">Сумма</string>
+    <string name="weight">Вес</string>
+    <string name="name">Имя</string>
+    <string name="kg">Кг</string>
+    <string name="unit_price">Грам_цена</string>
+
+    <string name="rus"> Rus</string>
+    <string name="eng"> Eng</string>
+
+    <string name="add"> Добавить</string>
+    <string name="change">Изменить</string>
+    <string name="delete_all"> Удалить всё?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="select_language">Выберите язык</string>
+
+    <string name="saved">Сохранино</string>
+    <string name="changed">Изменино</string>
+
+    <string name="no_dessert">Десертов нет</string>
+    <string name="add_dessert">Добавить десерт</string>
+    <string name="sm">см</string>
+    <string name="dessert_size">Размер десерта</string>
+    <string name="portion_size">Размер куска</string>
+    <string name="select_unit">Выберите единицу</string>
+    <string name="how_many">Сколько</string>
+    <string name="no_ingredients">Нет ингредиентов</string>
+    <string name="add_ingredients">Добавить ингредиент</string>
+    <string name="ingredients">Ингредиенты</string>
+    <string name="dessert_already_exists">Этот десерт уже добовлин</string>
+    <string name="ingredient_already_exists">Этот ингредиент уже добовлин</string>
+    <string name="do_you_want_delete">Хотите удалить?</string>
+    <string name="piece">Кусок</string>
+    <string name="milliliter">Миллилитр</string>
+    <string name="liter">литр</string>
+</resources>

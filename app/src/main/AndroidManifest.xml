@@ -19,9 +19,12 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="34">
         <activity
+            android:name=".Activities.LanguageActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.ChangeDessertActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Activities.MainActivity"
             android:exported="true">
@@ -34,7 +37,7 @@
         <activity
             android:name=".Activities.ChangeIngredientsActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Activities.AddIngredientsActivity"
             android:exported="true"
