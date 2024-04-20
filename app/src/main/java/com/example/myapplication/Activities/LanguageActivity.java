@@ -43,7 +43,7 @@ public class LanguageActivity extends AppCompatActivity {
                     setLocale("ru");
                     changeFirstTime();
                 }else if (which == 2) {
-                    setLocale("");
+                    setLocale("tkm");
                     changeFirstTime();
                 }
                 dialog.dismiss();
@@ -51,6 +51,7 @@ public class LanguageActivity extends AppCompatActivity {
         });
 
         AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
     }
@@ -69,7 +70,7 @@ public class LanguageActivity extends AppCompatActivity {
 
     private void changeFirstTime(){
         SharedPreferences.Editor editor = getSharedPreferences("com.mycompany.myAppName", MODE_PRIVATE).edit();
-        editor.putBoolean("firstrun", false).apply();
+        editor.putBoolean("first_run", false).apply();
         startActivity(new Intent(LanguageActivity.this, MainActivity.class));
     }
 }

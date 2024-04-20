@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/light_grey"
     tools:context=".Activities.AddIngredientsActivity">
 
     <include
@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        app:boxStrokeColor="@color/chocolate"
         android:textColorHint="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6">
@@ -66,6 +67,7 @@
         android:layout_height="70dp"
         android:layout_margin="10dp"
         android:textColorHint="@color/black"
+        app:boxStrokeColor="@color/chocolate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7">
@@ -102,6 +104,7 @@
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_margin="10dp"
+        app:boxStrokeColor="@color/chocolate"
         android:textColorHint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -136,6 +139,7 @@
         android:layout_height="70dp"
         android:layout_margin="10dp"
         android:textColorHint="@color/black"
+        app:boxStrokeColor="@color/chocolate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView99">
@@ -167,7 +171,7 @@
         android:id="@+id/buttons2"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@android:color/white"
+        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="@+id/set_image"
         app:layout_constraintEnd_toEndOf="@+id/set_image">
 

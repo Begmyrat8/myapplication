@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         databaseAccess.open();
         prefs = getSharedPreferences("com.mycompany.myAppName", MODE_PRIVATE);
 
-        if (prefs.getBoolean("firstrun", true)) {
+        if (prefs.getBoolean("first_run", true)) {
             startActivity(new Intent(MainActivity.this, LanguageActivity.class));
             finish();
         }

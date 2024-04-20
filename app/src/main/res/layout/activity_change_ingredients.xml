@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/light_grey">
 
     <include
         android:id="@+id/include"
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:textColorHint="@color/black"
-        app:boxStrokeColor="@color/orange"
+        app:boxStrokeColor="@color/chocolate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6">
 
@@ -64,7 +64,7 @@
         android:layout_height="70dp"
         android:layout_margin="10dp"
         android:textColorHint="@color/black"
-        app:boxStrokeColor="@color/orange"
+        app:boxStrokeColor="@color/chocolate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView77">
@@ -102,7 +102,7 @@
         android:layout_height="70dp"
         android:layout_margin="10dp"
         android:textColorHint="@color/black"
-        app:boxStrokeColor="@color/orange"
+        app:boxStrokeColor="@color/chocolate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8">
@@ -136,7 +136,7 @@
         android:layout_height="70dp"
         android:layout_margin="10dp"
         android:textColorHint="@color/black"
-        app:boxStrokeColor="@color/orange"
+        app:boxStrokeColor="@color/chocolate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9">
@@ -168,7 +168,7 @@
         android:id="@+id/buttons2"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@android:color/white"
+        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="@+id/edit_image"
         app:layout_constraintEnd_toEndOf="@+id/edit_image">
 

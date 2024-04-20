@@ -6,8 +6,10 @@
     <string name="gram">Грам</string>
     <string name="dessert_name">Названия десерта</string>
     <string name="price">Цена</string>
+    <string name="small_price">цена</string>
     <string name="save">Сохранить</string>
     <string name="todo">TODO</string>
+
     <string name="sum">Сумма</string>
     <string name="weight">Вес</string>
     <string name="name">Имя</string>
@@ -19,9 +21,14 @@
 
     <string name="add"> Добавить</string>
     <string name="change">Изменить</string>
+    <string name="updated">Обнавлино</string>
+
     <string name="delete_all"> Удалить всё?</string>
+    <string name="do_you_want_delete">Хотите удалить?</string>
+
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+
     <string name="select_language">Выберите язык</string>
 
     <string name="saved">Сохранино</string>
@@ -29,18 +36,24 @@
 
     <string name="no_dessert">Десертов нет</string>
     <string name="add_dessert">Добавить десерт</string>
+
     <string name="sm">см</string>
     <string name="dessert_size">Размер десерта</string>
     <string name="portion_size">Размер куска</string>
     <string name="select_unit">Выберите единицу</string>
+
     <string name="how_many">Сколько</string>
+
     <string name="no_ingredients">Нет ингредиентов</string>
     <string name="add_ingredients">Добавить ингредиент</string>
     <string name="ingredients">Ингредиенты</string>
+
     <string name="dessert_already_exists">Этот десерт уже добовлин</string>
     <string name="ingredient_already_exists">Этот ингредиент уже добовлин</string>
-    <string name="do_you_want_delete">Хотите удалить?</string>
-    <string name="piece">Кусок</string>
+
+    <string name="piece">Штука</string>
     <string name="milliliter">Миллилитр</string>
-    <string name="liter">литр</string>
+    <string name="liter">Литр</string>
+    <string name="unit">Eдиницa</string>
+    <string name="used"> используется</string>
 </resources>

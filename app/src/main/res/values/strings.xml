@@ -5,7 +5,8 @@
     <string name="gram">Gram</string>
     <string name="dessert_name">dessert name</string>
     <string name="price">Baha</string>
-    <string name="save">Save</string>
+    <string name="small_price">baha</string>
+    <string name="save">Ýatda saklamak</string>
     <string name="todo">TODO</string>
     <string name="sum">Summa</string>
     <string name="weight">Agram</string>
@@ -43,5 +44,8 @@
     <string name="do_you_want_delete">Pozmak isleýäňizmi?</string>
     <string name="piece">Bölek</string>
     <string name="milliliter">Millilitr</string>
-    <string name="liter">litr</string>
+    <string name="liter">Litr</string>
+    <string name="unit">Birlik</string>
+    <string name="used"> ulanylýar</string>
+    <string name="updated">Täzelendi</string>
 </resources>

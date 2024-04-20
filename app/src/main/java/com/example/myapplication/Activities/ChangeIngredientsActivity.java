@@ -35,6 +35,8 @@ import com.example.myapplication.R;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class ChangeIngredientsActivity extends AppCompatActivity {
 
@@ -45,7 +47,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     AutoCompleteTextView autoComplete;
     TextView textInputLayout;
     ArrayAdapter<String> adapterItem;
-    String[] item = {String.valueOf(R.string.gram),getString(R.string.piece),getString(R.string.milliliter)};
+
     ImageView imageView, edit_image, lang, delete;
     Toolbar toolbar;
     ImageButton change_ingredient_img;
@@ -85,36 +87,42 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         delete.setVisibility(View.GONE);
         toolbar.setSubtitle(getString(R.string.change));
 
-        adapterItem = new ArrayAdapter<String>(this,R.layout.item_list,item);
+        String[] items = getResources().getStringArray(R.array.items);
+        adapterItem = new ArrayAdapter<>(this, R.layout.item_list, items);
         autoComplete.setAdapter(adapterItem);
 
+        String kg = getResources().getString(R.string.kg);
+        String price = getResources().getString(R.string.small_price);
+        String liter = getResources().getString(R.string.liter);
+        String piece = getResources().getString(R.string.piece);
+        String how_many = getResources().getString(R.string.how_many);
+        String used = getResources().getString(R.string.used);
 
-        imageView.setOnClickListener(v -> {
-            finish();
-        });
+        imageView.setOnClickListener(v -> finish());
         autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                textView77.setText(R.string.how_many + item);
-                if (autoComplete.getText().toString().equals("gram")){
-                    textInputLayout.setText("1 " + R.string.kg + " " + R.string.price);
+                textView77.setText( how_many+ " " + item + " " + used);
+                if (autoComplete.getText().toString().equals(items[0])){
+                    textInputLayout.setText("1 " + kg + " " + price);
                 }
-                if (autoComplete.getText().toString().equals("milliliter")){
-                    textInputLayout.setText("1 " + R.string.liter + " " + R.string.price);
+                if (autoComplete.getText().toString().equals(items[2])){
+                    textInputLayout.setText("1 " + liter + " " + price);
                 }
-                if (autoComplete.getText().toString().equals("piece")){
-                    textInputLayout.setText("1 " + R.string.piece + " " + R.string.price);
+                if (autoComplete.getText().toString().equals(items[1])){
+                    textInputLayout.setText("1 " + piece + " " + price);
                 }
             }
         });
 
-        change_ingredient_img.setOnClickListener(v -> {
-            ImagePicker.with(this)
-                    .crop(1f, 1f)
-                    .start();
-        });
+        change_ingredient_img.setOnClickListener(v -> ImagePicker.with(this)
+                .crop()	    			//Crop image(Optional), Check Customization for more option
+                .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                .crop(1f, 1f)
+                .start());
 
 
         save_btn.setOnClickListener(view -> {
@@ -141,24 +149,24 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
                 double a = parseDouble(valueOf(edit_price.getText()));
                 double b = parseDouble(valueOf(edit_value.getText()));
                 double c = a * b;
-                if (autoComplete.getText().toString().equals("piece")) {
+                if (autoComplete.getText().toString().equals(items[1])) {
 
                     contentValues.put("value", edit_value.getText().toString());
-                    contentValues.put("units", item[1]);
+                    contentValues.put("units", items[1]);
                     contentValues.put("gram_price", c);
 
-                } else if (autoComplete.getText().toString().equals("gram")){
+                } else if (autoComplete.getText().toString().equals(items[0])){
                     double v = b /1000;
                     double r = v * a ;
                     contentValues.put("gram_price",r);
                     contentValues.put("value", edit_value.getText().toString());
-                    contentValues.put("units", item[0]);
+                    contentValues.put("units", items[0]);
                 }else {
                     double v = b /1000;
                     double r = v * a ;
                     contentValues.put("gram_price", r);
                     contentValues.put("value", edit_value.getText().toString());
-                    contentValues.put("units", item[2]);
+                    contentValues.put("units", items[2]);
                 }
             }
 
@@ -167,7 +175,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             if (result == -1) {
                 Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.updated, Toast.LENGTH_SHORT).show();
                 finish();
             }
 
@@ -178,6 +186,10 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra("id") && getIntent().hasExtra("title") && getIntent().hasExtra("price") && getIntent().hasExtra("image") && getIntent().hasExtra("value") && getIntent().hasExtra("units")){
 
+            String[] items = getResources().getStringArray(R.array.items);
+            String how_many = getResources().getString(R.string.how_many);
+            String used = getResources().getString(R.string.used);
+
             id = getIntent().getStringExtra("id");
             title = getIntent().getStringExtra("title");
             value = getIntent().getStringExtra("value");
@@ -187,27 +199,30 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
             if (value.equals("0")){
                 if (units == null){
-                    textView77.setText(R.string.how_many);
+                    textView77.setText(how_many);
                     autoComplete.setText(" ");
-                }else if (units == "piece"){
-                    textView77.setText(item[1]);
+                }else if (units.equals(how_many + " " + items[1])){
+                    textView77.setText(items[1]);
                     edit_value.setText(units);
-                    autoComplete.setText(item[1], false);
+                    autoComplete.setText(items[1],false);
 
-                }else {
-                    textView77.setText( R.string.how_many + " " + item[2]);
+                }else if (units.equals(how_many + " " + items[2])){
+                    textView77.setText( how_many + " " + items[2]);
                     edit_value.setText(value);
-                    autoComplete.setText(item[2], false);
+                    autoComplete.setText(items[2],false);
                 }
             }else{
-                textView77.setText(units);
+                textView77.setText(how_many + " " + units + " " + used);
                 edit_value.setText(value);
                 autoComplete.setText(units,false);
             }
 
 
             edit_title.setText(title);
-            edit_price.setText(price);
+
+            if (!Objects.equals(price, "0.0")){
+                edit_price.setText(price);
+            }
 
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             if (bitmap != null){
@@ -227,12 +242,12 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         Bitmap bitmap =((BitmapDrawable)set_image.getDrawable()).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
-        byte [] bytes = stream.toByteArray();
-        return bytes;
+        return stream.toByteArray();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        assert data != null;
         Uri uri = data.getData();
         edit_image.setImageURI(uri);
     }

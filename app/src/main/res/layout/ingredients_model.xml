@@ -161,7 +161,7 @@
 
                         <TextView
                             android:id="@+id/price"
-                            android:layout_width="130dp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical|end"
                             android:text="@string/price"
@@ -193,7 +193,6 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="5dp"
                     android:padding="3dp"
-                    android:background="@drawable/edit_text_orange_border"
                     android:importantForAccessibility="no"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/containers"
@@ -205,7 +204,6 @@
                     android:layout_width="100dp"
                     android:layout_height="80dp"
                     android:layout_marginEnd="5dp"
-                    android:background="@drawable/edit_text_orange_border"
                     android:gravity="center"
                     android:padding="3dp"
                     android:src="@drawable/noun_cake_6710939"

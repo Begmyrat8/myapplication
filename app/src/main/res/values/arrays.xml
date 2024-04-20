@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="items">
+        <item>gram</item>
+        <item>bölek</item>
+        <item>mililitr</item>
+    </string-array>
+</resources>

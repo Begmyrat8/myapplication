@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/amita</item>
+        <item>@font/anonymous_pro</item>
+        <item>@font/archivo</item>
+        <item>@font/baskervville_italic</item>
+        <item>@font/courgette</item>
+        <item>@font/emilys_candy</item>
+        <item>@font/sansita_swashed</item>
+        <item>@font/underdog</item>
+        <item>@font/wellfleet</item>
+    </array>
+</resources>

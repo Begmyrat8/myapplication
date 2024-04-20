@@ -71,6 +71,9 @@ public class ChangeDessertActivity extends AppCompatActivity {
         });
         change_dessert_img.setOnClickListener(v -> {
             ImagePicker.with(this)
+                    .crop()	    			//Crop image(Optional), Check Customization for more option
+                    .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                    .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
                     .crop(1f, 1f)
                     .start();
         });
@@ -132,7 +135,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
             if (result == -1){
                 Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
             }else {
-                Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.updated, Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
