@@ -20,16 +20,9 @@ public class DatabaseAccess {
 
     private final SQLiteOpenHelper openHelper;
     private SQLiteDatabase database;
+    @SuppressLint("StaticFieldLeak")
     private static DatabaseAccess instances;
     Cursor c = null;
-    String COL_TITLE = "title";
-    String COL_GRAM = "gram";
-    String COL_KG = "kg";
-    String COL_PRICE = "price";
-    String COL_GRAM_PRICE = "gram_price";
-    String TABLE_NAME = "list";
-    String ID = "id";
-    byte [] imageInBytes;
     Context context;
 
     public DatabaseAccess(Context context) {

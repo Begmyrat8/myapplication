@@ -1,6 +1,7 @@
 package com.example.myapplication.Adaptors;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Activities.ChangeDessertActivity;
 import com.example.myapplication.Activities.IngredientActivity;
+import com.example.myapplication.Activities.MainActivity;
 import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.Models.DessertModel;
@@ -48,7 +51,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
     @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     @Override
-    public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CategoryViewHolder holder, @SuppressLint("RecyclerView") int position) {
         databaseHelper = new DatabaseOpenHelper(context);
         database = databaseHelper.getWritableDatabase();
 
@@ -77,7 +80,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
         holder.portion_size.setText(decimalFormat.format(portion_size) + " cm");
 
         double portion = Double.parseDouble(String.valueOf(desserts.get(position).getPortion()));
-        holder.portion.setText(decimalFormat.format(portion) + "");
+        holder.portion.setText(decimalFormat.format(portion) + " ");
 
         if (portion == 0 && sum == 0){
             holder.portion_price.setText("0 TMT");
@@ -106,14 +109,51 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
 
         holder.change_dessert.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ChangeDessertActivity.class);
-            intent.putExtra("id", String.valueOf(desserts.get(position).getId()));
-            intent.putExtra("title", String.valueOf(desserts.get(position).getTitle()));
-            intent.putExtra("image", desserts.get(position).getImage());
-            intent.putExtra("portion_size", String.valueOf(desserts.get(position).getPortion_size()));
-            intent.putExtra("dessert_size", String.valueOf(desserts.get(position).getDessert_size()));
-            context.startActivity(intent);
+            // Create a PopupMenu
+            PopupMenu popupMenu = new PopupMenu(context, v);
+            // Inflate the menu resource
+            popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+
+            // Set a click listener for each menu item
+            popupMenu.setOnMenuItemClickListener(item -> {
+                int itemId = item.getItemId();
+                if (itemId == R.id.nav_delete) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle(R.string.do_you_want_delete)
+                            .setCancelable(true)
+                            .setPositiveButton((R.string.yes), (dialog, which) -> {
+                                database.delete("dessert","id=" + desserts.get(position).getId(),null);
+                                desserts.remove(position);
+                                notifyItemRemoved(position);
+
+                                ((MainActivity)context).refresh();
+                            })
+
+                            .setNegativeButton((R.string.no), (dialog, which) -> dialog.cancel());
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.setCanceledOnTouchOutside(false);
+                    alertDialog.show();
+
+                    return true;
+                } else if (itemId == R.id.nav_edit) {
+                    Intent intent = new Intent(context, ChangeDessertActivity.class);
+                    intent.putExtra("id", String.valueOf(desserts.get(position).getId()));
+                    intent.putExtra("title", String.valueOf(desserts.get(position).getTitle()));
+                    intent.putExtra("image", desserts.get(position).getImage());
+                    intent.putExtra("portion_size", String.valueOf(desserts.get(position).getPortion_size()));
+                    intent.putExtra("dessert_size", String.valueOf(desserts.get(position).getDessert_size()));
+                    context.startActivity(intent);
+                    return true;
+                }
+                return false;
+            });
+
+            // Show the popup menu
+            popupMenu.show();
         });
+
+
 
         holder.itemView.setOnClickListener(v -> {
 

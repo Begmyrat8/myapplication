@@ -47,4 +47,7 @@
     <string name="liter">liter</string>
     <string name="unit">Unit</string>
     <string name="used"> is used</string>
+    <string name="exit">Exit</string>
+    <string name="do_you_really_want_exit">Would you like to go out?</string>
+    <string name="delete">Delete</string>
 </resources>

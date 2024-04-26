@@ -48,4 +48,7 @@
     <string name="unit">Birlik</string>
     <string name="used"> ulanylýar</string>
     <string name="updated">Täzelendi</string>
+    <string name="exit">Çykmak</string>
+    <string name="do_you_really_want_exit">Çykmak isleýäňizmi?</string>
+    <string name="delete">Pozmak</string>
 </resources>

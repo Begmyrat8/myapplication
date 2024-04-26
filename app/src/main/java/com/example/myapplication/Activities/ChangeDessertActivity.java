@@ -1,9 +1,7 @@
 package com.example.myapplication.Activities;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -28,7 +26,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
-import java.text.DecimalFormat;
+import java.util.Objects;
 
 public class ChangeDessertActivity extends AppCompatActivity {
 
@@ -64,51 +62,23 @@ public class ChangeDessertActivity extends AppCompatActivity {
         get_and_set_intent_data();
 
         lang.setVisibility(View.GONE);
+        delete.setVisibility(View.GONE);
         toolbar.setSubtitle(getString(R.string.change));
 
-        imageView.setOnClickListener(v -> {
-           finish();
-        });
-        change_dessert_img.setOnClickListener(v -> {
-            ImagePicker.with(this)
-                    .crop()	    			//Crop image(Optional), Check Customization for more option
-                    .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                    .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                    .crop(1f, 1f)
-                    .start();
-        });
+        imageView.setOnClickListener(v -> finish());
 
-        delete.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.do_you_want_delete)
-                    .setCancelable(true)
-                    .setPositiveButton(getText(R.string.yes), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            database.delete("dessert","id="+ id,null);
-                            databaseAccess.clearAllDataFromTable("list");
-                            finish();
-                        }
-                    })
-
-                    .setNegativeButton(getText(R.string.no), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-
-            AlertDialog alertDialog = builder.create();
-            alertDialog.setCanceledOnTouchOutside(false);
-            alertDialog.show();
-
-        });
+        change_dessert_img.setOnClickListener(v -> ImagePicker.with(this)
+                .crop()	    			//Crop image(Optional), Check Customization for more option
+                .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                .crop(1f, 1f)
+                .start());
 
         save_btn.setOnClickListener(view -> {
 
             ContentValues contentValues = new ContentValues();
-            contentValues.put("title", edit_title.getText().toString());
-            if (update_dessert_size.getText().toString().isEmpty() || update_portion_size.getText().toString().isEmpty()){
+            contentValues.put("title", Objects.requireNonNull(edit_title.getText()).toString());
+            if (Objects.requireNonNull(update_dessert_size.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty()){
                 if (update_dessert_size.getText().toString().isEmpty()){
                     contentValues.put("dessert_size", 0);
                 }else {
@@ -144,7 +114,6 @@ public class ChangeDessertActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra("id") && getIntent().hasExtra("title")  && getIntent().hasExtra("image") && getIntent().hasExtra("portion_size") && getIntent().hasExtra("dessert_size")){
 
-            DecimalFormat decimalFormat = new DecimalFormat();
 
             id = getIntent().getStringExtra("id");
             title = getIntent().getStringExtra("title");
@@ -173,12 +142,12 @@ public class ChangeDessertActivity extends AppCompatActivity {
         Bitmap bitmap =((BitmapDrawable)set_image.getDrawable()).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
-        byte [] bytes = stream.toByteArray();
-        return bytes;
+        return stream.toByteArray();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        assert data != null;
         Uri uri = data.getData();
         edit_image.setImageURI(uri);
     }

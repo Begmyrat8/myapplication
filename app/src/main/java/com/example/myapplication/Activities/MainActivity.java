@@ -1,15 +1,14 @@
 package com.example.myapplication.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,8 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Adaptors.DessertAdaptor;
-import com.example.myapplication.Models.DessertModel;
 import com.example.myapplication.Datebase.DatabaseAccess;
+import com.example.myapplication.Models.DessertModel;
 import com.example.myapplication.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -63,40 +62,29 @@ public class MainActivity extends AppCompatActivity {
         add_button = findViewById(R.id.buttons2);
         empty = findViewById(R.id.empty);
 
-        lang.setOnClickListener(v -> {
-            showChangeLanguageDialog();
-        });
+        lang.setOnClickListener(v -> showChangeLanguageDialog());
 
         delete.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.delete_all))
                     .setCancelable(true)
-                    .setPositiveButton(getText(R.string.yes), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            databaseAccess.clearAllDataFromTable("dessert");
-                            databaseAccess.clearAllDataFromTable("list");
+                    .setPositiveButton(getText(R.string.yes), (dialog, which) -> {
+                        databaseAccess.clearAllDataFromTable("dessert");
+                        databaseAccess.clearAllDataFromTable("list");
 
-                            List = databaseAccess.getDessertList();
-                            setRecycler(List);
+                        List = databaseAccess.getDessertList();
+                        setRecycler(List);
 
-                            if (List.isEmpty()) {
-                                Recycler.setVisibility(View.GONE);
-                                empty.setVisibility(View.VISIBLE);
-                            }else {
-                                Recycler.setVisibility(View.VISIBLE);
-                                empty.setVisibility(View.GONE);
-                            }
+                        if (List.isEmpty()) {
+                            Recycler.setVisibility(View.GONE);
+                            empty.setVisibility(View.VISIBLE);
+                        }else {
+                            Recycler.setVisibility(View.VISIBLE);
+                            empty.setVisibility(View.GONE);
                         }
                     })
 
-                    .setNegativeButton(getText(R.string.no), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-
-                    });
+                    .setNegativeButton(getText(R.string.no), (dialog, which) -> dialog.cancel());
 
             AlertDialog alertDialog = builder.create();
             alertDialog.setCanceledOnTouchOutside(false);
@@ -142,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -179,10 +168,15 @@ public class MainActivity extends AppCompatActivity {
             }else if (i == 2){
                 setLocale("");
                 recreate();
+            }else {
+                setLocale("en");
+                recreate();
             }
             dialog.dismiss();
         });
-        builder.show();
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     private void setLocale(String lang) {
@@ -201,7 +195,22 @@ public class MainActivity extends AppCompatActivity {
         String language = pref.getString("My_lang","");
         setLocale(language);
     }
-    public void refreshMainActivity(){
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onBackPressed() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.exit);
+        builder.setMessage(R.string.do_you_really_want_exit);
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> finishAffinity());
+        builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+    public void refresh(){
         recreate();
     }
 

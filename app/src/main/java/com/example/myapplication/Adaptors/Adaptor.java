@@ -1,6 +1,7 @@
 package com.example.myapplication.Adaptors;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -51,7 +53,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     @SuppressLint({"SetTextI18n", "NotifyDataSetChanged", "ResourceAsColor"})
     @Override
-    public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CategoryViewHolder holder, @SuppressLint("RecyclerView") int position) {
         databaseHelper = new DatabaseOpenHelper(context);
         database = databaseHelper.getWritableDatabase();
 
@@ -132,29 +134,52 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
         }
 
-        holder.change_btn.setOnClickListener(view -> {
+        holder.change_btn.setOnClickListener(v -> {
 
-            Intent intent = new Intent(context, ChangeIngredientsActivity.class);
-            intent.putExtra("id", String.valueOf(list.get(position).getId()));
-            intent.putExtra("title", String.valueOf(list.get(position).getTitle()));
-            intent.putExtra("value", String.valueOf(list.get(position).getValue()));
-            intent.putExtra("price", String.valueOf(list.get(position).getPrice()));
-            intent.putExtra("image", list.get(position).getImage());
-            intent.putExtra("units", String.valueOf(list.get(position).getUnits()));
+            PopupMenu popupMenu = new PopupMenu(context, v);
+            popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
 
-            context.startActivity(intent);
+            // Set a click listener for each menu item
+            popupMenu.setOnMenuItemClickListener(item -> {
+                int itemId = item.getItemId();
+                if (itemId == R.id.nav_delete) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle(R.string.do_you_want_delete)
+                            .setCancelable(true)
+                            .setPositiveButton((R.string.yes), (dialog, which) -> {
+                                database.delete("list","id=" + list.get(position).getId(),null);
+                                list.remove(position);
+                                notifyItemRemoved(position);
 
+                                ((IngredientActivity) context).refresh();
+                            })
 
+                            .setNegativeButton((R.string.no), (dialog, which) -> dialog.cancel());
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.setCanceledOnTouchOutside(false);
+                    alertDialog.show();
+
+                    return true;
+                } else if (itemId == R.id.nav_edit) {
+                    Intent intent = new Intent(context, ChangeIngredientsActivity.class);
+                    intent.putExtra("id", String.valueOf(list.get(position).getId()));
+                    intent.putExtra("title", String.valueOf(list.get(position).getTitle()));
+                    intent.putExtra("value", String.valueOf(list.get(position).getValue()));
+                    intent.putExtra("price", String.valueOf(list.get(position).getPrice()));
+                    intent.putExtra("image", list.get(position).getImage());
+                    intent.putExtra("units", String.valueOf(list.get(position).getUnits()));
+
+                    context.startActivity(intent);
+                    return true;
+                }
+                return false;
+            });
+
+            // Show the popup menu
+            popupMenu.show();
         });
-        holder.delete_btn.setOnClickListener(v -> {
 
-            database.delete("list","id="+list.get(position).getId(),null);
-            list.remove(position);
-            notifyItemRemoved(position);
-
-            ((IngredientActivity) context).refresh();
-
-        });
 
     }
 
@@ -167,7 +192,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
        TextView title,  price, value, gram_price, hint_unit, hint_price;
        ImageView img, empty_avatar;
-       ImageButton change_btn, delete_btn;
+       ImageButton change_btn;
        String kg, small_price, piece, liter, unit;
         String[] items;
 
@@ -183,7 +208,6 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             gram_price = itemView.findViewById(R.id.gram_price);
             change_btn = itemView.findViewById(R.id.change_btn);
             img = itemView.findViewById(R.id.avatar);
-            delete_btn = itemView.findViewById(R.id.delete_btn);
             empty_avatar = itemView.findViewById(R.id.empty_avatar);
 
             kg = itemView.getResources().getString(R.string.kg);

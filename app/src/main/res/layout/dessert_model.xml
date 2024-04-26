@@ -228,7 +228,7 @@
                 android:layout_height="30dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/todo"
-                android:src="@drawable/edit"
+                android:src="@drawable/menu"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

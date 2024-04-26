@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,9 +64,7 @@ public class IngredientActivity extends AppCompatActivity {
         empty = findViewById(R.id.empty_ingredients);
 
         lang.setVisibility(View.GONE);
-        imageView.setOnClickListener(v -> {
-            finish();
-        });
+        imageView.setOnClickListener(v -> finish());
 
         dessertName = getIntent().getStringExtra("dessertName");
         dessertId = getIntent().getStringExtra("dessertId");
@@ -77,29 +74,21 @@ public class IngredientActivity extends AppCompatActivity {
             builder.setTitle(R.string.delete_all)
                     .setCancelable(true)
 
-                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            database.delete("list","dessert_id=" + dessertId, null);
+                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+                        database.delete("list","dessert_id=" + dessertId, null);
 
-                            List = databaseAccess.getDessertData(dessertId);
-                            setRecycler(List);
-                            if (Adaptor.isEmpty()) {
-                                Recycler.setVisibility(View.GONE);
-                                empty.setVisibility(View.VISIBLE);
-                            }else {
-                                Recycler.setVisibility(View.VISIBLE);
-                                empty.setVisibility(View.GONE);
-                            }
+                        List = databaseAccess.getDessertData(dessertId);
+                        setRecycler(List);
+                        if (Adaptor.isEmpty()) {
+                            Recycler.setVisibility(View.GONE);
+                            empty.setVisibility(View.VISIBLE);
+                        }else {
+                            Recycler.setVisibility(View.VISIBLE);
+                            empty.setVisibility(View.GONE);
                         }
                     })
 
-                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
+                    .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
 
             AlertDialog alertDialog = builder.create();
             alertDialog.setCanceledOnTouchOutside(false);

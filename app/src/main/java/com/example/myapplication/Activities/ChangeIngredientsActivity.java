@@ -35,7 +35,6 @@ import com.example.myapplication.R;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class ChangeIngredientsActivity extends AppCompatActivity {
@@ -250,5 +249,15 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         assert data != null;
         Uri uri = data.getData();
         edit_image.setImageURI(uri);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        clearAutoCompleteText();
+    }
+    private void clearAutoCompleteText() {
+        if (autoComplete != null) {
+            autoComplete.setText(""); // Clear the text
+        }
     }
 }

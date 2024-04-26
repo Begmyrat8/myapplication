@@ -38,28 +38,8 @@ public class DessertModel {
         this.title = title;
     }
 
-    public void setSum(double sum) {
-        this.sum = sum;
-    }
-
-    public double getSum() {
-        return sum;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
     public byte[] getImage() {
         return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
     }
 
     public double getPortion(){
@@ -68,10 +48,6 @@ public class DessertModel {
 
     public double getPortion_size(){
         return portion_size;
-    }
-
-    public double getPortion_price(){
-        return portion_price;
     }
 
     public double getDessert_size(){

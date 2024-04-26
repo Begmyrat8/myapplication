@@ -56,4 +56,7 @@
     <string name="liter">Литр</string>
     <string name="unit">Eдиницa</string>
     <string name="used"> используется</string>
+    <string name="exit">Выход</string>
+    <string name="do_you_really_want_exit">Хотели бы вы выйти?</string>
+    <string name="delete">Удалить</string>
 </resources>

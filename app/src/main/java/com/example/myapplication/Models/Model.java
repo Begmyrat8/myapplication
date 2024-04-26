@@ -3,7 +3,6 @@ package com.example.myapplication.Models;
 public class Model {
     int id;
     String title;
-    int kg;
     double price;
     String units;
     double gram_price;
@@ -50,14 +49,6 @@ public class Model {
         return image;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
     public int getValue() {
         return value;
     }
@@ -66,7 +57,4 @@ public class Model {
         return units;
     }
 
-    public void setUnits(String units) {
-        this.units = units;
-    }
 }

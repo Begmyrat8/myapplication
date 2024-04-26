@@ -88,37 +88,23 @@ public class AddIngredientsActivity extends AppCompatActivity {
         adapterItem = new ArrayAdapter<>(this, R.layout.item_list, items);
         autoComplete.setAdapter(adapterItem);
 
-        String kg = getResources().getString(R.string.kg);
-        String price = getResources().getString(R.string.small_price);
-        String liter = getResources().getString(R.string.liter);
-        String piece = getResources().getString(R.string.piece);
-        String how_many = getResources().getString(R.string.how_many);
-        String used = getResources().getString(R.string.used);
-
         toolbar.setSubtitle(getString(R.string.add));
 
         imageView.setOnClickListener(v -> finish());
+
+
         autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 String item = parent.getItemAtPosition(position).toString();
-                textview7.setText(how_many + " " + item + " " + used);
-                if (autoComplete.getText().toString().equals(items[0])){
-                    textInputLayout11.setText("1 " + kg + " " + price);
-                }
-                if (autoComplete.getText().toString().equals(items[2])){
-                    textInputLayout11.setText("1 " + liter + " " + price);
-                }
-                if (autoComplete.getText().toString().equals(items[1])){
-                    textInputLayout11.setText("1 " + piece + " " + price);
-                }
+                handleSelectedItem(item);
             }
         });
 
-
-
     }
+
     private void insertData (){
         add_product.setOnClickListener(view -> {
             boolean inserted = insertTitleIfNotExists(Objects.requireNonNull(set_title.getText()).toString());
@@ -160,8 +146,6 @@ public class AddIngredientsActivity extends AppCompatActivity {
         add_ingredient_img.setOnClickListener(v -> pickFromGallery());
     }
 
-
-
     private void pickFromGallery() {
         ImagePicker.with(this)
                 .crop()	    			//Crop image(Optional), Check Customization for more option
@@ -171,7 +155,6 @@ public class AddIngredientsActivity extends AppCompatActivity {
                 .start();
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -180,78 +163,106 @@ public class AddIngredientsActivity extends AppCompatActivity {
         set_image.setImageURI(uri);
     }
     private boolean insertTitleIfNotExists(String title) {
-        // Check if the title exists in the database
-        Cursor cursor = database.rawQuery("SELECT * FROM " + "list" + " WHERE " + "title" + " = ?", new String[]{title});
-        if (cursor.getCount() > 0) {
-            cursor.close();
-            return false; // Title already exists
+        try (Cursor cursor = database.rawQuery("SELECT * FROM list WHERE title = ?", new String[]{title})) {
+
+            if (cursor.getCount() == 0) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(COL_TITLE, Objects.requireNonNull(set_title.getText()).toString());
+                contentValues.put(COL_CATEGORY_ID, category_id);
+                String[] items = getResources().getStringArray(R.array.items);
+
+                try {
+                    contentValues.put(COL_IMAGE, ImageViewToByte(set_image));
+
+                } catch (Exception e) {
+
+                    contentValues.put(COL_IMAGE, valueOf(set_image));
+                }
+
+                if (Objects.requireNonNull(set_price.getText()).toString().isEmpty() || Objects.requireNonNull(set_value.getText()).toString().isEmpty()) {
+
+
+                    if (set_price.getText().toString().isEmpty()) {
+                        contentValues.put(COL_PRICE, 0);
+                    } else {
+                        contentValues.put(COL_PRICE, set_price.getText().toString());
+                    }
+                    if (Objects.requireNonNull(set_value.getText()).toString().isEmpty()) {
+                        contentValues.put(COL_VALUE, 0);
+                    } else {
+                        contentValues.put(COL_VALUE, set_value.getText().toString());
+                    }
+                    if (autoComplete.getText().toString().equals(items[1])) {
+                        contentValues.put(COL_UNIT, item[1]);
+
+                    } else if (autoComplete.getText().toString().equals(items[0])) {
+                        contentValues.put(COL_UNIT, item[0]);
+                    } else if (autoComplete.getText().toString().equals(items[2])) {
+                        contentValues.put(COL_UNIT, item[2]);
+                    }
+                } else {
+                    contentValues.put(COL_PRICE, set_price.getText().toString());
+                    contentValues.put(COL_VALUE, set_value.getText().toString());
+                    double a = parseDouble(valueOf(set_price.getText()));
+                    double b = parseDouble(valueOf(set_value.getText()));
+                    double c = a * b;
+
+                    if (autoComplete.getText().toString().equals(items[1])) {
+                        contentValues.put(COL_GRAM_PRICE, c);
+                        contentValues.put(COL_UNIT, item[1]);
+
+                    } else if (autoComplete.getText().toString().equals(items[0])) {
+                        double v = b / 1000;
+                        double r = v * a;
+                        contentValues.put(COL_GRAM_PRICE, r);
+                        contentValues.put(COL_UNIT, item[0]);
+                    } else if (autoComplete.getText().toString().equals(items[2])) {
+                        double v = b / 1000;
+                        double r = v * a;
+                        contentValues.put(COL_GRAM_PRICE, r);
+                        contentValues.put(COL_UNIT, item[2]);
+                    }
+                }
+
+                database.insert("list", null, contentValues);
+                return true;
+            } else {
+                return false;
+            }
         }
+        // Закройте курсор после завершения операции
 
-        // Insert
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_TITLE, Objects.requireNonNull(set_title.getText()).toString());
-        contentValues.put(COL_CATEGORY_ID, category_id);
-        String[] items = getResources().getStringArray(R.array.items);
-
-        try {
-            contentValues.put(COL_IMAGE, ImageViewToByte(set_image));
-
-        } catch (Exception e) {
-
-            contentValues.put(COL_IMAGE, valueOf(set_image));
-        }
-
-        if (Objects.requireNonNull(set_price.getText()).toString().isEmpty() || Objects.requireNonNull(set_value.getText()).toString().isEmpty()){
-
-
-
-            if (set_price.getText().toString().isEmpty()){
-                contentValues.put(COL_PRICE, 0);
-            }else {
-                contentValues.put(COL_PRICE, set_price.getText().toString());
-            }
-            if (Objects.requireNonNull(set_value.getText()).toString().isEmpty()){
-                contentValues.put(COL_VALUE, 0);
-            }else {
-                contentValues.put(COL_VALUE, set_value.getText().toString());
-            }
-            if (autoComplete.getText().toString().equals(items[1])) {
-                contentValues.put(COL_UNIT, item[1]);
-
-            } else if (autoComplete.getText().toString().equals(items[0])){
-                contentValues.put(COL_UNIT, item[0]);
-            }else if (autoComplete.getText().toString().equals(items[2])){
-                contentValues.put(COL_UNIT, item[2]);
-            }
-        }else {
-            contentValues.put(COL_PRICE, set_price.getText().toString());
-            contentValues.put(COL_VALUE, set_value.getText().toString());
-            double a = parseDouble(valueOf(set_price.getText()));
-            double b = parseDouble(valueOf(set_value.getText()));
-            double c = a * b;
-            if (autoComplete.getText().toString().equals(items[1])) {
-                contentValues.put(COL_GRAM_PRICE, c);
-                contentValues.put(COL_UNIT, item[1]);
-
-            } else if (autoComplete.getText().toString().equals(items[0])){
-                double v = b /1000;
-                double r = v * a ;
-                contentValues.put(COL_GRAM_PRICE, r);
-                contentValues.put(COL_UNIT, item[0]);
-            }else if (autoComplete.getText().toString().equals(items[2])){
-                double v = b /1000;
-                double r = v * a ;
-                contentValues.put(COL_GRAM_PRICE, r);
-                contentValues.put(COL_UNIT, item[2]);
-            }
-        }
-
-
-
-        database.insert("list", null, contentValues);
-
-        cursor.close();
-        return true; // Title inserted successfully
     }
 
+    @SuppressLint("SetTextI18n")
+    private void handleSelectedItem(String selectedItem) {
+        String[] items = getResources().getStringArray(R.array.items);
+        String kg = getResources().getString(R.string.kg);
+        String price = getResources().getString(R.string.small_price);
+        String liter = getResources().getString(R.string.liter);
+        String piece = getResources().getString(R.string.piece);
+        String how_many = getResources().getString(R.string.how_many);
+        String used = getResources().getString(R.string.used);
+
+        textview7.setText(how_many + " " + selectedItem + " " + used);
+
+        if (selectedItem.equals(items[0])) {
+            textInputLayout11.setText("1 " + kg + " " + price);
+        } else if (selectedItem.equals(items[1])) {
+            textInputLayout11.setText("1 " + liter + " " + price);
+        } else if (selectedItem.equals(items[2])) {
+            textInputLayout11.setText("1 " + piece + " " + price);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        clearAutoCompleteText();
+    }
+    private void clearAutoCompleteText() {
+        if (autoComplete != null) {
+            autoComplete.setText(""); // Clear the text
+        }
+    }
 }
