@@ -1,23 +1,27 @@
-<androidx.cardview.widget.CardView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:layout_marginBottom="20dp"
-    android:backgroundTint="@color/white"
-    app:cardCornerRadius="10dp">
+    android:backgroundTint="@color/white">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="@color/white">
+        android:layout_margin="15dp"
+        android:backgroundTint="@color/white"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/c"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
+            android:layout_margin="5dp"
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -29,12 +33,12 @@
             <TextView
                 android:id="@+id/name"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="0dp"
                 android:layout_marginStart="5dp"
-                android:gravity="center_vertical|start"
-                android:text="@string/name"
+                android:padding="10dp"
+                android:gravity="center_vertical"
+                android:text="@string/title"
                 android:textColor="@color/black"
-                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/change_dessert"
                 app:layout_constraintEnd_toStartOf="@+id/change_dessert"
                 app:layout_constraintStart_toStartOf="parent"
@@ -111,8 +115,8 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="5dp"
-                        android:src="@drawable/noun_weight_scale_4683187"
                         android:gravity="start"
+                        android:src="@drawable/noun_weight_scale_4683187"
                         android:text="dessert weight"
                         android:textColor="@color/grey"
                         app:layout_constraintStart_toStartOf="parent"
@@ -123,8 +127,8 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="5dp"
-                        android:src="@drawable/noun_ice_cream_4517503"
                         android:gravity="start"
+                        android:src="@drawable/noun_ice_cream_4517503"
                         android:text="dessert size"
                         android:textColor="@color/grey"
                         app:layout_constraintStart_toStartOf="parent"
@@ -134,11 +138,14 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:padding="5dp"
+                    android:paddingStart="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
                     app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="RtlSymmetry">
 
                     <TextView
                         android:id="@+id/portion"
@@ -225,11 +232,12 @@
             <ImageButton
                 android:id="@+id/change_dessert"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/todo"
-                android:src="@drawable/menu"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/more"
+                app:layout_constraintEnd_toEndOf="@+id/result"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -261,6 +269,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
-</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

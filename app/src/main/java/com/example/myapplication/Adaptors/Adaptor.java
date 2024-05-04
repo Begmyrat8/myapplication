@@ -84,36 +84,35 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
         if (value == 0) {
             if (units == null) {
+                holder.hint_unit_price.setText(holder.unit + " " + holder.small_price);
                 holder.hint_unit.setText(holder.unit);
                 holder.value.setText("0");
                 holder.hint_price.setText(holder.unit + " " + holder.small_price);
                 holder.gram_price.setText("0 TMT");
             }else {
-                if (units.equals(holder.items[0])){
+                if (units.equals(holder.item[0])){
                     holder.hint_price.setText("1 " + holder.kg + " " + holder.small_price);
-                }else {
-                    holder.hint_price.setText("1 " + units +" price");
                 }
-                if (units.equals(holder.items[2])){
+                if (units.equals(holder.item[2])){
                     holder.hint_price.setText("1 " + holder.liter + " " + holder.small_price);
-                }else {
-                    holder.hint_price.setText("1 " + units +" price");
                 }
+
+                holder.hint_unit_price.setText(units + " " + holder.small_price);
                 holder.hint_unit.setText(units);
-                holder.value.setText(decimalFormat.format(value) + " " + name);
+                holder.value.setText(decimalFormat.format(value) + " " + units);
                 holder.gram_price.setText(decimalFormat.format(gram_price) + " TMT ");
             }
         }else {
-            if (Objects.equals(units, holder.items[0])){
+            if (Objects.equals(units, holder.item[0])){
                 holder.hint_price.setText("1 " + holder.kg + " " + holder.small_price);
-            }else {
-                holder.hint_price.setText("1 " + units +" price");
             }
-            if (Objects.equals(units, holder.items[2])){
-                holder.hint_price.setText("1 " + holder.liter + " " + holder.small_price);
-            }else {
+            if (Objects.equals(units, holder.item[1])){
                 holder.hint_price.setText("1 " + holder.piece + " " + holder.small_price);
             }
+            if (Objects.equals(units, holder.item[2])){
+                holder.hint_price.setText("1 " + holder.liter + " " + holder.small_price);
+            }
+            holder.hint_unit_price.setText(units + " " + holder.small_price);
             holder.hint_unit.setText(units);
             holder.value.setText(decimalFormat.format(value) +" " + units);
             holder.gram_price.setText(decimalFormat.format(gram_price)  + " TMT ");
@@ -190,11 +189,11 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     public static  class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       TextView title,  price, value, gram_price, hint_unit, hint_price;
+       TextView title,  price, value, gram_price, hint_unit, hint_price, hint_unit_price;
        ImageView img, empty_avatar;
        ImageButton change_btn;
        String kg, small_price, piece, liter, unit;
-        String[] items;
+       String[] item = {"Gram","Piece","Milliliter"};
 
         @SuppressLint("WrongViewCast")
         public CategoryViewHolder(@NonNull View itemView) {
@@ -206,6 +205,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             price = itemView.findViewById(R.id.price);
             value = itemView.findViewById(R.id.gram);
             gram_price = itemView.findViewById(R.id.gram_price);
+            hint_unit_price = itemView.findViewById(R.id.hint_gram_price);
             change_btn = itemView.findViewById(R.id.change_btn);
             img = itemView.findViewById(R.id.avatar);
             empty_avatar = itemView.findViewById(R.id.empty_avatar);
@@ -214,7 +214,6 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             small_price = itemView.getResources().getString(R.string.small_price);
             liter = itemView.getResources().getString(R.string.liter);
             piece = itemView.getResources().getString(R.string.piece);
-            items = itemView.getResources().getStringArray(R.array.items);
             unit = itemView.getResources().getString(R.string.unit);
         }
     }

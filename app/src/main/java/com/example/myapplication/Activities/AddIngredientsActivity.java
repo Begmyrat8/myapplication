@@ -112,8 +112,6 @@ public class AddIngredientsActivity extends AppCompatActivity {
             if(inserted) {
                 Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
                 finish();
-            } else {
-                Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -187,18 +185,22 @@ public class AddIngredientsActivity extends AppCompatActivity {
                     } else {
                         contentValues.put(COL_PRICE, set_price.getText().toString());
                     }
+
                     if (Objects.requireNonNull(set_value.getText()).toString().isEmpty()) {
                         contentValues.put(COL_VALUE, 0);
                     } else {
                         contentValues.put(COL_VALUE, set_value.getText().toString());
                     }
+
                     if (autoComplete.getText().toString().equals(items[1])) {
                         contentValues.put(COL_UNIT, item[1]);
 
                     } else if (autoComplete.getText().toString().equals(items[0])) {
                         contentValues.put(COL_UNIT, item[0]);
+
                     } else if (autoComplete.getText().toString().equals(items[2])) {
                         contentValues.put(COL_UNIT, item[2]);
+
                     }
                 } else {
                     contentValues.put(COL_PRICE, set_price.getText().toString());
@@ -216,12 +218,21 @@ public class AddIngredientsActivity extends AppCompatActivity {
                         double r = v * a;
                         contentValues.put(COL_GRAM_PRICE, r);
                         contentValues.put(COL_UNIT, item[0]);
+
                     } else if (autoComplete.getText().toString().equals(items[2])) {
                         double v = b / 1000;
                         double r = v * a;
                         contentValues.put(COL_GRAM_PRICE, r);
                         contentValues.put(COL_UNIT, item[2]);
                     }
+                }
+                if (autoComplete.getText().toString().isEmpty()){
+                    Toast.makeText(this, "Please select unit", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                if (set_title.getText().toString().isEmpty()){
+                    Toast.makeText(this, "Please add title", Toast.LENGTH_SHORT).show();
+                    return false;
                 }
 
                 database.insert("list", null, contentValues);
@@ -244,7 +255,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
         String how_many = getResources().getString(R.string.how_many);
         String used = getResources().getString(R.string.used);
 
-        textview7.setText(how_many + " " + selectedItem + " " + used);
+        textview7.setText(selectedItem + " " + used);
 
         if (selectedItem.equals(items[0])) {
             textInputLayout11.setText("1 " + kg + " " + price);

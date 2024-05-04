@@ -94,7 +94,6 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         String price = getResources().getString(R.string.small_price);
         String liter = getResources().getString(R.string.liter);
         String piece = getResources().getString(R.string.piece);
-        String how_many = getResources().getString(R.string.how_many);
         String used = getResources().getString(R.string.used);
 
         imageView.setOnClickListener(v -> finish());
@@ -103,7 +102,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                textView77.setText( how_many+ " " + item + " " + used);
+                textView77.setText(item + " " + used);
                 if (autoComplete.getText().toString().equals(items[0])){
                     textInputLayout.setText("1 " + kg + " " + price);
                 }
@@ -123,6 +122,12 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
                 .crop(1f, 1f)
                 .start());
 
+        edit_image.setOnClickListener(v -> ImagePicker.with(this)
+                .crop()	    			//Crop image(Optional), Check Customization for more option
+                .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                .crop(1f, 1f)
+                .start());
 
         save_btn.setOnClickListener(view -> {
 
