@@ -6,6 +6,7 @@ import static java.lang.String.valueOf;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -66,21 +67,10 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this);
         database = dbHelper.getWritableDatabase();
 
-        textInputLayout = findViewById(R.id.textView9);
-        textView77 = findViewById(R.id.textView77);
-        autoComplete = findViewById(R.id.autoComplete2);
-        lang = findViewById(R.id.lang);
-        edit_image = findViewById(R.id.edit_image);
-        imageView = findViewById(R.id.imageView);
-        toolbar = findViewById(R.id.toolbar);
-        edit_title = findViewById(R.id.edit_title);
-        edit_value = findViewById(R.id.edit_gram);
-        edit_price = findViewById(R.id.edit_price);
-        save_btn = findViewById(R.id.save_product);
-        delete = findViewById(R.id.delete);
-        change_ingredient_img = findViewById(R.id.change_ingredient_img);
-
+        findView();
         get_and_set_intent_data();
+        imagePick();
+        insertData();
 
         lang.setVisibility(View.GONE);
         delete.setVisibility(View.GONE);
@@ -115,75 +105,118 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             }
         });
 
-        change_ingredient_img.setOnClickListener(v -> ImagePicker.with(this)
-                .crop()	    			//Crop image(Optional), Check Customization for more option
-                .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                .crop(1f, 1f)
-                .start());
+    }
 
-        edit_image.setOnClickListener(v -> ImagePicker.with(this)
-                .crop()	    			//Crop image(Optional), Check Customization for more option
-                .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                .crop(1f, 1f)
-                .start());
-
-        save_btn.setOnClickListener(view -> {
-
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("title", edit_title.getText().toString());
-            contentValues.put("price", edit_price.getText().toString());
-            try {
-                contentValues.put("image", ImageViewToByte(edit_image));
-
-            } catch (Exception e) {
-                contentValues.put("image", String.valueOf(edit_image));
-            }
-
-            if (edit_price.getText().toString().isEmpty() || edit_value.getText().toString().isEmpty()) {
-
-                if (edit_price.getText().toString().isEmpty()){
-                    contentValues.put("price", 0);
-                }else if (edit_value.getText().toString().isEmpty()){
-                    contentValues.put("value", 0);
-                }
-            } else {
-
-                double a = parseDouble(valueOf(edit_price.getText()));
-                double b = parseDouble(valueOf(edit_value.getText()));
-                double c = a * b;
-                if (autoComplete.getText().toString().equals(items[1])) {
-
-                    contentValues.put("value", edit_value.getText().toString());
-                    contentValues.put("units", items[1]);
-                    contentValues.put("gram_price", c);
-
-                } else if (autoComplete.getText().toString().equals(items[0])){
-                    double v = b /1000;
-                    double r = v * a ;
-                    contentValues.put("gram_price",r);
-                    contentValues.put("value", edit_value.getText().toString());
-                    contentValues.put("units", items[0]);
-                }else {
-                    double v = b /1000;
-                    double r = v * a ;
-                    contentValues.put("gram_price", r);
-                    contentValues.put("value", edit_value.getText().toString());
-                    contentValues.put("units", items[2]);
-                }
-            }
-
-
-            long result = database.update("list", contentValues, "id=" + id, null);
-            if (result == -1) {
-                Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, R.string.updated, Toast.LENGTH_SHORT).show();
-                finish();
-            }
-
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void imagePick(){
+        change_ingredient_img.setOnClickListener(v -> {
+            pickFromGallery();
         });
+        edit_image.setOnClickListener(view -> {
+            pickFromGallery();
+        });
+    }
+    private void pickFromGallery() {
+        ImagePicker.with(this)
+                .crop()	    			//Crop image(Optional), Check Customization for more option
+                .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                .crop(1f, 1f)
+                .start();
+    }
+    private void findView() {
+        textInputLayout = findViewById(R.id.textView9);
+        textView77 = findViewById(R.id.textView77);
+        autoComplete = findViewById(R.id.autoComplete2);
+        lang = findViewById(R.id.lang);
+        edit_image = findViewById(R.id.edit_image);
+        imageView = findViewById(R.id.imageView);
+        toolbar = findViewById(R.id.toolbar);
+        edit_title = findViewById(R.id.edit_title);
+        edit_value = findViewById(R.id.edit_gram);
+        edit_price = findViewById(R.id.edit_price);
+        save_btn = findViewById(R.id.save_product);
+        delete = findViewById(R.id.delete);
+        change_ingredient_img = findViewById(R.id.change_ingredient_img);
+
+    }
+
+    private void insertData (){
+        save_btn.setOnClickListener(view -> {
+            boolean inserted = updateTitleIfNotExists(Objects.requireNonNull(edit_title.getText()).toString());
+
+            if(inserted) {
+                Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                finish();
+            }else {
+                Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private boolean updateTitleIfNotExists(String title) {
+        try (Cursor cursor = database.rawQuery("SELECT * FROM list WHERE title = ?", new String[]{title})) {
+
+            if (cursor.getCount() == 0) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("title", edit_title.getText().toString());
+                contentValues.put("price", edit_price.getText().toString());
+                String[] items = getResources().getStringArray(R.array.items);
+                try {
+                    contentValues.put("image", ImageViewToByte(edit_image));
+
+                } catch (Exception e) {
+                    contentValues.put("image", String.valueOf(edit_image));
+                }
+
+                if (edit_price.getText().toString().isEmpty() || edit_value.getText().toString().isEmpty()) {
+
+                    if (edit_price.getText().toString().isEmpty()){
+                        contentValues.put("price", 0);
+                    }else if (edit_value.getText().toString().isEmpty()){
+                        contentValues.put("value", 0);
+                    }
+                } else {
+
+                    double a = parseDouble(valueOf(edit_price.getText()));
+                    double b = parseDouble(valueOf(edit_value.getText()));
+                    double c = a * b;
+                    if (autoComplete.getText().toString().equals(items[1])) {
+
+                        contentValues.put("value", edit_value.getText().toString());
+                        contentValues.put("units", items[1]);
+                        contentValues.put("gram_price", c);
+
+                    } else if (autoComplete.getText().toString().equals(items[0])){
+                        double v = b /1000;
+                        double r = v * a ;
+                        contentValues.put("gram_price",r);
+                        contentValues.put("value", edit_value.getText().toString());
+                        contentValues.put("units", items[0]);
+                    }else {
+                        double v = b /1000;
+                        double r = v * a ;
+                        contentValues.put("gram_price", r);
+                        contentValues.put("value", edit_value.getText().toString());
+                        contentValues.put("units", items[2]);
+                    }
+                }
+                if (autoComplete.getText().toString().isEmpty()){
+                    Toast.makeText(this, R.string.please_select_unit, Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                if (edit_title.getText().toString().isEmpty()){
+                    Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                database.update("list", contentValues, "id=" + id, null);
+                return true;
+
+            } else {
+                return false;
+            }
+        }
+
     }
     @SuppressLint("SetTextI18n")
     void get_and_set_intent_data(){

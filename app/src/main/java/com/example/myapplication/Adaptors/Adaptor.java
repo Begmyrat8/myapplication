@@ -90,10 +90,10 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
                 holder.hint_price.setText(holder.unit + " " + holder.small_price);
                 holder.gram_price.setText("0 TMT");
             }else {
-                if (units.equals(holder.item[0])){
+                if (units.equals(holder.items[0])){
                     holder.hint_price.setText("1 " + holder.kg + " " + holder.small_price);
                 }
-                if (units.equals(holder.item[2])){
+                if (units.equals(holder.items[2])){
                     holder.hint_price.setText("1 " + holder.liter + " " + holder.small_price);
                 }
 
@@ -103,13 +103,13 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
                 holder.gram_price.setText(decimalFormat.format(gram_price) + " TMT ");
             }
         }else {
-            if (Objects.equals(units, holder.item[0])){
+            if (Objects.equals(units, holder.items[0])){
                 holder.hint_price.setText("1 " + holder.kg + " " + holder.small_price);
             }
-            if (Objects.equals(units, holder.item[1])){
+            if (Objects.equals(units, holder.items[1])){
                 holder.hint_price.setText("1 " + holder.piece + " " + holder.small_price);
             }
-            if (Objects.equals(units, holder.item[2])){
+            if (Objects.equals(units, holder.items[2])){
                 holder.hint_price.setText("1 " + holder.liter + " " + holder.small_price);
             }
             holder.hint_unit_price.setText(units + " " + holder.small_price);
@@ -193,7 +193,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
        ImageView img, empty_avatar;
        ImageButton change_btn;
        String kg, small_price, piece, liter, unit;
-       String[] item = {"Gram","Piece","Milliliter"};
+       String[] items;
 
         @SuppressLint("WrongViewCast")
         public CategoryViewHolder(@NonNull View itemView) {
@@ -209,6 +209,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             change_btn = itemView.findViewById(R.id.change_btn);
             img = itemView.findViewById(R.id.avatar);
             empty_avatar = itemView.findViewById(R.id.empty_avatar);
+            items = itemView.getResources().getStringArray(R.array.items);
 
             kg = itemView.getResources().getString(R.string.kg);
             small_price = itemView.getResources().getString(R.string.small_price);

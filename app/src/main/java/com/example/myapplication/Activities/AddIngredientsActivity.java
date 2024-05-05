@@ -109,9 +109,25 @@ public class AddIngredientsActivity extends AppCompatActivity {
         add_product.setOnClickListener(view -> {
             boolean inserted = insertTitleIfNotExists(Objects.requireNonNull(set_title.getText()).toString());
 
-            if(inserted) {
-                Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
-                finish();
+            if (autoComplete.getText().toString().isEmpty()){
+                Toast.makeText(this, R.string.please_select_unit, Toast.LENGTH_SHORT).show();
+            }else if (set_title.getText().toString().isEmpty()){
+                if (inserted) {
+                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
+                }
+            }
+            if (set_title.getText().toString().isEmpty()){
+                Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
+            }else if (autoComplete.getText().toString().isEmpty()){
+                if (inserted) {
+                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -141,8 +157,10 @@ public class AddIngredientsActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void imagePick(){
-        add_ingredient_img.setOnClickListener(v -> pickFromGallery());
+        add_ingredient_img.setOnClickListener(v -> {pickFromGallery();});
+        set_image.setOnClickListener(view -> {pickFromGallery();});
     }
+
 
     private void pickFromGallery() {
         ImagePicker.with(this)
@@ -193,13 +211,13 @@ public class AddIngredientsActivity extends AppCompatActivity {
                     }
 
                     if (autoComplete.getText().toString().equals(items[1])) {
-                        contentValues.put(COL_UNIT, item[1]);
+                        contentValues.put(COL_UNIT, items[1]);
 
                     } else if (autoComplete.getText().toString().equals(items[0])) {
-                        contentValues.put(COL_UNIT, item[0]);
+                        contentValues.put(COL_UNIT, items[0]);
 
                     } else if (autoComplete.getText().toString().equals(items[2])) {
-                        contentValues.put(COL_UNIT, item[2]);
+                        contentValues.put(COL_UNIT, items[2]);
 
                     }
                 } else {
@@ -211,27 +229,25 @@ public class AddIngredientsActivity extends AppCompatActivity {
 
                     if (autoComplete.getText().toString().equals(items[1])) {
                         contentValues.put(COL_GRAM_PRICE, c);
-                        contentValues.put(COL_UNIT, item[1]);
+                        contentValues.put(COL_UNIT, items[1]);
 
                     } else if (autoComplete.getText().toString().equals(items[0])) {
                         double v = b / 1000;
                         double r = v * a;
                         contentValues.put(COL_GRAM_PRICE, r);
-                        contentValues.put(COL_UNIT, item[0]);
+                        contentValues.put(COL_UNIT, items[0]);
 
                     } else if (autoComplete.getText().toString().equals(items[2])) {
                         double v = b / 1000;
                         double r = v * a;
                         contentValues.put(COL_GRAM_PRICE, r);
-                        contentValues.put(COL_UNIT, item[2]);
+                        contentValues.put(COL_UNIT, items[2]);
                     }
                 }
                 if (autoComplete.getText().toString().isEmpty()){
-                    Toast.makeText(this, "Please select unit", Toast.LENGTH_SHORT).show();
                     return false;
                 }
                 if (set_title.getText().toString().isEmpty()){
-                    Toast.makeText(this, "Please add title", Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
@@ -252,7 +268,6 @@ public class AddIngredientsActivity extends AppCompatActivity {
         String price = getResources().getString(R.string.small_price);
         String liter = getResources().getString(R.string.liter);
         String piece = getResources().getString(R.string.piece);
-        String how_many = getResources().getString(R.string.how_many);
         String used = getResources().getString(R.string.used);
 
         textview7.setText(selectedItem + " " + used);

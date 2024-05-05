@@ -51,4 +51,6 @@
     <string name="exit">Çykmak</string>
     <string name="do_you_really_want_exit">Çykmak isleýäňizmi?</string>
     <string name="delete">Pozmak</string>
+    <string name="please_select_unit">Haýyş, birlik saýlaň</string>
+    <string name="please_add_title">Haýyş, ad goşuň</string>
 </resources>

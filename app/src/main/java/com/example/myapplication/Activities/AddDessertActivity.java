@@ -1,7 +1,5 @@
 package com.example.myapplication.Activities;
 
-import static com.example.myapplication.R.string.dessert_already_exists;
-
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -76,13 +74,16 @@ public class AddDessertActivity extends AppCompatActivity {
         add_btn.setOnClickListener(view -> {
             boolean inserted = insertTitleIfNotExists(set_name.getText().toString());
 
-            if(inserted) {
-                Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
-                finish();
-            } else {
-                Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
+            if (set_name.getText().toString().isEmpty()){
+                Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
+            }else {
+                if (inserted) {
+                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
+                }
             }
-
         });
     }
     private void findView(){
@@ -109,9 +110,10 @@ public class AddDessertActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void imagePick(){
         add_img.setOnClickListener(v -> {
-
             pickFromGallery();
-
+        });
+        image.setOnClickListener(view -> {
+            pickFromGallery();
         });
     }
 
@@ -165,6 +167,9 @@ public class AddDessertActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             contentValues.put(COL_IMAGE, String.valueOf(image));
+        }
+        if (set_name.getText().toString().isEmpty()){
+            return false;
         }
 
         database.insert("dessert", null, contentValues);

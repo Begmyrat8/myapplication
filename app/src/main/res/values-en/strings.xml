@@ -50,4 +50,6 @@
     <string name="exit">Exit</string>
     <string name="do_you_really_want_exit">Would you like to go out?</string>
     <string name="delete">Delete</string>
+    <string name="please_select_unit">Please, select unit</string>
+    <string name="please_add_title">Please, add title</string>
 </resources>

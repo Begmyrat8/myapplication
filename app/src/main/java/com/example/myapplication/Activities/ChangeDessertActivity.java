@@ -3,11 +3,13 @@ package com.example.myapplication.Activities;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -38,6 +41,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
     Toolbar toolbar;
     ImageButton change_dessert_img;
     Button save_btn;
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,24 @@ public class ChangeDessertActivity extends AppCompatActivity {
         DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this);
         database = dbHelper.getWritableDatabase();
         
+        findView();
+        get_and_set_intent_data();
+        imagePick();
+        insertData();
+
+        lang.setVisibility(View.GONE);
+        delete.setVisibility(View.GONE);
+        toolbar.setSubtitle(getString(R.string.change));
+
+        imageView.setOnClickListener(v -> finish());
+
+
+        save_btn.setOnClickListener(view -> {
+
+
+        });
+    }
+    private void findView(){
         lang = findViewById(R.id.lang);
         edit_image = findViewById(R.id.dessert_image);
         imageView = findViewById(R.id.imageView);
@@ -59,63 +81,19 @@ public class ChangeDessertActivity extends AppCompatActivity {
         update_dessert_size = findViewById(R.id.update_dessert_size);
         update_portion_size = findViewById(R.id.update_portion_size);
 
-        get_and_set_intent_data();
-
-        lang.setVisibility(View.GONE);
-        delete.setVisibility(View.GONE);
-        toolbar.setSubtitle(getString(R.string.change));
-
-        imageView.setOnClickListener(v -> finish());
-
-        change_dessert_img.setOnClickListener(v -> ImagePicker.with(this)
+    }
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void imagePick(){
+        change_dessert_img.setOnClickListener(v -> {pickFromGallery();});
+        edit_image.setOnClickListener(view -> {pickFromGallery();});
+    }
+    private void pickFromGallery() {
+        ImagePicker.with(this)
                 .crop()	    			//Crop image(Optional), Check Customization for more option
                 .compress(1024)			//Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
                 .crop(1f, 1f)
-                .start());
-
-        edit_image.setOnClickListener(v -> ImagePicker.with(this)
-                .crop()	    			//Crop image(Optional), Check Customization for more option
-                .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                .crop(1f, 1f)
-                .start());
-
-        save_btn.setOnClickListener(view -> {
-
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("title", Objects.requireNonNull(edit_title.getText()).toString());
-            if (Objects.requireNonNull(update_dessert_size.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty()){
-                if (update_dessert_size.getText().toString().isEmpty()){
-                    contentValues.put("dessert_size", 0);
-                }else {
-                    contentValues.put("portion_size", 0);
-                }
-            }else {
-                contentValues.put("dessert_size", update_dessert_size.getText().toString());
-                contentValues.put("portion_size", update_portion_size.getText().toString());
-
-                double a = Double.parseDouble(String.valueOf(update_dessert_size.getText()));
-                double b = Double.parseDouble(String.valueOf(update_portion_size.getText()));
-
-                contentValues.put("portion", a / b);
-            }
-
-            try {
-                contentValues.put("image", ImageViewToByte(edit_image));
-
-            }catch (Exception e){
-                contentValues.put("image", String.valueOf(edit_image));
-            }
-
-            long result = database.update("dessert", contentValues,"id="+id ,null);
-            if (result == -1){
-                Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
-            }else {
-                Toast.makeText(this, R.string.updated, Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
+                .start();
     }
     void get_and_set_intent_data(){
 
@@ -157,5 +135,62 @@ public class ChangeDessertActivity extends AppCompatActivity {
         assert data != null;
         Uri uri = data.getData();
         edit_image.setImageURI(uri);
+    }
+    private void insertData (){
+        save_btn.setOnClickListener(view -> {
+            boolean inserted = updateTitleIfNotExists(Objects.requireNonNull(edit_title.getText()).toString());
+
+            if (edit_title.getText().toString().isEmpty()){
+                Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
+            }else {
+                if (inserted) {
+                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    private boolean updateTitleIfNotExists(String title) {
+        try (Cursor cursor = database.rawQuery("SELECT * FROM list WHERE title = ?", new String[]{title})) {
+
+            if (cursor.getCount() == 0) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("title", Objects.requireNonNull(edit_title.getText()).toString());
+                if (Objects.requireNonNull(update_dessert_size.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty()) {
+                    if (update_dessert_size.getText().toString().isEmpty()) {
+                        contentValues.put("dessert_size", 0);
+                    } else {
+                        contentValues.put("portion_size", 0);
+                    }
+                } else {
+                    contentValues.put("dessert_size", update_dessert_size.getText().toString());
+                    contentValues.put("portion_size", update_portion_size.getText().toString());
+
+                    double a = Double.parseDouble(String.valueOf(update_dessert_size.getText()));
+                    double b = Double.parseDouble(String.valueOf(update_portion_size.getText()));
+
+                    contentValues.put("portion", a / b);
+                }
+
+                try {
+                    contentValues.put("image", ImageViewToByte(edit_image));
+
+                } catch (Exception e) {
+                    contentValues.put("image", String.valueOf(edit_image));
+                }
+
+                if (edit_title.getText().toString().isEmpty()){
+                    return false;
+                }
+
+                database.update("dessert", contentValues, "id=" + id, null);
+                return true;
+
+            } else {
+                return false;
+            }
+        }
     }
 }
