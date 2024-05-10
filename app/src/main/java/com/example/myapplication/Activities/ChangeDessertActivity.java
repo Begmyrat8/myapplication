@@ -37,7 +37,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
     TextInputEditText edit_title, update_dessert_size, update_portion_size;
     String title, id, dessert_size, portion_size;
     byte [] img;
-    ImageView imageView, edit_image, lang, delete;
+    ImageView imageView, edit_image, lang, delete, mode;
     Toolbar toolbar;
     ImageButton change_dessert_img;
     Button save_btn;
@@ -45,6 +45,9 @@ public class ChangeDessertActivity extends AppCompatActivity {
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
+
+        setTheme(theme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_dessert);
         DatabaseAccess databaseAccess = DatabaseAccess.getInstances(this);
@@ -57,6 +60,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
         imagePick();
         insertData();
 
+        mode.setVisibility(View.GONE);
         lang.setVisibility(View.GONE);
         delete.setVisibility(View.GONE);
         toolbar.setSubtitle(getString(R.string.change));
@@ -70,6 +74,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
         });
     }
     private void findView(){
+        mode = findViewById(R.id.mode);
         lang = findViewById(R.id.lang);
         edit_image = findViewById(R.id.dessert_image);
         imageView = findViewById(R.id.imageView);

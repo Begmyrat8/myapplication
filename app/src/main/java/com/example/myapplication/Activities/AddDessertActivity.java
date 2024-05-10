@@ -35,7 +35,7 @@ public class AddDessertActivity extends AppCompatActivity {
     Button add_btn;
     String COL_TITLE = "title";
     String COL_IMAGE = "image";
-    ImageView imageView, image, lang, delete;
+    ImageView imageView, image, lang, delete, mode;
     EditText set_name;
     TextView set_dessert_size, set_portion_size;
     Toolbar toolbar;
@@ -47,6 +47,10 @@ public class AddDessertActivity extends AppCompatActivity {
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
+
+        // Применяем тему перед super.onCreate()
+        setTheme(theme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_dessert);
 
@@ -60,6 +64,7 @@ public class AddDessertActivity extends AppCompatActivity {
         insertData();
         imagePick();
 
+        mode.setVisibility(View.GONE);
         delete.setVisibility(View.GONE);
         lang.setVisibility(View.GONE);
         toolbar.setSubtitle(R.string.add_dessert);
@@ -87,6 +92,7 @@ public class AddDessertActivity extends AppCompatActivity {
         });
     }
     private void findView(){
+        mode = findViewById(R.id.mode);
         lang = findViewById(R.id.lang);
         imageView = findViewById(R.id.imageView);
         toolbar = findViewById(R.id.toolbar);

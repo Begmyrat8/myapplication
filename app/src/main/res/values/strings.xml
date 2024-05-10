@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Dessert Prices</string>
     <string name="title">Ady</string>
-    <string name="kg_price">Kg/price</string>
+    <string name="kg_price">Kg/baha</string>
     <string name="gram">Gram</string>
     <string name="dessert_name">dessert name</string>
     <string name="price">Baha</string>
@@ -12,7 +12,7 @@
     <string name="weight">Agram</string>
     <string name="name">Ad</string>
     <string name="kg">Kg</string>
-    <string name="unit_price">Birlik_baha</string>
+    <string name="unit_price">Birlik/baha</string>
 
     <string name="rus"> Rus</string>
     <string name="eng"> Eng</string>
@@ -31,26 +31,36 @@
 
     <string name="no_dessert">Desertler ýok</string>
     <string name="add_dessert">Desertdi goşmak</string>
+
     <string name="sm">sm</string>
+
     <string name="dessert_size">Deserdiň ölçegi</string>
-    <string name="portion_size">Bölegiň ölçegi</string>
+    <string name="portion_size">Bölegiň ölçegi</string>]
+
     <string name="select_unit">Birlik saylaň</string>
     <string name="how_many">Näçe</string>
+
     <string name="no_ingredients">Ingredientler ýok</string>
     <string name="add_ingredients">Ingredientleri goşmak</string>
     <string name="ingredients">Ingredientler</string>
+
     <string name="dessert_already_exists">Bu desert eýýäm goşulan</string>
     <string name="ingredient_already_exists">Bu ingredient eýýäm goşulan</string>
     <string name="do_you_want_delete">Pozmak isleýäňizmi?</string>
+
     <string name="piece">Bölek</string>
     <string name="milliliter">Millilitr</string>
     <string name="liter">Litr</string>
     <string name="unit">Birlik</string>
+
     <string name="used"> ulanylýar</string>
     <string name="updated">Täzelendi</string>
     <string name="exit">Çykmak</string>
+
     <string name="do_you_really_want_exit">Çykmak isleýäňizmi?</string>
     <string name="delete">Pozmak</string>
+
     <string name="please_select_unit">Haýyş, birlik saýlaň</string>
     <string name="please_add_title">Haýyş, ad goşuň</string>
+    <string name="please_change_title">Haýyş, ady üýtgediň</string>
 </resources>

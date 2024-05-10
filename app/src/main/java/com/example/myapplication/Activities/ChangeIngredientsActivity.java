@@ -47,8 +47,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     AutoCompleteTextView autoComplete;
     TextView textInputLayout;
     ArrayAdapter<String> adapterItem;
-
-    ImageView imageView, edit_image, lang, delete;
+    ImageView imageView, edit_image, lang, delete, modes;
     Toolbar toolbar;
     ImageButton change_ingredient_img;
     Button save_btn;
@@ -59,6 +58,10 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
+
+        // Применяем тему перед super.onCreate()
+        setTheme(theme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_ingredients);
 
@@ -72,6 +75,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         imagePick();
         insertData();
 
+        modes.setVisibility(View.GONE);
         lang.setVisibility(View.GONE);
         delete.setVisibility(View.GONE);
         toolbar.setSubtitle(getString(R.string.change));
@@ -84,7 +88,6 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         String price = getResources().getString(R.string.small_price);
         String liter = getResources().getString(R.string.liter);
         String piece = getResources().getString(R.string.piece);
-        String used = getResources().getString(R.string.used);
 
         imageView.setOnClickListener(v -> finish());
         autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -92,7 +95,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                textView77.setText(item + " " + used);
+                textView77.setText(item);
                 if (autoComplete.getText().toString().equals(items[0])){
                     textInputLayout.setText("1 " + kg + " " + price);
                 }
@@ -109,12 +112,8 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void imagePick(){
-        change_ingredient_img.setOnClickListener(v -> {
-            pickFromGallery();
-        });
-        edit_image.setOnClickListener(view -> {
-            pickFromGallery();
-        });
+        change_ingredient_img.setOnClickListener(v -> pickFromGallery());
+        edit_image.setOnClickListener(view -> pickFromGallery());
     }
     private void pickFromGallery() {
         ImagePicker.with(this)
@@ -137,6 +136,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         edit_price = findViewById(R.id.edit_price);
         save_btn = findViewById(R.id.save_product);
         delete = findViewById(R.id.delete);
+        modes = findViewById(R.id.mode);
         change_ingredient_img = findViewById(R.id.change_ingredient_img);
 
     }
@@ -145,15 +145,32 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         save_btn.setOnClickListener(view -> {
             boolean inserted = updateTitleIfNotExists(Objects.requireNonNull(edit_title.getText()).toString());
 
-            if(inserted) {
-                Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
-                finish();
-            }else {
-                Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
+            if (edit_title.getText().toString().isEmpty()){
+                Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
+            }else if (!autoComplete.getText().toString().isEmpty()) {
+                if (inserted) {
+                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.please_change_title, Toast.LENGTH_SHORT).show();
+                }
+
+            }else  if (autoComplete.getText().toString().isEmpty()){
+                Toast.makeText(this, R.string.please_select_unit, Toast.LENGTH_SHORT).show();
+            }else if (!edit_title.getText().toString().isEmpty()){
+                if (inserted) {
+                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, (R.string.dessert_already_exists), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.please_change_title, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
     private boolean updateTitleIfNotExists(String title) {
+
         try (Cursor cursor = database.rawQuery("SELECT * FROM list WHERE title = ?", new String[]{title})) {
 
             if (cursor.getCount() == 0) {
@@ -201,11 +218,9 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
                     }
                 }
                 if (autoComplete.getText().toString().isEmpty()){
-                    Toast.makeText(this, R.string.please_select_unit, Toast.LENGTH_SHORT).show();
                     return false;
                 }
                 if (edit_title.getText().toString().isEmpty()){
-                    Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
@@ -224,8 +239,10 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         if (getIntent().hasExtra("id") && getIntent().hasExtra("title") && getIntent().hasExtra("price") && getIntent().hasExtra("image") && getIntent().hasExtra("value") && getIntent().hasExtra("units")){
 
             String[] items = getResources().getStringArray(R.array.items);
-            String how_many = getResources().getString(R.string.how_many);
-            String used = getResources().getString(R.string.used);
+            String kg = getResources().getString(R.string.kg);
+            String prices = getResources().getString(R.string.small_price);
+            String liter = getResources().getString(R.string.liter);
+            String piece = getResources().getString(R.string.piece);
 
             id = getIntent().getStringExtra("id");
             title = getIntent().getStringExtra("title");
@@ -234,32 +251,23 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             img = getIntent().getByteArrayExtra("image");
             units = getIntent().getStringExtra("units");
 
-            if (value.equals("0")){
-                if (units == null){
-                    textView77.setText(how_many);
-                    autoComplete.setText(" ");
-                }else if (units.equals(how_many + " " + items[1])){
-                    textView77.setText(items[1]);
-                    edit_value.setText(units);
-                    autoComplete.setText(items[1],false);
+            edit_value.setText(value);
+            autoComplete.setText(units);
 
-                }else if (units.equals(how_many + " " + items[2])){
-                    textView77.setText( how_many + " " + items[2]);
-                    edit_value.setText(value);
-                    autoComplete.setText(items[2],false);
-                }
-            }else{
-                textView77.setText(how_many + " " + units + " " + used);
-                edit_value.setText(value);
-                autoComplete.setText(units,false);
+            if (units.equals(items[0])){
+                textView77.setText("1 " + kg + " " + prices);
             }
-
+            if (units.equals(items[2])){
+                textView77.setText("1 " + liter + " " + prices);
+            }
+            if (units.equals(items[1])){
+                textView77.setText("1 " + piece + " " + prices);
+            }
 
             edit_title.setText(title);
 
-            if (!Objects.equals(price, "0.0")){
-                edit_price.setText(price);
-            }
+            edit_price.setText(price);
+
 
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             if (bitmap != null){
@@ -291,7 +299,6 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        clearAutoCompleteText();
     }
     private void clearAutoCompleteText() {
         if (autoComplete != null) {

@@ -3,7 +3,6 @@ package com.example.myapplication.Activities;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -37,13 +36,17 @@ public class IngredientActivity extends AppCompatActivity {
     String dessertName;
     String dessertId;
     Toolbar toolbar;
-    ImageView lang, imageView, delete;
+    ImageView lang, imageView, delete, modes;
     FloatingActionButton add_button;
     Button add_ingredient;
     SQLiteDatabase database;
+
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        setTheme(themeId());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient);
 
@@ -62,12 +65,15 @@ public class IngredientActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         add_button = findViewById(R.id.buttons);
         empty = findViewById(R.id.empty_ingredients);
+        modes = findViewById(R.id.mode);
 
         lang.setVisibility(View.GONE);
         imageView.setOnClickListener(v -> finish());
 
         dessertName = getIntent().getStringExtra("dessertName");
         dessertId = getIntent().getStringExtra("dessertId");
+
+        modes.setVisibility(View.GONE);
 
         delete.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -103,6 +109,7 @@ public class IngredientActivity extends AppCompatActivity {
 
             Intent intent = new Intent(this, AddIngredientsActivity.class);
             intent.putExtra("dessertId", dessertId);
+            intent.putExtra("style", themeId());
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
 
@@ -110,6 +117,7 @@ public class IngredientActivity extends AppCompatActivity {
         add_ingredient.setOnClickListener(view -> {
             Intent intent = new Intent(this, AddIngredientsActivity.class);
             intent.putExtra("dessertId", dessertId);
+            intent.putExtra("style", themeId());
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
         });
@@ -162,6 +170,11 @@ public class IngredientActivity extends AppCompatActivity {
     }
     public void refresh(){
         recreate();
+    }
+
+    public int themeId(){
+        int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
+        return theme;
     }
 
 }

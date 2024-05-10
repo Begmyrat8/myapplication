@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/dark_chocolate</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/chocolate</item>
+        <item name="colorSecondaryVariant">@color/light_grey</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/anonymous_pro</item>
+    </style>
+
+    <style name="AppTheme.Blue" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">#283593</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#558B2F</item>
+        <item name="colorSecondaryVariant">#C9CDDF</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">#283593</item>
+        <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/anonymous_pro</item>
+    </style>
+    <style name="AppTheme.Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">#5C330F</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#D5AD20</item>
+        <item name="colorSecondaryVariant">#DEC9DF</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">#5C330F</item>
+        <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/anonymous_pro</item>
+    </style>
+
+</resources>

@@ -31,8 +31,8 @@
 
     <string name="select_language">Выберите язык</string>
 
-    <string name="saved">Сохранино</string>
-    <string name="changed">Изменино</string>
+    <string name="saved">Сохранено</string>
+    <string name="changed">Изменено</string>
 
     <string name="no_dessert">Десертов нет</string>
     <string name="add_dessert">Добавить десерт</string>
@@ -61,4 +61,5 @@
     <string name="delete">Удалить</string>
     <string name="please_select_unit">Пожалуйста, выберите единицу</string>
     <string name="please_add_title">Пожалуйста, добавьте название</string>
+    <string name="please_change_title">Пожалуйста, измените название</string>
 </resources>

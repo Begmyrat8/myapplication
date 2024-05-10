@@ -42,7 +42,7 @@
                         android:layout_height="0dp"
                         android:background="@android:color/transparent"
                         android:gravity="center_vertical"
-                        android:src="@drawable/more"
+                        android:src="@drawable/menu"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/title_edit_text"
@@ -66,9 +66,10 @@
                     android:id="@+id/containers"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_margin="3dp"
                     android:paddingStart="5dp"
-                    android:paddingBottom="5dp"
                     android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/title_and_btn"
                     app:layout_constraintStart_toEndOf="@+id/avatar"
@@ -77,7 +78,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/gram_container"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="@+id/price_container"
                         app:layout_constraintStart_toStartOf="parent"
@@ -87,11 +88,12 @@
                             android:id="@+id/gram"
                             android:layout_width="0dp"
                             android:layout_height="30dp"
-                            android:gravity="end|center"
+                            android:gravity="end|center_vertical"
                             android:text="@string/gram"
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/hint_gram"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
@@ -101,8 +103,6 @@
                             android:gravity="start|center"
                             android:text="@string/gram"
                             android:textColor="@color/grey"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/gram"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -168,7 +168,7 @@
                             android:layout_width="0dp"
                             android:layout_height="30dp"
                             android:gravity="start|center"
-                            android:text="1 kg/price"
+                            android:text="@string/kg_price"
                             android:textColor="@color/grey"
                             app:layout_constraintEnd_toStartOf="@+id/price"
                             app:layout_constraintStart_toStartOf="parent"

@@ -72,9 +72,9 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
         double price = list.get(position).getPrice();
         if (price == 0){
-            holder.price.setText(0 + " TMT ");
+            holder.price.setText(0 + " TMT");
         }else {
-            holder.price.setText(decimalFormat.format(price) + " TMT ");
+            holder.price.setText(decimalFormat.format(price) + " TMT");
         }
 
         int value = list.get(position).getValue();
@@ -82,41 +82,24 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         double gram_price = list.get(position).getGram_price();
 
 
-        if (value == 0) {
-            if (units == null) {
-                holder.hint_unit_price.setText(holder.unit + " " + holder.small_price);
-                holder.hint_unit.setText(holder.unit);
-                holder.value.setText("0");
-                holder.hint_price.setText(holder.unit + " " + holder.small_price);
-                holder.gram_price.setText("0 TMT");
-            }else {
-                if (units.equals(holder.items[0])){
-                    holder.hint_price.setText("1 " + holder.kg + " " + holder.small_price);
-                }
-                if (units.equals(holder.items[2])){
-                    holder.hint_price.setText("1 " + holder.liter + " " + holder.small_price);
-                }
-
-                holder.hint_unit_price.setText(units + " " + holder.small_price);
-                holder.hint_unit.setText(units);
-                holder.value.setText(decimalFormat.format(value) + " " + units);
-                holder.gram_price.setText(decimalFormat.format(gram_price) + " TMT ");
-            }
-        }else {
-            if (Objects.equals(units, holder.items[0])){
-                holder.hint_price.setText("1 " + holder.kg + " " + holder.small_price);
-            }
-            if (Objects.equals(units, holder.items[1])){
-                holder.hint_price.setText("1 " + holder.piece + " " + holder.small_price);
-            }
-            if (Objects.equals(units, holder.items[2])){
-                holder.hint_price.setText("1 " + holder.liter + " " + holder.small_price);
-            }
-            holder.hint_unit_price.setText(units + " " + holder.small_price);
-            holder.hint_unit.setText(units);
-            holder.value.setText(decimalFormat.format(value) +" " + units);
-            holder.gram_price.setText(decimalFormat.format(gram_price)  + " TMT ");
+        if (Objects.equals(units, holder.items[0])){
+            holder.hint_price.setText("1 " + holder.kg + " " + holder.small_price);
+            holder.hint_unit_price.setText( holder.gram+ " " + holder.small_price);
+            holder.hint_unit.setText(holder.gram);
         }
+        if (Objects.equals(units, holder.items[1])){
+            holder.hint_price.setText("1 " + holder.piece + " " + holder.small_price);
+            holder.hint_unit_price.setText(holder.piece + " " + holder.small_price);
+            holder.hint_unit.setText(holder.piece);
+        }
+        if (Objects.equals(units, holder.items[2])){
+            holder.hint_price.setText("1 " + holder.liter + " " + holder.small_price);
+            holder.hint_unit_price.setText(holder.milliliter + " " + holder.small_price);
+            holder.hint_unit.setText(holder.milliliter);
+        }
+        holder.value.setText(decimalFormat.format(value));
+        holder.gram_price.setText(decimalFormat.format(gram_price)  + " TMT");
+
 
 
 
@@ -168,6 +151,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
                     intent.putExtra("price", String.valueOf(list.get(position).getPrice()));
                     intent.putExtra("image", list.get(position).getImage());
                     intent.putExtra("units", String.valueOf(list.get(position).getUnits()));
+                    intent.putExtra("styles",((IngredientActivity) context).themeId());
 
                     context.startActivity(intent);
                     return true;
@@ -192,7 +176,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
        TextView title,  price, value, gram_price, hint_unit, hint_price, hint_unit_price;
        ImageView img, empty_avatar;
        ImageButton change_btn;
-       String kg, small_price, piece, liter, unit;
+       String kg, small_price, piece, liter, unit, gram, milliliter;
        String[] items;
 
         @SuppressLint("WrongViewCast")
@@ -216,6 +200,10 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             liter = itemView.getResources().getString(R.string.liter);
             piece = itemView.getResources().getString(R.string.piece);
             unit = itemView.getResources().getString(R.string.unit);
+            gram = itemView.getResources().getString(R.string.gram);
+            milliliter = itemView.getResources().getString(R.string.milliliter);
+
+
         }
     }
 

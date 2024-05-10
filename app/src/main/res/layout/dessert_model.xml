@@ -236,7 +236,7 @@
                 android:layout_marginTop="5dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/todo"
-                android:src="@drawable/more"
+                android:src="@drawable/menu"
                 app:layout_constraintEnd_toEndOf="@+id/result"
                 app:layout_constraintTop_toTopOf="parent" />
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_grey"
+    android:background="?attr/colorSecondaryVariant"
     tools:context=".Activities.ChangeDessertActivity">
 
     <include
@@ -164,6 +164,7 @@
 
     <Button
         android:id="@+id/save_dessert"
+        android:backgroundTint="?attr/colorPrimaryVariant"
         android:layout_width="match_parent"
         android:layout_margin="20dp"
         android:layout_height="70dp"

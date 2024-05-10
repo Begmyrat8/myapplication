@@ -48,7 +48,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
     String COL_CATEGORY_ID = "dessert_id";
     String COL_UNIT = "units";
     String category_id;
-    ImageView imageView, set_image, lang, delete;
+    ImageView imageView, set_image, lang, delete, modes;
     TextInputEditText set_title, set_value, set_price;
     TextView  textInputLayout11;
     AutoCompleteTextView autoComplete;
@@ -64,6 +64,10 @@ public class AddIngredientsActivity extends AppCompatActivity {
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
+
+        // Применяем тему перед super.onCreate()
+        setTheme(theme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_ingredients);
 
@@ -83,6 +87,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
 
         delete.setVisibility(View.GONE);
         lang.setVisibility(View.GONE);
+        modes.setVisibility(View.GONE);
 
         String[] items = getResources().getStringArray(R.array.items);
         adapterItem = new ArrayAdapter<>(this, R.layout.item_list, items);
@@ -109,30 +114,33 @@ public class AddIngredientsActivity extends AppCompatActivity {
         add_product.setOnClickListener(view -> {
             boolean inserted = insertTitleIfNotExists(Objects.requireNonNull(set_title.getText()).toString());
 
-            if (autoComplete.getText().toString().isEmpty()){
-                Toast.makeText(this, R.string.please_select_unit, Toast.LENGTH_SHORT).show();
-            }else if (set_title.getText().toString().isEmpty()){
-                if (inserted) {
-                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
-                }
-            }
             if (set_title.getText().toString().isEmpty()){
                 Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
-            }else if (autoComplete.getText().toString().isEmpty()){
+            }else if (!autoComplete.getText().toString().isEmpty()) {
                 if (inserted) {
                     Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.please_change_title, Toast.LENGTH_SHORT).show();
+                }
+
+            }else  if (autoComplete.getText().toString().isEmpty()){
+                Toast.makeText(this, R.string.please_select_unit, Toast.LENGTH_SHORT).show();
+            }else if (!set_title.getText().toString().isEmpty()){
+                if (inserted) {
+                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, (R.string.dessert_already_exists), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.please_change_title, Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
     private void findView(){
 
+        modes = findViewById(R.id.mode);
         textInputLayout11 = findViewById(R.id.textView99);
         textview7 = findViewById(R.id.textView7);
         lang = findViewById(R.id.lang);
@@ -268,16 +276,15 @@ public class AddIngredientsActivity extends AppCompatActivity {
         String price = getResources().getString(R.string.small_price);
         String liter = getResources().getString(R.string.liter);
         String piece = getResources().getString(R.string.piece);
-        String used = getResources().getString(R.string.used);
 
-        textview7.setText(selectedItem + " " + used);
+        textview7.setText(selectedItem);
 
         if (selectedItem.equals(items[0])) {
             textInputLayout11.setText("1 " + kg + " " + price);
         } else if (selectedItem.equals(items[1])) {
-            textInputLayout11.setText("1 " + liter + " " + price);
-        } else if (selectedItem.equals(items[2])) {
             textInputLayout11.setText("1 " + piece + " " + price);
+        } else if (selectedItem.equals(items[2])) {
+            textInputLayout11.setText("1 " + liter + " " + price);
         }
     }
 

@@ -80,7 +80,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
         holder.portion_size.setText(decimalFormat.format(portion_size) + " cm");
 
         double portion = Double.parseDouble(String.valueOf(desserts.get(position).getPortion()));
-        holder.portion.setText(decimalFormat.format(portion) + " ");
+        holder.portion.setText(decimalFormat.format(portion));
 
         if (portion == 0 && sum == 0){
             holder.portion_price.setText("0 TMT");
@@ -143,6 +143,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
                     intent.putExtra("image", desserts.get(position).getImage());
                     intent.putExtra("portion_size", String.valueOf(desserts.get(position).getPortion_size()));
                     intent.putExtra("dessert_size", String.valueOf(desserts.get(position).getDessert_size()));
+                    intent.putExtra("style",((MainActivity)context).getMyStyleId());
                     context.startActivity(intent);
                     return true;
                 }
@@ -160,6 +161,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
             Intent intent = new Intent(context, IngredientActivity.class);
             intent.putExtra("dessertName", dessertName);
             intent.putExtra("dessertId", String.valueOf(desserts.get(position).getId()));
+            intent.putExtra("style",((MainActivity)context).getMyStyleId());
             context.startActivity(intent);
         });
     }
