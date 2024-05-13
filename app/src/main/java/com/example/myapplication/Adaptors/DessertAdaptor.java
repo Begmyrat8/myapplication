@@ -33,9 +33,10 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
     Context context;
     List<DessertModel> desserts;
-
+    private boolean isFirstImage = true;
     SQLiteDatabase database;
     DatabaseOpenHelper databaseHelper;
+    private int selectedItemPosition = -1;
 
     public DessertAdaptor(Context context, List<DessertModel> desserts) {
         this.context = context;
@@ -155,6 +156,10 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
         });
 
 
+        holder.dessert_like.setOnClickListener(v -> {
+
+        });
+
 
         holder.itemView.setOnClickListener(v -> {
 
@@ -174,7 +179,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
     public static final class CategoryViewHolder extends RecyclerView.ViewHolder{
 
         ImageView dessertImage, empty_img;
-        ImageButton  change_dessert;
+        ImageButton  change_dessert, dessert_like;
         TextView dessertTitle, sum, weight, portion, portion_price, dessert_size, portion_size;
 
         public CategoryViewHolder(@NonNull View itemView) {
@@ -190,6 +195,8 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
             portion_price = itemView.findViewById(R.id.portion_price);
             dessert_size = itemView.findViewById(R.id.dessert_size);
             portion_size = itemView.findViewById(R.id.portion_size);
+            dessert_like = itemView.findViewById(R.id.like_dessert);
         }
     }
+
 }

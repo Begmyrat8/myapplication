@@ -63,4 +63,6 @@
     <string name="please_select_unit">Haýyş, birlik saýlaň</string>
     <string name="please_add_title">Haýyş, ad goşuň</string>
     <string name="please_change_title">Haýyş, ady üýtgediň</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

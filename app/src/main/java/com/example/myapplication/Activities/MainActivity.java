@@ -13,34 +13,32 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.example.myapplication.Adaptors.DessertAdaptor;
 import com.example.myapplication.Datebase.DatabaseAccess;
-import com.example.myapplication.Models.DessertModel;
+import com.example.myapplication.Fragments.BookmarkFragment;
+import com.example.myapplication.Fragments.HomeFragment;
 import com.example.myapplication.R;
+import com.example.myapplication.databinding.ActivityMainBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
-    java.util.List<DessertModel> List = new ArrayList<>();
-    DessertAdaptor Adaptor;
     DatabaseAccess databaseAccess;
     ConstraintLayout empty;
-    RecyclerView Recycler;
     ImageView imageView, lang, delete, modes;
     FloatingActionButton add_button;
     Button add_dessert;
     SharedPreferences prefs = null;
+    ActivityMainBinding binding;
 
     @Override
     protected int getContentView() {
         return R.layout.activity_main;
     }
+    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onViewReady(Bundle savedInstanceState,Intent intent) {
         int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
@@ -48,6 +46,7 @@ public class MainActivity extends BaseActivity {
         // Применяем тему перед super.onCreate()
         setTheme(theme);
         super.onViewReady(savedInstanceState, intent);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_main);
         databaseAccess = DatabaseAccess.getInstances(this.getApplicationContext());
         databaseAccess.open();
@@ -59,8 +58,7 @@ public class MainActivity extends BaseActivity {
             finish();
         }
 
-        Recycler = findViewById(R.id.category_list);
-        Recycler.setHasFixedSize(true);
+//
 
         add_dessert = findViewById(R.id.add_dessert);
         delete = findViewById(R.id.delete);
@@ -71,6 +69,20 @@ public class MainActivity extends BaseActivity {
         empty = findViewById(R.id.empty);
 
         lang.setOnClickListener(v -> showLanguagePicker(this, false));
+
+        replaceFragment(new HomeFragment());
+        binding.bottomNavigationView.setBackground(null);
+
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+
+            if (item.getItemId() == R.id.home) {
+                replaceFragment(new HomeFragment());
+            } else  {
+                replaceFragment(new BookmarkFragment());
+            }
+            return true;
+
+        });
 
         modes.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(this, v);
@@ -136,34 +148,10 @@ public class MainActivity extends BaseActivity {
 
         });
 
-        add_dessert.setOnClickListener(view -> {
-            startActivity(new Intent(this, AddDessertActivity.class).putExtra("style",getMyStyleId()), ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        });
 
 
-        List = databaseAccess.getDessertList();
-
-        setRecycler(List);
-        if (List.isEmpty()) {
-            Recycler.setVisibility(View.GONE);
-            empty.setVisibility(View.VISIBLE);
-        } else {
-            Recycler.setVisibility(View.VISIBLE);
-            empty.setVisibility(View.GONE);
-        }
-    }
-
-    private void setRecycler(List<DessertModel> categoryList) {
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(this,RecyclerView.VERTICAL,false);
-        Recycler.setLayoutManager(manager);
-
-        Adaptor = new DessertAdaptor(this, categoryList);
-        Recycler.setAdapter(Adaptor);
 
     }
-
-
 
     @Override
     protected void onResume() {
@@ -172,19 +160,19 @@ public class MainActivity extends BaseActivity {
         databaseAccess.open();
 
 
-        Recycler = findViewById(R.id.category_list);
-        Recycler.setHasFixedSize(true);
-
-        List = databaseAccess.getDessertList();
-        setRecycler(List);
-
-        if (List.isEmpty()) {
-            Recycler.setVisibility(View.GONE);
-            empty.setVisibility(View.VISIBLE);
-        }else {
-            Recycler.setVisibility(View.VISIBLE);
-            empty.setVisibility(View.GONE);
-        }
+//        Recycler = findViewById(R.id.category_list);
+//        Recycler.setHasFixedSize(true);
+//
+//        List = databaseAccess.getDessertList();
+//        setRecycler(List);
+//
+//        if (List.isEmpty()) {
+//            Recycler.setVisibility(View.GONE);
+//            empty.setVisibility(View.VISIBLE);
+//        }else {
+//            Recycler.setVisibility(View.VISIBLE);
+//            empty.setVisibility(View.GONE);
+//        }
     }
 
 
@@ -234,5 +222,11 @@ public class MainActivity extends BaseActivity {
         editor.putInt("theme", theme);
         editor.apply();
         return theme;
+    }
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 }
