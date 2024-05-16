@@ -82,13 +82,31 @@ public class HomeFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        databaseAccess = DatabaseAccess.getInstances(getContext().getApplicationContext());
+        databaseAccess.open();
 
+        Recycler.setHasFixedSize(true);
+
+        List = databaseAccess.getDessertList();
+        setRecycler(List);
+
+        if (List.isEmpty()) {
+            Recycler.setVisibility(View.GONE);
+            empty.setVisibility(View.VISIBLE);
+        }else {
+            Recycler.setVisibility(View.VISIBLE);
+            empty.setVisibility(View.GONE);
+        }
+    }
 
     private void setRecycler(List<DessertModel> categoryList) {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
         Recycler.setLayoutManager(manager);
 
-        Adaptor = new DessertAdaptor(getContext(), categoryList);
+        Adaptor = new DessertAdaptor(getContext(), categoryList,1);
         Recycler.setAdapter(Adaptor);
 
     }

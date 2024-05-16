@@ -61,5 +61,8 @@
     <string name="delete">Удалить</string>
     <string name="please_select_unit">Пожалуйста, выберите единицу</string>
     <string name="please_add_title">Пожалуйста, добавьте название</string>
-    <string name="please_change_title">Пожалуйста, измените название</string>
+    <string name="please_change_title">Пожалуйста, измените название</string>\
+
+    <string name="liked">Понравившиеся</string>
+    <string name="home">Главная</string>
 </resources>

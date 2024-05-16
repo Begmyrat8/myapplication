@@ -53,4 +53,7 @@
     <string name="please_select_unit">Please, select unit</string>
     <string name="please_add_title">Please, add title</string>
     <string name="please_change_title">Please, change title</string>
+
+    <string name="liked">Liked</string>
+    <string name="home">Main</string>
 </resources>

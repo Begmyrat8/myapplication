@@ -165,6 +165,24 @@ public class DatabaseAccess {
         }
         return stringArrayList;
     }
+    public List<DessertModel> getBookmarkList() {
+        c = database.rawQuery("select * from bookmark", null);
+        List<DessertModel> stringArrayList = new ArrayList<>();
+        while (c.moveToNext()) {
+            int id = c.getInt(0);
+            String title = c.getString(1);
+            byte[] image = c.getBlob(2);
+            double weight = c.getDouble(8);
+            double sum = c.getDouble(7);
+            double dessert_size = c.getDouble(3);
+            double portion = c.getDouble(5);
+            double portion_size = c.getDouble(4);
+            double portion_price = c.getDouble(6);
+
+            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size,portion_price));
+        }
+        return stringArrayList;
+    }
     public List<Model> getDessertData(String dessertId) {
         c = database.rawQuery("select * from list where dessert_id ='" + dessertId + "';" , null);
         List<Model> stringArrayList = new ArrayList<>();

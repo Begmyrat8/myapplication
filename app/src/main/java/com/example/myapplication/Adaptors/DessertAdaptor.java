@@ -2,6 +2,7 @@ package com.example.myapplication.Adaptors;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -36,11 +37,13 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
     private boolean isFirstImage = true;
     SQLiteDatabase database;
     DatabaseOpenHelper databaseHelper;
+    private int currentFragment;
     private int selectedItemPosition = -1;
 
-    public DessertAdaptor(Context context, List<DessertModel> desserts) {
+    public DessertAdaptor(Context context, List<DessertModel> desserts, int currentFragment) {
         this.context = context;
         this.desserts = desserts;
+        this.currentFragment = currentFragment;
     }
 
     @NonNull
@@ -63,12 +66,8 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
         String id = String.valueOf(desserts.get(position).getId());
         String dessertName = desserts.get(position).getTitle();
-        if (dessertName.isEmpty()){
-            holder.dessertTitle.setText("Untitled");
-        }else {
-            holder.dessertTitle.setText(dessertName);
-        }
 
+        holder.dessertTitle.setText(dessertName);
 
 
         double sum = Double.parseDouble(String.format("%s", databaseAccess.getSumPrice(id)));
@@ -123,13 +122,20 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
                     builder.setTitle(R.string.do_you_want_delete)
                             .setCancelable(true)
                             .setPositiveButton((R.string.yes), (dialog, which) -> {
-                                database.delete("dessert","id=" + desserts.get(position).getId(),null);
-                                desserts.remove(position);
-                                notifyItemRemoved(position);
-
-                                ((MainActivity)context).refresh();
+                                if (currentFragment == 0) { // If in bookmark fragment
+                                    // Handle bookmark fragment deletion
+                                    database.delete("bookmark", "id=" + desserts.get(position).getId(), null);
+                                    // Update the RecyclerView
+                                    desserts.remove(position);
+                                    notifyItemRemoved(position);
+                                } else if (currentFragment == 1) { // If in home fragment
+                                    // Handle home fragment deletion
+                                    database.delete("desserts", "id=" + desserts.get(position).getId(), null);
+                                    // Update the RecyclerView
+                                    desserts.remove(position);
+                                    notifyItemRemoved(position);
+                                }
                             })
-
                             .setNegativeButton((R.string.no), (dialog, which) -> dialog.cancel());
 
                     AlertDialog alertDialog = builder.create();
@@ -147,6 +153,18 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
                     intent.putExtra("style",((MainActivity)context).getMyStyleId());
                     context.startActivity(intent);
                     return true;
+                } else if (itemId == R.id.nav_bookmark) {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("title", holder.dessertTitle.getText().toString());
+                    contentValues.put("sum", holder.sum.getText().toString());
+                    contentValues.put("dessert_size", holder.dessert_size.getText().toString());
+                    contentValues.put("portion_size", holder.portion_size.getText().toString());
+                    contentValues.put("portion_price", holder.portion_price.getText().toString());
+                    contentValues.put("weight", holder.weight.getText().toString());
+                    contentValues.put("portion", holder.portion.getText().toString());
+                    contentValues.put("image", desserts.get(position).getImage());
+                    database.insert("bookmark", null, contentValues);
+
                 }
                 return false;
             });
@@ -155,10 +173,6 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
             popupMenu.show();
         });
 
-
-        holder.dessert_like.setOnClickListener(v -> {
-
-        });
 
 
         holder.itemView.setOnClickListener(v -> {
@@ -179,7 +193,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
     public static final class CategoryViewHolder extends RecyclerView.ViewHolder{
 
         ImageView dessertImage, empty_img;
-        ImageButton  change_dessert, dessert_like;
+        ImageButton  change_dessert;
         TextView dessertTitle, sum, weight, portion, portion_price, dessert_size, portion_size;
 
         public CategoryViewHolder(@NonNull View itemView) {
@@ -195,7 +209,6 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
             portion_price = itemView.findViewById(R.id.portion_price);
             dessert_size = itemView.findViewById(R.id.dessert_size);
             portion_size = itemView.findViewById(R.id.portion_size);
-            dessert_like = itemView.findViewById(R.id.like_dessert);
         }
     }
 

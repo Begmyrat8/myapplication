@@ -6,22 +6,25 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.myapplication.Adaptors.FragmentAdapter;
 import com.example.myapplication.Datebase.DatabaseAccess;
-import com.example.myapplication.Fragments.BookmarkFragment;
-import com.example.myapplication.Fragments.HomeFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityMainBinding;
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends BaseActivity {
@@ -31,14 +34,18 @@ public class MainActivity extends BaseActivity {
     ImageView imageView, lang, delete, modes;
     FloatingActionButton add_button;
     Button add_dessert;
+    ViewPager2 viewPager;
     SharedPreferences prefs = null;
     ActivityMainBinding binding;
+    FragmentAdapter fragmentAdapter;
+    BottomNavigationView bnv;
 
     @Override
     protected int getContentView() {
         return R.layout.activity_main;
     }
-    @SuppressLint("NonConstantResourceId")
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @SuppressLint({"NonConstantResourceId", "MissingInflatedId", "ResourceAsColor"})
     @Override
     protected void onViewReady(Bundle savedInstanceState,Intent intent) {
         int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
@@ -58,8 +65,8 @@ public class MainActivity extends BaseActivity {
             finish();
         }
 
-//
-
+        bnv = findViewById(R.id.bottomNavigationView);
+        viewPager = findViewById(R.id.view_pager);
         add_dessert = findViewById(R.id.add_dessert);
         delete = findViewById(R.id.delete);
         lang = findViewById(R.id.lang);
@@ -70,18 +77,56 @@ public class MainActivity extends BaseActivity {
 
         lang.setOnClickListener(v -> showLanguagePicker(this, false));
 
-        replaceFragment(new HomeFragment());
+        FragmentAdapter fragmentAdapter = new FragmentAdapter(this, bnv);
+        viewPager.setAdapter(fragmentAdapter);
+
+
         binding.bottomNavigationView.setBackground(null);
 
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+        int color;
+        if (theme == R.style.AppTheme){
+            color = ContextCompat.getColor(this, R.color.chocolate);
+        }else if (theme == R.style.AppTheme_Dark){
+            color = ContextCompat.getColor(this, R.color.orange);
+        }else if (theme == R.style.AppTheme_Blue) {
+            color = ContextCompat.getColor(this, R.color.green);
+        }else {
+            color = 0;
+        }
 
-            if (item.getItemId() == R.id.home) {
-                replaceFragment(new HomeFragment());
-            } else  {
-                replaceFragment(new BookmarkFragment());
+
+        bnv.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.home) {
+                viewPager.setCurrentItem(0, false);
+                setIconColor(bnv.getOrCreateBadge(R.id.home), true, color); // Pass true to indicate selected
+                setIconColor(bnv.getOrCreateBadge(R.id.library), false, color);
+                return true;
+            } else if (itemId == R.id.library) {
+                viewPager.setCurrentItem(1, false);
+                setIconColor(bnv.getOrCreateBadge(R.id.home), false, color); // Pass true to indicate selected
+                setIconColor(bnv.getOrCreateBadge(R.id.library), true, color);
+                return true;
             }
-            return true;
+            return false;
 
+
+        });
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                switch (position) {
+                    case 0:
+                        setIconColor(bnv.getOrCreateBadge(R.id.home), true, color); // Pass true to indicate selected
+                        setIconColor(bnv.getOrCreateBadge(R.id.library), false, color);
+                        break;
+                    case 1:
+                        setIconColor(bnv.getOrCreateBadge(R.id.home), false, color); // Pass true to indicate selected
+                        setIconColor(bnv.getOrCreateBadge(R.id.library), true, color);
+                        break;
+                }
+            }
         });
 
         modes.setOnClickListener(v -> {
@@ -111,8 +156,6 @@ public class MainActivity extends BaseActivity {
             popupMenu.show();
         });
 
-
-
         delete.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.delete_all))
@@ -120,17 +163,8 @@ public class MainActivity extends BaseActivity {
                     .setPositiveButton(getText(R.string.yes), (dialog, which) -> {
                         databaseAccess.clearAllDataFromTable("dessert");
                         databaseAccess.clearAllDataFromTable("list");
+                        refresh();
 
-                        List = databaseAccess.getDessertList();
-                        setRecycler(List);
-
-                        if (List.isEmpty()) {
-                            Recycler.setVisibility(View.GONE);
-                            empty.setVisibility(View.VISIBLE);
-                        } else {
-                            Recycler.setVisibility(View.VISIBLE);
-                            empty.setVisibility(View.GONE);
-                        }
                     })
 
                     .setNegativeButton(getText(R.string.no), (dialog, which) -> dialog.cancel());
@@ -153,27 +187,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        databaseAccess = DatabaseAccess.getInstances(this.getApplicationContext());
-        databaseAccess.open();
 
-
-//        Recycler = findViewById(R.id.category_list);
-//        Recycler.setHasFixedSize(true);
-//
-//        List = databaseAccess.getDessertList();
-//        setRecycler(List);
-//
-//        if (List.isEmpty()) {
-//            Recycler.setVisibility(View.GONE);
-//            empty.setVisibility(View.VISIBLE);
-//        }else {
-//            Recycler.setVisibility(View.VISIBLE);
-//            empty.setVisibility(View.GONE);
-//        }
-    }
 
 
     @SuppressLint("MissingSuperCall")
@@ -223,10 +237,10 @@ public class MainActivity extends BaseActivity {
         editor.apply();
         return theme;
     }
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
+    private void setIconColor(BadgeDrawable badgeDrawable, boolean selected, int color) {
+        if (badgeDrawable != null) {
+            badgeDrawable.setBackgroundColor(selected ? color : Color.TRANSPARENT); // Set the color based on selection
+        }
     }
+
 }
