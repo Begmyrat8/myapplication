@@ -3,7 +3,6 @@ package com.example.myapplication.Activities;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -67,11 +66,6 @@ public class ChangeDessertActivity extends AppCompatActivity {
 
         imageView.setOnClickListener(v -> finish());
 
-
-        save_btn.setOnClickListener(view -> {
-
-
-        });
     }
     private void findView(){
         mode = findViewById(R.id.mode);
@@ -158,44 +152,38 @@ public class ChangeDessertActivity extends AppCompatActivity {
         });
     }
     private boolean updateTitleIfNotExists(String title) {
-        try (Cursor cursor = database.rawQuery("SELECT * FROM list WHERE title = ?", new String[]{title})) {
 
-            if (cursor.getCount() == 0) {
-                ContentValues contentValues = new ContentValues();
-                contentValues.put("title", Objects.requireNonNull(edit_title.getText()).toString());
-                if (Objects.requireNonNull(update_dessert_size.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty()) {
-                    if (update_dessert_size.getText().toString().isEmpty()) {
-                        contentValues.put("dessert_size", 0);
-                    } else {
-                        contentValues.put("portion_size", 0);
-                    }
-                } else {
-                    contentValues.put("dessert_size", update_dessert_size.getText().toString());
-                    contentValues.put("portion_size", update_portion_size.getText().toString());
-
-                    double a = Double.parseDouble(String.valueOf(update_dessert_size.getText()));
-                    double b = Double.parseDouble(String.valueOf(update_portion_size.getText()));
-
-                    contentValues.put("portion", a / b);
-                }
-
-                try {
-                    contentValues.put("image", ImageViewToByte(edit_image));
-
-                } catch (Exception e) {
-                    contentValues.put("image", String.valueOf(edit_image));
-                }
-
-                if (edit_title.getText().toString().isEmpty()){
-                    return false;
-                }
-
-                database.update("dessert", contentValues, "id=" + id, null);
-                return true;
-
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("title", Objects.requireNonNull(edit_title.getText()).toString());
+        if (Objects.requireNonNull(update_dessert_size.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty()) {
+            if (update_dessert_size.getText().toString().isEmpty()) {
+                contentValues.put("dessert_size", 0);
             } else {
-                return false;
+                contentValues.put("portion_size", 0);
             }
+        } else {
+            contentValues.put("dessert_size", update_dessert_size.getText().toString());
+            contentValues.put("portion_size", update_portion_size.getText().toString());
+
+            double a = Double.parseDouble(String.valueOf(update_dessert_size.getText()));
+            double b = Double.parseDouble(String.valueOf(update_portion_size.getText()));
+
+            contentValues.put("portion", a / b);
         }
+
+        try {
+            contentValues.put("image", ImageViewToByte(edit_image));
+
+        } catch (Exception e) {
+            contentValues.put("image", String.valueOf(edit_image));
+        }
+
+        if (edit_title.getText().toString().isEmpty()){
+            return false;
+        }
+
+        database.update("dessert", contentValues, "id=" + id, null);
+        return true;
+
     }
 }

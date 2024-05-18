@@ -65,4 +65,7 @@
 
     <string name="liked">Понравившиеся</string>
     <string name="home">Главная</string>
+
+    <string name="no_favorites">Нет понравившиеся</string>
+    <string name="desserts">Десерты</string>
 </resources>

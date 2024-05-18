@@ -24,17 +24,15 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/List"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="5dp"
+        android:background="@android:color/transparent"
         android:padding="5dp"
         android:scrollbarSize="5dp"
         android:scrollbars="vertical"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toTopOf="@id/buttons"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,13 +44,12 @@
         android:id="@+id/empty_ingredients"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="5dp"
         android:background="@android:color/transparent"
         android:padding="5dp"
         android:scrollbarSize="5dp"
         android:scrollbars="vertical"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@id/buttons"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,9 +84,9 @@
 
         <Button
             android:id="@+id/add_ingredients"
-            android:backgroundTint="?attr/colorPrimaryVariant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="?attr/colorPrimaryVariant"
             android:text="@string/add_ingredients"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"

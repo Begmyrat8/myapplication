@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,16 +36,19 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
     Context context;
     List<DessertModel> desserts;
-    private boolean isFirstImage = true;
     SQLiteDatabase database;
     DatabaseOpenHelper databaseHelper;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     private int currentFragment;
-    private int selectedItemPosition = -1;
 
     public DessertAdaptor(Context context, List<DessertModel> desserts, int currentFragment) {
         this.context = context;
         this.desserts = desserts;
         this.currentFragment = currentFragment;
+        this.sharedPreferences = context.getSharedPreferences("like_prefs", Context.MODE_PRIVATE);
+        this.editor = sharedPreferences.edit();
+
     }
 
     @NonNull
@@ -56,6 +61,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
     @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        DessertModel dessert = desserts.get(position);
         databaseHelper = new DatabaseOpenHelper(context);
         database = databaseHelper.getWritableDatabase();
 
@@ -63,8 +69,13 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
         databaseAccess.open();
         DecimalFormat decimalFormat = new DecimalFormat();
 
+        boolean isLiked = sharedPreferences.getBoolean(dessert.getTitle(), false);
 
-        String id = String.valueOf(desserts.get(position).getId());
+        // Set the tag and image resource based on the liked state
+        holder.like.setTag(isLiked ? 1 : 0);
+        holder.like.setImageResource(isLiked ? R.drawable.like : R.drawable.like_border);
+
+        String id = String.valueOf(dessert.getId());
         String dessertName = desserts.get(position).getTitle();
 
         holder.dessertTitle.setText(dessertName);
@@ -76,10 +87,10 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
         double weight = Double.parseDouble(String.format("%s", databaseAccess.getSumGram(id)));
         holder.weight.setText(decimalFormat.format(weight)  + " kg");
 
-        double portion_size = Double.parseDouble(String.valueOf(desserts.get(position).getPortion_size()));
+        double portion_size = Double.parseDouble(String.valueOf(dessert.getPortion_size()));
         holder.portion_size.setText(decimalFormat.format(portion_size) + " cm");
 
-        double portion = Double.parseDouble(String.valueOf(desserts.get(position).getPortion()));
+        double portion = Double.parseDouble(String.valueOf(dessert.getPortion()));
         holder.portion.setText(decimalFormat.format(portion));
 
         if (portion == 0 && sum == 0){
@@ -91,7 +102,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
         }
 
 
-        double dessert_size = Double.parseDouble(String.valueOf(desserts.get(position).getDessert_size()));
+        double dessert_size = Double.parseDouble(String.valueOf(dessert.getDessert_size()));
         holder.dessert_size.setText(decimalFormat.format(dessert_size) + " cm");
 
         byte[] image =  desserts.get(position).getImage();
@@ -124,16 +135,18 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
                             .setPositiveButton((R.string.yes), (dialog, which) -> {
                                 if (currentFragment == 0) { // If in bookmark fragment
                                     // Handle bookmark fragment deletion
-                                    database.delete("bookmark", "id=" + desserts.get(position).getId(), null);
+                                    database.delete("bookmark", "id=" + dessert.getId(), null);
                                     // Update the RecyclerView
                                     desserts.remove(position);
                                     notifyItemRemoved(position);
+                                    ((MainActivity)context).refresh();
                                 } else if (currentFragment == 1) { // If in home fragment
                                     // Handle home fragment deletion
-                                    database.delete("desserts", "id=" + desserts.get(position).getId(), null);
+                                    database.delete("dessert", "id=" + dessert.getId(), null);
                                     // Update the RecyclerView
                                     desserts.remove(position);
                                     notifyItemRemoved(position);
+                                    ((MainActivity)context).refresh();
                                 }
                             })
                             .setNegativeButton((R.string.no), (dialog, which) -> dialog.cancel());
@@ -145,32 +158,58 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
                     return true;
                 } else if (itemId == R.id.nav_edit) {
                     Intent intent = new Intent(context, ChangeDessertActivity.class);
-                    intent.putExtra("id", String.valueOf(desserts.get(position).getId()));
-                    intent.putExtra("title", String.valueOf(desserts.get(position).getTitle()));
-                    intent.putExtra("image", desserts.get(position).getImage());
-                    intent.putExtra("portion_size", String.valueOf(desserts.get(position).getPortion_size()));
-                    intent.putExtra("dessert_size", String.valueOf(desserts.get(position).getDessert_size()));
+                    intent.putExtra("id", String.valueOf(dessert.getId()));
+                    intent.putExtra("title", String.valueOf(dessert.getTitle()));
+                    intent.putExtra("image", dessert.getImage());
+                    intent.putExtra("portion_size", String.valueOf(dessert.getPortion_size()));
+                    intent.putExtra("dessert_size", String.valueOf(dessert.getDessert_size()));
                     intent.putExtra("style",((MainActivity)context).getMyStyleId());
                     context.startActivity(intent);
                     return true;
-                } else if (itemId == R.id.nav_bookmark) {
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put("title", holder.dessertTitle.getText().toString());
-                    contentValues.put("sum", holder.sum.getText().toString());
-                    contentValues.put("dessert_size", holder.dessert_size.getText().toString());
-                    contentValues.put("portion_size", holder.portion_size.getText().toString());
-                    contentValues.put("portion_price", holder.portion_price.getText().toString());
-                    contentValues.put("weight", holder.weight.getText().toString());
-                    contentValues.put("portion", holder.portion.getText().toString());
-                    contentValues.put("image", desserts.get(position).getImage());
-                    database.insert("bookmark", null, contentValues);
-
                 }
                 return false;
             });
 
             // Show the popup menu
             popupMenu.show();
+        });
+
+        holder.like.setOnClickListener(v -> {
+            String title = holder.dessertTitle.getText().toString();
+            Cursor cursor = database.query("bookmark", null, "title = ?", new String[]{title}, null, null, null);
+
+            if (cursor.getCount() == 0) {
+                // Title not found, proceed to insert bookmark
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("title", title);
+                contentValues.put("sum", holder.sum.getText().toString());
+                contentValues.put("dessert_size", holder.dessert_size.getText().toString());
+                contentValues.put("portion_size", holder.portion_size.getText().toString());
+                contentValues.put("portion_price", holder.portion_price.getText().toString());
+                contentValues.put("weight", holder.weight.getText().toString());
+                contentValues.put("portion", holder.portion.getText().toString());
+                contentValues.put("image", image);
+
+                database.insert("bookmark", null, contentValues);
+                holder.like.setImageResource(R.drawable.like);
+                holder.like.setTag(1); // Update tag to liked state
+                editor.putBoolean(desserts.get(position).getTitle(), true);
+            } else {
+                // Title found, remove bookmark
+                database.delete("bookmark", "title = ?", new String[]{title});
+                holder.like.setImageResource(R.drawable.like_border);
+                holder.like.setTag(0); // Update tag to unliked state
+                editor.putBoolean(desserts.get(position).getTitle(), false);
+                desserts.remove(position);
+                notifyItemRemoved(position);
+                ((MainActivity)context).refresh();
+            }
+
+            // Apply the changes to SharedPreferences
+            editor.apply();
+
+            // Close the cursor to avoid memory leaks
+            cursor.close();
         });
 
 
@@ -192,13 +231,14 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
     public static final class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView dessertImage, empty_img;
+        ImageView dessertImage, empty_img,like;
         ImageButton  change_dessert;
         TextView dessertTitle, sum, weight, portion, portion_price, dessert_size, portion_size;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            like = itemView.findViewById(R.id.like_dessert);
             empty_img = itemView.findViewById(R.id.empty_img);
             dessertImage = itemView.findViewById(R.id.word_lang);
             dessertTitle = itemView.findViewById(R.id.name);

@@ -1,5 +1,9 @@
 package com.example.myapplication.Activities;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+import static androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode;
+
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
@@ -15,12 +19,17 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.myapplication.Adaptors.FragmentAdapter;
 import com.example.myapplication.Datebase.DatabaseAccess;
+import com.example.myapplication.Fragments.BookmarkFragment;
+import com.example.myapplication.Fragments.HomeFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityMainBinding;
 import com.google.android.material.badge.BadgeDrawable;
@@ -37,7 +46,7 @@ public class MainActivity extends BaseActivity {
     ViewPager2 viewPager;
     SharedPreferences prefs = null;
     ActivityMainBinding binding;
-    FragmentAdapter fragmentAdapter;
+    Toolbar toolbar;
     BottomNavigationView bnv;
 
     @Override
@@ -49,8 +58,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onViewReady(Bundle savedInstanceState,Intent intent) {
         int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
+        int mode = getSharedPreferences("mode", MODE_PRIVATE).getInt("mode", 0);
 
-        // Применяем тему перед super.onCreate()
+        setDefaultNightMode(mode);
         setTheme(theme);
         super.onViewReady(savedInstanceState, intent);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -65,6 +75,7 @@ public class MainActivity extends BaseActivity {
             finish();
         }
 
+        toolbar = findViewById(R.id.toolbar);
         bnv = findViewById(R.id.bottomNavigationView);
         viewPager = findViewById(R.id.view_pager);
         add_dessert = findViewById(R.id.add_dessert);
@@ -86,10 +97,13 @@ public class MainActivity extends BaseActivity {
         int color;
         if (theme == R.style.AppTheme){
             color = ContextCompat.getColor(this, R.color.chocolate);
+            modes.setImageResource(R.drawable.sun);
         }else if (theme == R.style.AppTheme_Dark){
             color = ContextCompat.getColor(this, R.color.orange);
+            modes.setImageResource(R.drawable.moon);
         }else if (theme == R.style.AppTheme_Blue) {
             color = ContextCompat.getColor(this, R.color.green);
+            modes.setImageResource(R.drawable.clouds);
         }else {
             color = 0;
         }
@@ -101,11 +115,13 @@ public class MainActivity extends BaseActivity {
                 viewPager.setCurrentItem(0, false);
                 setIconColor(bnv.getOrCreateBadge(R.id.home), true, color); // Pass true to indicate selected
                 setIconColor(bnv.getOrCreateBadge(R.id.library), false, color);
+                toolbar.setSubtitle(R.string.app_name);
                 return true;
             } else if (itemId == R.id.library) {
                 viewPager.setCurrentItem(1, false);
                 setIconColor(bnv.getOrCreateBadge(R.id.home), false, color); // Pass true to indicate selected
                 setIconColor(bnv.getOrCreateBadge(R.id.library), true, color);
+                toolbar.setSubtitle(R.string.liked);
                 return true;
             }
             return false;
@@ -120,10 +136,12 @@ public class MainActivity extends BaseActivity {
                     case 0:
                         setIconColor(bnv.getOrCreateBadge(R.id.home), true, color); // Pass true to indicate selected
                         setIconColor(bnv.getOrCreateBadge(R.id.library), false, color);
+                        toolbar.setSubtitle(R.string.app_name);
                         break;
                     case 1:
                         setIconColor(bnv.getOrCreateBadge(R.id.home), false, color); // Pass true to indicate selected
                         setIconColor(bnv.getOrCreateBadge(R.id.library), true, color);
+                        toolbar.setSubtitle(R.string.liked);
                         break;
                 }
             }
@@ -137,17 +155,27 @@ public class MainActivity extends BaseActivity {
                 int itemId = item.getItemId();
                 if (itemId == R.id.light_mode) {
                     setAppTheme(R.style.AppTheme);
+                    setDefaultNightMode(MODE_NIGHT_NO);
+                    modes.setImageResource(R.drawable.sun);
+
                     saveMyTheme(R.style.AppTheme);
+                    saveMyMode(MODE_NIGHT_NO);
                     recreate(); // Recreate the activity to apply the new theme
                     return true;
                 } else if (itemId == R.id.night_mode) {
                     setAppTheme(R.style.AppTheme_Dark);
+                    setDefaultNightMode(MODE_NIGHT_YES);
+                    modes.setImageResource(R.drawable.moon);
                     saveMyTheme(R.style.AppTheme_Dark);
+                    saveMyMode(MODE_NIGHT_YES);
                     recreate(); // Recreate the activity to apply the new theme
                     return true;
                 } else if (itemId == R.id.blue_mode) {
                     setAppTheme(R.style.AppTheme_Blue);
+                    setDefaultNightMode(MODE_NIGHT_NO);
+                    modes.setImageResource(R.drawable.clouds);
                     saveMyTheme(R.style.AppTheme_Blue);
+                    saveMyMode(MODE_NIGHT_NO);
                     recreate(); // Recreate the activity to apply the new theme
                     return true;
                 }
@@ -157,33 +185,19 @@ public class MainActivity extends BaseActivity {
         });
 
         delete.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.delete_all))
-                    .setCancelable(true)
-                    .setPositiveButton(getText(R.string.yes), (dialog, which) -> {
-                        databaseAccess.clearAllDataFromTable("dessert");
-                        databaseAccess.clearAllDataFromTable("list");
-                        refresh();
+            Fragment currentFragment = getCurrentFragment();
 
-                    })
-
-                    .setNegativeButton(getText(R.string.no), (dialog, which) -> dialog.cancel());
-
-            AlertDialog alertDialog = builder.create();
-            alertDialog.setCanceledOnTouchOutside(false);
-            alertDialog.show();
+            if (currentFragment instanceof HomeFragment) {
+                showAlertDialog("dessert");
+            } else if (currentFragment instanceof BookmarkFragment) {
+                showAlertDialog("bookmark");
+            }
 
         });
 
         imageView.setVisibility(View.INVISIBLE);
 
-        add_button.setOnClickListener(view -> {
-            startActivity(new Intent(this, AddDessertActivity.class).putExtra("style",getMyStyleId()), ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        });
-
-
-
+        add_button.setOnClickListener(view -> startActivity(new Intent(this, AddDessertActivity.class).putExtra("style",getMyStyleId()), ActivityOptions.makeSceneTransitionAnimation(this).toBundle()));
 
     }
 
@@ -231,16 +245,41 @@ public class MainActivity extends BaseActivity {
 
     public int saveMyTheme(int theme){
 
-
         SharedPreferences.Editor editor = getSharedPreferences("a", MODE_PRIVATE).edit();
         editor.putInt("theme", theme);
         editor.apply();
         return theme;
     }
+    public void saveMyMode(int mode){
+
+        SharedPreferences.Editor editor = getSharedPreferences("mode", MODE_PRIVATE).edit();
+        editor.putInt("mode", mode);
+        editor.apply();
+    }
     private void setIconColor(BadgeDrawable badgeDrawable, boolean selected, int color) {
         if (badgeDrawable != null) {
             badgeDrawable.setBackgroundColor(selected ? color : Color.TRANSPARENT); // Set the color based on selection
         }
+    }
+    private Fragment getCurrentFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        // This will return the fragment currently displayed in your ViewPager2
+        return fragmentManager.findFragmentByTag("f" + viewPager.getCurrentItem());
+
+    }
+    private void showAlertDialog(String tableName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.delete_all))
+                .setCancelable(true)
+                .setPositiveButton(getText(R.string.yes), (dialog, which) -> {
+                    databaseAccess.clearAllDataFromTable(tableName);
+                    refresh(); // Assuming you have a method to refresh the UI
+                })
+                .setNegativeButton(getText(R.string.no), (dialog, which) -> dialog.cancel());
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
 }

@@ -28,7 +28,7 @@
         <item name="android:fontFamily">@font/anonymous_pro</item>
     </style>
     <style name="AppTheme.Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">#633A15</item>
 
         <!-- Secondary brand color. -->

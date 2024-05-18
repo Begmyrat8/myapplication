@@ -62,13 +62,13 @@ public class DessertModel {
         return dessert_size;
     }
 
-    private boolean isBookmarked;
-    public boolean isBookmarked() {
-        return isBookmarked;
+    private boolean isDeleted;
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
-    public void setBookmarked(boolean bookmarked) {
-        isBookmarked = bookmarked;
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
 }

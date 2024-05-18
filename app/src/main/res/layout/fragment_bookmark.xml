@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.BookmarkFragment">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bookmark_list"
         android:layout_width="0dp"
@@ -53,7 +54,7 @@
             android:layout_height="30dp"
             android:layout_margin="10dp"
             android:gravity="center"
-            android:text="@string/no_dessert"
+            android:text="@string/no_favorites"
             android:textColor="@color/black"
             android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"

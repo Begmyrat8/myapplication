@@ -9,7 +9,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="50dp"
         android:backgroundTint="@color/white"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,7 +43,7 @@
                 android:text="@string/title"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/change_dessert"
-                app:layout_constraintEnd_toStartOf="@+id/change_dessert"
+                app:layout_constraintEnd_toStartOf="@+id/like_dessert"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/change_dessert" />
 
@@ -239,6 +242,17 @@
                 android:src="@drawable/menu"
                 app:layout_constraintEnd_toEndOf="@+id/result"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/like_dessert"
+                android:layout_width="25dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/like_border"
+                app:layout_constraintBottom_toBottomOf="@+id/change_dessert"
+                app:layout_constraintEnd_toStartOf="@+id/change_dessert"
+                app:layout_constraintTop_toTopOf="@+id/change_dessert" />
 
             <ImageView
                 android:id="@+id/word_lang"

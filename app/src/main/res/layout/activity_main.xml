@@ -22,10 +22,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include">
 
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
+
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottomAppBar"
@@ -33,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:backgroundTint="?attr/colorPrimaryVariant"
-            app:fabCradleMargin="10dp"
+            app:fabCradleMargin="12dp"
             app:fabCradleRoundedCornerRadius="50dp">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -41,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/baseline_add_a_photo_24"
+                android:background="@drawable/baseline_add_a_white_photo"
                 app:labelVisibilityMode="labeled"
                 app:itemIconTint="@color/white"
                 app:itemTextColor="@color/white"

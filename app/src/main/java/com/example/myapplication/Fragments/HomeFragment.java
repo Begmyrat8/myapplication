@@ -28,7 +28,7 @@ import java.util.List;
 public class HomeFragment extends Fragment {
     RecyclerView Recycler;
     java.util.List<DessertModel> List = new ArrayList<>();
-    DessertAdaptor Adaptor;
+    DessertAdaptor adaptor;
     DatabaseAccess databaseAccess;
     ConstraintLayout empty;
 
@@ -106,8 +106,8 @@ public class HomeFragment extends Fragment {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
         Recycler.setLayoutManager(manager);
 
-        Adaptor = new DessertAdaptor(getContext(), categoryList,1);
-        Recycler.setAdapter(Adaptor);
+        adaptor = new DessertAdaptor(getContext(), categoryList,1);
+        Recycler.setAdapter(adaptor);
 
     }
 }

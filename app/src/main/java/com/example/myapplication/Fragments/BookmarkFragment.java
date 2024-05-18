@@ -21,9 +21,9 @@ import com.example.myapplication.R;
 import java.util.ArrayList;
 
 public class BookmarkFragment extends Fragment {
-    RecyclerView Recycler;
+    RecyclerView recycler;
     java.util.List<DessertModel> List = new ArrayList<>();
-    DessertAdaptor Adaptor;
+    DessertAdaptor adaptor;
     DatabaseAccess databaseAccess;
     ConstraintLayout bookmark_empty;
 
@@ -55,17 +55,17 @@ public class BookmarkFragment extends Fragment {
         databaseAccess.open();
 
         bookmark_empty = view.findViewById(R.id.bookmark_empty);
-        Recycler = view.findViewById(R.id.bookmark_list);
-        Recycler.setHasFixedSize(true);
+        recycler = view.findViewById(R.id.bookmark_list);
+        recycler.setHasFixedSize(true);
 
         List = databaseAccess.getBookmarkList();
 
         setRecycler(List);
         if (List.isEmpty()) {
-            Recycler.setVisibility(View.GONE);
+            recycler.setVisibility(View.GONE);
             bookmark_empty.setVisibility(View.VISIBLE);
         } else {
-            Recycler.setVisibility(View.VISIBLE);
+            recycler.setVisibility(View.VISIBLE);
             bookmark_empty.setVisibility(View.GONE);
         }
     }
@@ -76,26 +76,26 @@ public class BookmarkFragment extends Fragment {
         databaseAccess.open();
 
 
-        Recycler.setHasFixedSize(true);
+        recycler.setHasFixedSize(true);
 
         List = databaseAccess.getBookmarkList();
         setRecycler(List);
 
         if (List.isEmpty()) {
-            Recycler.setVisibility(View.GONE);
+            recycler.setVisibility(View.GONE);
             bookmark_empty.setVisibility(View.VISIBLE);
         }else {
-            Recycler.setVisibility(View.VISIBLE);
+            recycler.setVisibility(View.VISIBLE);
             bookmark_empty.setVisibility(View.GONE);
         }
     }
 
     private void setRecycler(java.util.List<DessertModel> bookmarkList) {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
-        Recycler.setLayoutManager(manager);
+        recycler.setLayoutManager(manager);
 
-        Adaptor = new DessertAdaptor(getContext(), bookmarkList,0);
-        Recycler.setAdapter(Adaptor);
+        adaptor = new DessertAdaptor(getContext(), bookmarkList,0);
+        recycler.setAdapter(adaptor);
 
     }
 }

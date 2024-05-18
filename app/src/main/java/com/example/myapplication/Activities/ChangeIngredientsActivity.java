@@ -6,7 +6,6 @@ import static java.lang.String.valueOf;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -171,66 +170,58 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     }
     private boolean updateTitleIfNotExists(String title) {
 
-        try (Cursor cursor = database.rawQuery("SELECT * FROM list WHERE title = ?", new String[]{title})) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("title", edit_title.getText().toString());
+        contentValues.put("price", edit_price.getText().toString());
+        String[] items = getResources().getStringArray(R.array.items);
+        try {
+            contentValues.put("image", ImageViewToByte(edit_image));
 
-            if (cursor.getCount() == 0) {
-                ContentValues contentValues = new ContentValues();
-                contentValues.put("title", edit_title.getText().toString());
-                contentValues.put("price", edit_price.getText().toString());
-                String[] items = getResources().getStringArray(R.array.items);
-                try {
-                    contentValues.put("image", ImageViewToByte(edit_image));
+        } catch (Exception e) {
+            contentValues.put("image", String.valueOf(edit_image));
+        }
 
-                } catch (Exception e) {
-                    contentValues.put("image", String.valueOf(edit_image));
-                }
+        if (edit_price.getText().toString().isEmpty() || edit_value.getText().toString().isEmpty()) {
 
-                if (edit_price.getText().toString().isEmpty() || edit_value.getText().toString().isEmpty()) {
+            if (edit_price.getText().toString().isEmpty()){
+                contentValues.put("price", 0);
+            }else if (edit_value.getText().toString().isEmpty()){
+                contentValues.put("value", 0);
+            }
+        } else {
 
-                    if (edit_price.getText().toString().isEmpty()){
-                        contentValues.put("price", 0);
-                    }else if (edit_value.getText().toString().isEmpty()){
-                        contentValues.put("value", 0);
-                    }
-                } else {
+            double a = parseDouble(valueOf(edit_price.getText()));
+            double b = parseDouble(valueOf(edit_value.getText()));
+            double c = a * b;
+            if (autoComplete.getText().toString().equals(items[1])) {
 
-                    double a = parseDouble(valueOf(edit_price.getText()));
-                    double b = parseDouble(valueOf(edit_value.getText()));
-                    double c = a * b;
-                    if (autoComplete.getText().toString().equals(items[1])) {
+                contentValues.put("value", edit_value.getText().toString());
+                contentValues.put("units", items[1]);
+                contentValues.put("gram_price", c);
 
-                        contentValues.put("value", edit_value.getText().toString());
-                        contentValues.put("units", items[1]);
-                        contentValues.put("gram_price", c);
-
-                    } else if (autoComplete.getText().toString().equals(items[0])){
-                        double v = b /1000;
-                        double r = v * a ;
-                        contentValues.put("gram_price",r);
-                        contentValues.put("value", edit_value.getText().toString());
-                        contentValues.put("units", items[0]);
-                    }else {
-                        double v = b /1000;
-                        double r = v * a ;
-                        contentValues.put("gram_price", r);
-                        contentValues.put("value", edit_value.getText().toString());
-                        contentValues.put("units", items[2]);
-                    }
-                }
-                if (autoComplete.getText().toString().isEmpty()){
-                    return false;
-                }
-                if (edit_title.getText().toString().isEmpty()){
-                    return false;
-                }
-
-                database.update("list", contentValues, "id=" + id, null);
-                return true;
-
-            } else {
-                return false;
+            } else if (autoComplete.getText().toString().equals(items[0])){
+                double v = b /1000;
+                double r = v * a ;
+                contentValues.put("gram_price",r);
+                contentValues.put("value", edit_value.getText().toString());
+                contentValues.put("units", items[0]);
+            }else {
+                double v = b /1000;
+                double r = v * a ;
+                contentValues.put("gram_price", r);
+                contentValues.put("value", edit_value.getText().toString());
+                contentValues.put("units", items[2]);
             }
         }
+        if (autoComplete.getText().toString().isEmpty()){
+            return false;
+        }
+        if (edit_title.getText().toString().isEmpty()){
+            return false;
+        }
+
+        database.update("list", contentValues, "id=" + id, null);
+        return true;
 
     }
     @SuppressLint("SetTextI18n")
