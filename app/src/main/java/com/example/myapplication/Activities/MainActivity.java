@@ -106,7 +106,7 @@ public class MainActivity extends BaseActivity {
         viewPager = findViewById(R.id.view_pager);
         add_dessert = findViewById(R.id.add_dessert);
         imageView = findViewById(R.id.imageView);
-        add_button = findViewById(R.id.buttons2);
+//        add_button = findViewById(R.id.buttons2);
         empty = findViewById(R.id.empty);
 
         FragmentAdapter fragmentAdapter = new FragmentAdapter(this, bnv);
@@ -128,6 +128,9 @@ public class MainActivity extends BaseActivity {
                 setIconColor(bnv.getOrCreateBadge(R.id.home), false, color); // Pass true to indicate selected
                 setIconColor(bnv.getOrCreateBadge(R.id.library), true, color);
                 toolbar.setSubtitle(R.string.liked);
+                return true;
+            } else if (itemId == R.id.add) {
+                startActivity(new Intent(this, AddDessertActivity.class), ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
                 return true;
             }
             return false;
@@ -156,8 +159,6 @@ public class MainActivity extends BaseActivity {
         setting.setOnClickListener(view -> {startActivity(new Intent(this, SettingActivity.class), ActivityOptions.makeSceneTransitionAnimation(this).toBundle());});
 
         imageView.setVisibility(View.INVISIBLE);
-
-        add_button.setOnClickListener(view -> startActivity(new Intent(this, AddDessertActivity.class), ActivityOptions.makeSceneTransitionAnimation(this).toBundle()));
 
     }
 

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -21,12 +20,9 @@ import java.util.Locale;
 public class SettingActivity extends AppCompatActivity {
 
     RadioGroup lang, modes;
-    ImageView setting;
+    ImageView setting, back;
     Toolbar toolbar;
-    Button save_btn;
 
-    private String originalLanguage;
-    private String originalMode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setMode();
@@ -39,8 +35,6 @@ public class SettingActivity extends AppCompatActivity {
         toolbar.setSubtitle(R.string.setting);
         setting.setVisibility(View.GONE);
 
-        originalLanguage = getCurrentLanguage();
-        originalMode = getCurrentMode();
         // Set listeners for radio groups
         lang.setOnCheckedChangeListener((group, checkedId) -> {
             savePreferences();
@@ -52,15 +46,14 @@ public class SettingActivity extends AppCompatActivity {
             savePreferences();
             applyTheme(); // Apply theme without restarting the app
         });
-        save_btn.setOnClickListener(view -> {
-            savePreferences();
-            applyPreferences();
-            restartApp();
+        back.setOnClickListener(view -> {
+            finish();
         });
+
     }
 
     private void findView() {
-        save_btn = findViewById(R.id.save_setting);
+        back = findViewById(R.id.imageView);
         setting = findViewById(R.id.setting);
         toolbar = findViewById(R.id.toolbar);
         lang = findViewById(R.id.languageRadioGroup);
@@ -208,7 +201,6 @@ public class SettingActivity extends AppCompatActivity {
     }
     private void restartApp() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
@@ -242,11 +234,12 @@ public class SettingActivity extends AppCompatActivity {
         }
         recreate(); // Recreate activity to apply theme change
     }
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         // Restore original settings if the user exits without saving
-        previewLanguage(originalLanguage);
-        previewTheme(originalMode);
-        super.onBackPressed();
+        savePreferences();
+        applyPreferences();
+        restartApp();
     }
 }

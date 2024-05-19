@@ -7,9 +7,9 @@
         android:icon="@drawable/cake" />
 
     <item
-        android:id="@+id/fab"
-        android:title=""
-        android:enabled="false"/>
+        android:id="@+id/add"
+        android:title="@string/add"
+        android:icon="@drawable/add"/>
 
     <item
         android:id="@+id/library"
