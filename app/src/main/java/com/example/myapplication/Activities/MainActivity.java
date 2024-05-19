@@ -1,22 +1,19 @@
 package com.example.myapplication.Activities;
 
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
-import static androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode;
-
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
@@ -28,19 +25,19 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.myapplication.Adaptors.FragmentAdapter;
 import com.example.myapplication.Datebase.DatabaseAccess;
-import com.example.myapplication.Fragments.BookmarkFragment;
-import com.example.myapplication.Fragments.HomeFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityMainBinding;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Locale;
+
 public class MainActivity extends BaseActivity {
 
     DatabaseAccess databaseAccess;
     ConstraintLayout empty;
-    ImageView imageView, lang, delete, modes;
+    ImageView imageView, setting;
     FloatingActionButton add_button;
     Button add_dessert;
     ViewPager2 viewPager;
@@ -57,14 +54,42 @@ public class MainActivity extends BaseActivity {
     @SuppressLint({"NonConstantResourceId", "MissingInflatedId", "ResourceAsColor"})
     @Override
     protected void onViewReady(Bundle savedInstanceState,Intent intent) {
-        int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
-        int mode = getSharedPreferences("mode", MODE_PRIVATE).getInt("mode", 0);
+        SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
+        String language = sharedPreferences.getString("language", "English");
+        String mode = sharedPreferences.getString("mode", "light");
 
-        setDefaultNightMode(mode);
-        setTheme(theme);
+        // Apply language
+        Locale locale;
+        if (language.equals("English")) {
+            locale = new Locale("en");
+        } else if (language.equals("Русский")) {
+            locale = new Locale("ru");
+        } else {
+            locale = new Locale(" ");
+        }
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+        int color;
+        // Apply mode
+        if (mode.equals("dark")) {
+            setTheme(R.style.AppTheme_Dark);
+            color = ContextCompat.getColor(this, R.color.orange);
+        } else if (mode.equals("blue")){
+            setTheme(R.style.AppTheme_Blue);
+            color = ContextCompat.getColor(this, R.color.green);
+        }else {
+            setTheme(R.style.AppTheme);
+            color = ContextCompat.getColor(this, R.color.chocolate);
+        }
+
         super.onViewReady(savedInstanceState, intent);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        updateStatusBarColor();
         setContentView(R.layout.activity_main);
+
         databaseAccess = DatabaseAccess.getInstances(this.getApplicationContext());
         databaseAccess.open();
 
@@ -75,50 +100,31 @@ public class MainActivity extends BaseActivity {
             finish();
         }
 
+        setting = findViewById(R.id.setting);
         toolbar = findViewById(R.id.toolbar);
         bnv = findViewById(R.id.bottomNavigationView);
         viewPager = findViewById(R.id.view_pager);
         add_dessert = findViewById(R.id.add_dessert);
-        delete = findViewById(R.id.delete);
-        lang = findViewById(R.id.lang);
-        modes = findViewById(R.id.mode);
         imageView = findViewById(R.id.imageView);
         add_button = findViewById(R.id.buttons2);
         empty = findViewById(R.id.empty);
 
-        lang.setOnClickListener(v -> showLanguagePicker(this, false));
-
         FragmentAdapter fragmentAdapter = new FragmentAdapter(this, bnv);
         viewPager.setAdapter(fragmentAdapter);
 
-
         binding.bottomNavigationView.setBackground(null);
-
-        int color;
-        if (theme == R.style.AppTheme){
-            color = ContextCompat.getColor(this, R.color.chocolate);
-            modes.setImageResource(R.drawable.sun);
-        }else if (theme == R.style.AppTheme_Dark){
-            color = ContextCompat.getColor(this, R.color.orange);
-            modes.setImageResource(R.drawable.moon);
-        }else if (theme == R.style.AppTheme_Blue) {
-            color = ContextCompat.getColor(this, R.color.green);
-            modes.setImageResource(R.drawable.clouds);
-        }else {
-            color = 0;
-        }
-
 
         bnv.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
-                viewPager.setCurrentItem(0, false);
+                viewPager.setCurrentItem(0, true);
                 setIconColor(bnv.getOrCreateBadge(R.id.home), true, color); // Pass true to indicate selected
                 setIconColor(bnv.getOrCreateBadge(R.id.library), false, color);
                 toolbar.setSubtitle(R.string.app_name);
                 return true;
+
             } else if (itemId == R.id.library) {
-                viewPager.setCurrentItem(1, false);
+                viewPager.setCurrentItem(1, true);
                 setIconColor(bnv.getOrCreateBadge(R.id.home), false, color); // Pass true to indicate selected
                 setIconColor(bnv.getOrCreateBadge(R.id.library), true, color);
                 toolbar.setSubtitle(R.string.liked);
@@ -147,57 +153,11 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        modes.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(this, v);
-            popupMenu.getMenuInflater().inflate(R.menu.mode_menu, popupMenu.getMenu());
-
-            popupMenu.setOnMenuItemClickListener(item -> {
-                int itemId = item.getItemId();
-                if (itemId == R.id.light_mode) {
-                    setAppTheme(R.style.AppTheme);
-                    setDefaultNightMode(MODE_NIGHT_NO);
-                    modes.setImageResource(R.drawable.sun);
-
-                    saveMyTheme(R.style.AppTheme);
-                    saveMyMode(MODE_NIGHT_NO);
-                    recreate(); // Recreate the activity to apply the new theme
-                    return true;
-                } else if (itemId == R.id.night_mode) {
-                    setAppTheme(R.style.AppTheme_Dark);
-                    setDefaultNightMode(MODE_NIGHT_YES);
-                    modes.setImageResource(R.drawable.moon);
-                    saveMyTheme(R.style.AppTheme_Dark);
-                    saveMyMode(MODE_NIGHT_YES);
-                    recreate(); // Recreate the activity to apply the new theme
-                    return true;
-                } else if (itemId == R.id.blue_mode) {
-                    setAppTheme(R.style.AppTheme_Blue);
-                    setDefaultNightMode(MODE_NIGHT_NO);
-                    modes.setImageResource(R.drawable.clouds);
-                    saveMyTheme(R.style.AppTheme_Blue);
-                    saveMyMode(MODE_NIGHT_NO);
-                    recreate(); // Recreate the activity to apply the new theme
-                    return true;
-                }
-                return false;
-            });
-            popupMenu.show();
-        });
-
-        delete.setOnClickListener(v -> {
-            Fragment currentFragment = getCurrentFragment();
-
-            if (currentFragment instanceof HomeFragment) {
-                showAlertDialog("dessert");
-            } else if (currentFragment instanceof BookmarkFragment) {
-                showAlertDialog("bookmark");
-            }
-
-        });
+        setting.setOnClickListener(view -> {startActivity(new Intent(this, SettingActivity.class), ActivityOptions.makeSceneTransitionAnimation(this).toBundle());});
 
         imageView.setVisibility(View.INVISIBLE);
 
-        add_button.setOnClickListener(view -> startActivity(new Intent(this, AddDessertActivity.class).putExtra("style",getMyStyleId()), ActivityOptions.makeSceneTransitionAnimation(this).toBundle()));
+        add_button.setOnClickListener(view -> startActivity(new Intent(this, AddDessertActivity.class), ActivityOptions.makeSceneTransitionAnimation(this).toBundle()));
 
     }
 
@@ -222,52 +182,26 @@ public class MainActivity extends BaseActivity {
         recreate();
     }
 
-    @Override
-    public Resources.Theme getTheme() {
-        int themes = getSharedPreferences("a",MODE_PRIVATE).getInt("theme", 0);
-        Resources.Theme theme = super.getTheme();
-        theme.applyStyle(saveMyTheme(themes), true);
-        return theme;
+
+    public String getMyStyleId() {
+        return getSharedPreferences("Setting",MODE_PRIVATE).getString("mode", "light");
     }
 
-    @SuppressLint("UnsafeIntentLaunch")
-    public void setAppTheme(int themeId) {
-        // Пересоздание активности для применения изменений
-        Intent intent = getIntent();
-        intent.putExtra("themeId", themeId);
-        finish();
-        startActivity(intent);
-    }
 
-    public int getMyStyleId() {
-        return getIntent().getIntExtra("themeId", R.style.AppTheme);
-    }
-
-    public int saveMyTheme(int theme){
-
-        SharedPreferences.Editor editor = getSharedPreferences("a", MODE_PRIVATE).edit();
-        editor.putInt("theme", theme);
-        editor.apply();
-        return theme;
-    }
-    public void saveMyMode(int mode){
-
-        SharedPreferences.Editor editor = getSharedPreferences("mode", MODE_PRIVATE).edit();
-        editor.putInt("mode", mode);
-        editor.apply();
-    }
     private void setIconColor(BadgeDrawable badgeDrawable, boolean selected, int color) {
         if (badgeDrawable != null) {
             badgeDrawable.setBackgroundColor(selected ? color : Color.TRANSPARENT); // Set the color based on selection
         }
     }
+
     private Fragment getCurrentFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         // This will return the fragment currently displayed in your ViewPager2
         return fragmentManager.findFragmentByTag("f" + viewPager.getCurrentItem());
 
     }
-    private void showAlertDialog(String tableName) {
+
+    private void delete(String tableName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.delete_all))
                 .setCancelable(true)
@@ -280,6 +214,23 @@ public class MainActivity extends BaseActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
+    }
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void updateStatusBarColor() {
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
+        String mode = sharedPreferences.getString("mode", "light");
+
+        if (mode.equals("dark")) {
+            window.setStatusBarColor(getResources().getColor(R.color.brown, getTheme()));
+        } else if (mode.equals("blue")){
+            window.setStatusBarColor(getResources().getColor(R.color.blue, getTheme()));
+        }else if (mode.equals("light")){
+            window.setStatusBarColor(getResources().getColor(R.color.dark_chocolate, getTheme()));
+        }
+
     }
 
 }

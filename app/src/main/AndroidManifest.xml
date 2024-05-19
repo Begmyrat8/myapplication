@@ -21,11 +21,8 @@
         <activity
             android:name=".Activities.SettingActivity"
             android:exported="false"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".Activities.SettingsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_settings" />
+            android:configChanges="uiMode"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.LanguageActivity"
             android:configChanges="uiMode"

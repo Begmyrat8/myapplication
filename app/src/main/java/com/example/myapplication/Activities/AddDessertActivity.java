@@ -35,7 +35,7 @@ public class AddDessertActivity extends AppCompatActivity {
     Button add_btn;
     String COL_TITLE = "title";
     String COL_IMAGE = "image";
-    ImageView imageView, image, lang, delete, mode;
+    ImageView imageView, image, setting;
     EditText set_name;
     TextView set_dessert_size, set_portion_size;
     Toolbar toolbar;
@@ -47,10 +47,9 @@ public class AddDessertActivity extends AppCompatActivity {
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
 
-        // Применяем тему перед super.onCreate()
-        setTheme(theme);
+        setMode();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_dessert);
 
@@ -64,17 +63,31 @@ public class AddDessertActivity extends AppCompatActivity {
         insertData();
         imagePick();
 
-        mode.setVisibility(View.GONE);
-        delete.setVisibility(View.GONE);
-        lang.setVisibility(View.GONE);
         toolbar.setSubtitle(R.string.add_dessert);
+        setting.setVisibility(View.GONE);
 
-        imageView.setOnClickListener(v -> {
-            finish();
-        });
+        imageView.setOnClickListener(v -> {finish();});
 
 
     }
+
+    private void setMode() {
+        String mode = getSharedPreferences("Settings", MODE_PRIVATE).getString("mode", "light");
+
+        // Применяем тему перед super.onCreate()
+        switch (mode) {
+            case "dark":
+                setTheme(R.style.AppTheme_Dark);
+                break;
+            case "blue":
+                setTheme(R.style.AppTheme_Blue);
+                break;
+            default:
+                setTheme(R.style.AppTheme);
+                break;
+        }
+    }
+
     private void insertData (){
         add_btn.setOnClickListener(view -> {
             boolean inserted = insertTitleIfNotExists(set_name.getText().toString());
@@ -92,14 +105,12 @@ public class AddDessertActivity extends AppCompatActivity {
         });
     }
     private void findView(){
-        mode = findViewById(R.id.mode);
-        lang = findViewById(R.id.lang);
+        setting = findViewById(R.id.setting);
         imageView = findViewById(R.id.imageView);
         toolbar = findViewById(R.id.toolbar);
         set_name = findViewById(R.id.set_name);
         add_btn = findViewById(R.id.set);
         image = findViewById(R.id.image);
-        delete = findViewById(R.id.delete);
         add_img = findViewById(R.id.add_dessert_img);
         set_dessert_size = findViewById(R.id.set_dessert_size);
         set_portion_size = findViewById(R.id.set_portion_size);
@@ -183,4 +194,5 @@ public class AddDessertActivity extends AppCompatActivity {
         cursor.close();
         return true; // Title inserted successfully
     }
+
 }

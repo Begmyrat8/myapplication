@@ -6,6 +6,7 @@ import static java.lang.String.valueOf;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,7 +47,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     AutoCompleteTextView autoComplete;
     TextView textInputLayout;
     ArrayAdapter<String> adapterItem;
-    ImageView imageView, edit_image, lang, delete, modes;
+    ImageView imageView, edit_image, setting;
     Toolbar toolbar;
     ImageButton change_ingredient_img;
     Button save_btn;
@@ -57,10 +58,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
-
-        // Применяем тему перед super.onCreate()
-        setTheme(theme);
+        setMode();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_ingredients);
 
@@ -74,9 +72,6 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         imagePick();
         insertData();
 
-        modes.setVisibility(View.GONE);
-        lang.setVisibility(View.GONE);
-        delete.setVisibility(View.GONE);
         toolbar.setSubtitle(getString(R.string.change));
 
         String[] items = getResources().getStringArray(R.array.items);
@@ -89,6 +84,8 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         String piece = getResources().getString(R.string.piece);
 
         imageView.setOnClickListener(v -> finish());
+        setting.setVisibility(View.GONE);
+
         autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -123,10 +120,10 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
                 .start();
     }
     private void findView() {
+        setting = findViewById(R.id.setting);
         textInputLayout = findViewById(R.id.textView9);
         textView77 = findViewById(R.id.textView77);
         autoComplete = findViewById(R.id.autoComplete2);
-        lang = findViewById(R.id.lang);
         edit_image = findViewById(R.id.edit_image);
         imageView = findViewById(R.id.imageView);
         toolbar = findViewById(R.id.toolbar);
@@ -134,15 +131,13 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         edit_value = findViewById(R.id.edit_gram);
         edit_price = findViewById(R.id.edit_price);
         save_btn = findViewById(R.id.save_product);
-        delete = findViewById(R.id.delete);
-        modes = findViewById(R.id.mode);
         change_ingredient_img = findViewById(R.id.change_ingredient_img);
 
     }
 
     private void insertData (){
         save_btn.setOnClickListener(view -> {
-            boolean inserted = updateTitleIfNotExists(Objects.requireNonNull(edit_title.getText()).toString());
+            boolean inserted = updateTitleIfNotExists();
 
             if (edit_title.getText().toString().isEmpty()){
                 Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
@@ -168,18 +163,18 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             }
         });
     }
-    private boolean updateTitleIfNotExists(String title) {
+    private boolean updateTitleIfNotExists() {
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put("title", edit_title.getText().toString());
         contentValues.put("price", edit_price.getText().toString());
+        String title = Objects.requireNonNull(edit_title.getText()).toString();
+        contentValues.put("title", title);
         String[] items = getResources().getStringArray(R.array.items);
+
         try {
             contentValues.put("image", ImageViewToByte(edit_image));
 
-        } catch (Exception e) {
-            contentValues.put("image", String.valueOf(edit_image));
-        }
+        } catch (Exception e) {contentValues.put("image", String.valueOf(edit_image));}
 
         if (edit_price.getText().toString().isEmpty() || edit_value.getText().toString().isEmpty()) {
 
@@ -218,6 +213,17 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         }
         if (edit_title.getText().toString().isEmpty()){
             return false;
+        }
+
+        Cursor cursor = database.query("dessert", new String[]{"COUNT(*)"}, "title=?", new String[]{title}, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            cursor.close();
+
+            if (count > 1) { // assuming you want to check for more than one occurrence
+                return false;
+            }
         }
 
         database.update("list", contentValues, "id=" + id, null);
@@ -294,6 +300,22 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     private void clearAutoCompleteText() {
         if (autoComplete != null) {
             autoComplete.setText(""); // Clear the text
+        }
+    }
+    private void setMode() {
+        String mode = getSharedPreferences("Settings", MODE_PRIVATE).getString("mode", "light");
+
+        // Применяем тему перед super.onCreate()
+        switch (mode) {
+            case "dark":
+                setTheme(R.style.AppTheme_Dark);
+                break;
+            case "blue":
+                setTheme(R.style.AppTheme_Blue);
+                break;
+            default:
+                setTheme(R.style.AppTheme);
+                break;
         }
     }
 }

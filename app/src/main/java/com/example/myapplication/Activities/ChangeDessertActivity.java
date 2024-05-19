@@ -3,6 +3,7 @@ package com.example.myapplication.Activities;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -36,7 +37,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
     TextInputEditText edit_title, update_dessert_size, update_portion_size;
     String title, id, dessert_size, portion_size;
     byte [] img;
-    ImageView imageView, edit_image, lang, delete, mode;
+    ImageView imageView, edit_image, setting;
     Toolbar toolbar;
     ImageButton change_dessert_img;
     Button save_btn;
@@ -44,9 +45,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
-
-        setTheme(theme);
+        setMode();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_dessert);
         DatabaseAccess databaseAccess = DatabaseAccess.getInstances(this);
@@ -59,23 +58,19 @@ public class ChangeDessertActivity extends AppCompatActivity {
         imagePick();
         insertData();
 
-        mode.setVisibility(View.GONE);
-        lang.setVisibility(View.GONE);
-        delete.setVisibility(View.GONE);
         toolbar.setSubtitle(getString(R.string.change));
+        setting.setVisibility(View.GONE);
 
         imageView.setOnClickListener(v -> finish());
 
     }
     private void findView(){
-        mode = findViewById(R.id.mode);
-        lang = findViewById(R.id.lang);
+        setting =findViewById(R.id.setting);
         edit_image = findViewById(R.id.dessert_image);
         imageView = findViewById(R.id.imageView);
         toolbar = findViewById(R.id.toolbar);
         edit_title = findViewById(R.id.set_dessert_name);
         save_btn = findViewById(R.id.save_dessert);
-        delete = findViewById(R.id.delete);
         change_dessert_img = findViewById(R.id.change_dessert_img);
         update_dessert_size = findViewById(R.id.update_dessert_size);
         update_portion_size = findViewById(R.id.update_portion_size);
@@ -137,9 +132,9 @@ public class ChangeDessertActivity extends AppCompatActivity {
     }
     private void insertData (){
         save_btn.setOnClickListener(view -> {
-            boolean inserted = updateTitleIfNotExists(Objects.requireNonNull(edit_title.getText()).toString());
+            boolean inserted = updateTitleIfNotExists();
 
-            if (edit_title.getText().toString().isEmpty()){
+            if (Objects.requireNonNull(edit_title.getText()).toString().isEmpty()){
                 Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
             }else {
                 if (inserted) {
@@ -151,10 +146,12 @@ public class ChangeDessertActivity extends AppCompatActivity {
             }
         });
     }
-    private boolean updateTitleIfNotExists(String title) {
+    private boolean updateTitleIfNotExists() {
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put("title", Objects.requireNonNull(edit_title.getText()).toString());
+        String title = Objects.requireNonNull(edit_title.getText()).toString();
+        contentValues.put("title", title);
+
         if (Objects.requireNonNull(update_dessert_size.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty()) {
             if (update_dessert_size.getText().toString().isEmpty()) {
                 contentValues.put("dessert_size", 0);
@@ -173,17 +170,45 @@ public class ChangeDessertActivity extends AppCompatActivity {
 
         try {
             contentValues.put("image", ImageViewToByte(edit_image));
-
         } catch (Exception e) {
             contentValues.put("image", String.valueOf(edit_image));
         }
 
-        if (edit_title.getText().toString().isEmpty()){
+        if (title.isEmpty()){
             return false;
         }
 
+// Check if the title already exists in the database
+        Cursor cursor = database.query("dessert", new String[]{"COUNT(*)"}, "title=?", new String[]{title}, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            cursor.close();
+
+            if (count > 1) { // assuming you want to check for more than one occurrence
+                return false;
+            }
+        }
+
+// Proceed with the update
         database.update("dessert", contentValues, "id=" + id, null);
         return true;
 
+
+    }
+    private void setMode() {
+        String mode = getSharedPreferences("Settings", MODE_PRIVATE).getString("mode", "light");
+
+        switch (mode) {
+            case "dark":
+                setTheme(R.style.AppTheme_Dark);
+                break;
+            case "blue":
+                setTheme(R.style.AppTheme_Blue);
+                break;
+            default:
+                setTheme(R.style.AppTheme);
+                break;
+        }
     }
 }

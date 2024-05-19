@@ -151,7 +151,7 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
                     intent.putExtra("price", String.valueOf(list.get(position).getPrice()));
                     intent.putExtra("image", list.get(position).getImage());
                     intent.putExtra("units", String.valueOf(list.get(position).getUnits()));
-                    intent.putExtra("styles",((IngredientActivity) context).themeId());
+                    intent.putExtra("styles",((IngredientActivity) context).setMode());
 
                     context.startActivity(intent);
                     return true;

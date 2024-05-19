@@ -2,7 +2,6 @@ package com.example.myapplication.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -36,7 +35,7 @@ public class IngredientActivity extends AppCompatActivity {
     String dessertName;
     String dessertId;
     Toolbar toolbar;
-    ImageView lang, imageView, delete, modes;
+    ImageView imageView, setting;
     FloatingActionButton add_button;
     Button add_ingredient;
     SQLiteDatabase database;
@@ -45,8 +44,7 @@ public class IngredientActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-        setTheme(themeId());
+        setMode();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient);
 
@@ -60,47 +58,44 @@ public class IngredientActivity extends AppCompatActivity {
 
         add_ingredient = findViewById(R.id.add_ingredients);
         imageView = findViewById(R.id.imageView);
-        lang = findViewById(R.id.lang);
-        delete = findViewById(R.id.delete);
+        setting = findViewById(R.id.setting);
         toolbar = findViewById(R.id.toolbar);
         add_button = findViewById(R.id.buttons);
         empty = findViewById(R.id.empty_ingredients);
-        modes = findViewById(R.id.mode);
 
-        lang.setVisibility(View.GONE);
+        setting.setVisibility(View.GONE);
         imageView.setOnClickListener(v -> finish());
 
         dessertName = getIntent().getStringExtra("dessertName");
         dessertId = getIntent().getStringExtra("dessertId");
 
-        modes.setVisibility(View.GONE);
 
-        delete.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.delete_all)
-                    .setCancelable(true)
-
-                    .setPositiveButton(R.string.yes, (dialog, which) -> {
-                        database.delete("list","dessert_id=" + dessertId, null);
-
-                        List = databaseAccess.getDessertData(dessertId);
-                        setRecycler(List);
-                        if (Adaptor.isEmpty()) {
-                            Recycler.setVisibility(View.GONE);
-                            empty.setVisibility(View.VISIBLE);
-                        }else {
-                            Recycler.setVisibility(View.VISIBLE);
-                            empty.setVisibility(View.GONE);
-                        }
-                    })
-
-                    .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
-
-            AlertDialog alertDialog = builder.create();
-            alertDialog.setCanceledOnTouchOutside(false);
-            alertDialog.show();
-
-        });
+//        delete.setOnClickListener(v -> {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setTitle(R.string.delete_all)
+//                    .setCancelable(true)
+//
+//                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+//                        database.delete("list","dessert_id=" + dessertId, null);
+//
+//                        List = databaseAccess.getDessertData(dessertId);
+//                        setRecycler(List);
+//                        if (Adaptor.isEmpty()) {
+//                            Recycler.setVisibility(View.GONE);
+//                            empty.setVisibility(View.VISIBLE);
+//                        }else {
+//                            Recycler.setVisibility(View.VISIBLE);
+//                            empty.setVisibility(View.GONE);
+//                        }
+//                    })
+//
+//                    .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+//
+//            AlertDialog alertDialog = builder.create();
+//            alertDialog.setCanceledOnTouchOutside(false);
+//            alertDialog.show();
+//
+//        });
 
         toolbar.setSubtitle(R.string.ingredients);
 
@@ -109,7 +104,7 @@ public class IngredientActivity extends AppCompatActivity {
 
             Intent intent = new Intent(this, AddIngredientsActivity.class);
             intent.putExtra("dessertId", dessertId);
-            intent.putExtra("style", themeId());
+            intent.putExtra("style", setMode());
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
 
@@ -117,7 +112,7 @@ public class IngredientActivity extends AppCompatActivity {
         add_ingredient.setOnClickListener(view -> {
             Intent intent = new Intent(this, AddIngredientsActivity.class);
             intent.putExtra("dessertId", dessertId);
-            intent.putExtra("style", themeId());
+            intent.putExtra("style", setMode());
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
         });
@@ -172,9 +167,22 @@ public class IngredientActivity extends AppCompatActivity {
         recreate();
     }
 
-    public int themeId(){
-        int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
-        return theme;
+    public String setMode() {
+        String mode = getSharedPreferences("Settings", MODE_PRIVATE).getString("mode", "light");
+
+        // Применяем тему перед super.onCreate()
+        switch (mode) {
+            case "dark":
+                setTheme(R.style.AppTheme_Dark);
+                break;
+            case "blue":
+                setTheme(R.style.AppTheme_Blue);
+                break;
+            default:
+                setTheme(R.style.AppTheme);
+                break;
+        }
+        return mode;
     }
 
 }

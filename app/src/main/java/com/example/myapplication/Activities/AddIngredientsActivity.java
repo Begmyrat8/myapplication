@@ -48,13 +48,12 @@ public class AddIngredientsActivity extends AppCompatActivity {
     String COL_CATEGORY_ID = "dessert_id";
     String COL_UNIT = "units";
     String category_id;
-    ImageView imageView, set_image, lang, delete, modes;
+    ImageView imageView, set_image, setting;
     TextInputEditText set_title, set_value, set_price;
     TextView  textInputLayout11;
     AutoCompleteTextView autoComplete;
     ArrayAdapter<String> adapterItem;
     TextView textview7;
-    String[] item = {"Gram","Piece","Milliliter"};
     Toolbar toolbar;
     ImageButton add_ingredient_img;
     private SQLiteDatabase database;
@@ -64,10 +63,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        int theme = getSharedPreferences("a", MODE_PRIVATE).getInt("theme", 0);
-
-        // Применяем тему перед super.onCreate()
-        setTheme(theme);
+        setMode();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_ingredients);
 
@@ -85,15 +81,12 @@ public class AddIngredientsActivity extends AppCompatActivity {
         insertData();
         imagePick();
 
-        delete.setVisibility(View.GONE);
-        lang.setVisibility(View.GONE);
-        modes.setVisibility(View.GONE);
-
         String[] items = getResources().getStringArray(R.array.items);
         adapterItem = new ArrayAdapter<>(this, R.layout.item_list, items);
         autoComplete.setAdapter(adapterItem);
 
         toolbar.setSubtitle(getString(R.string.add));
+        setting.setVisibility(View.GONE);
 
         imageView.setOnClickListener(v -> finish());
 
@@ -140,10 +133,9 @@ public class AddIngredientsActivity extends AppCompatActivity {
     }
     private void findView(){
 
-        modes = findViewById(R.id.mode);
+        setting = findViewById(R.id.setting);
         textInputLayout11 = findViewById(R.id.textView99);
         textview7 = findViewById(R.id.textView7);
-        lang = findViewById(R.id.lang);
         autoComplete = findViewById(R.id.autoComplete);
         imageView = findViewById(R.id.imageView);
         toolbar = findViewById(R.id.toolbar);
@@ -152,7 +144,6 @@ public class AddIngredientsActivity extends AppCompatActivity {
         set_price = findViewById(R.id.set_price);
         add_product = findViewById(R.id.add_product);
         set_image = findViewById(R.id.set_image);
-        delete = findViewById(R.id.delete);
         add_ingredient_img = findViewById(R.id.add_ingredient_img);
 
     }
@@ -296,6 +287,22 @@ public class AddIngredientsActivity extends AppCompatActivity {
     private void clearAutoCompleteText() {
         if (autoComplete != null) {
             autoComplete.setText(""); // Clear the text
+        }
+    }
+    private void setMode() {
+        String mode = getSharedPreferences("Settings", MODE_PRIVATE).getString("mode", "light");
+
+        // Применяем тему перед super.onCreate()
+        switch (mode) {
+            case "dark":
+                setTheme(R.style.AppTheme_Dark);
+                break;
+            case "blue":
+                setTheme(R.style.AppTheme_Blue);
+                break;
+            default:
+                setTheme(R.style.AppTheme);
+                break;
         }
     }
 }

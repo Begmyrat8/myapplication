@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Dessert Prices</string>
+    <string name="app_name">Desserts Prices</string>
     <string name="title">Title</string>
     <string name="kg_price">Kg/price</string>
     <string name="gram">Gram</string>
@@ -59,4 +59,9 @@
 
     <string name="no_favorites">No favorites</string>
     <string name="desserts">Desserts</string>
+    <string name="select_mode">Select mode</string>
+    <string name="light_mode">Light mode</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="blue_mode">Blue mode</string>
+    <string name="setting">Setting</string>
 </resources>

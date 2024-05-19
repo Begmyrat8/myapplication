@@ -55,6 +55,7 @@
             android:id="@+id/buttons2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="35dp"
             android:backgroundTint="?attr/colorSecondary"
             android:src="@drawable/add"
             app:layout_anchor="@id/bottomAppBar" />

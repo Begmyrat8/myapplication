@@ -2,10 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/setting"
-        android:title="Setting"
-        android:icon="@drawable/setting" />
-    <item
         android:id="@+id/home"
         android:title="@string/desserts"
         android:icon="@drawable/cake" />
@@ -19,9 +15,5 @@
         android:id="@+id/library"
         android:title="@string/liked"
         android:icon="@drawable/like_border"/>
-    <item
-        android:id="@+id/delete"
-        android:title="@string/delete"
-        android:icon="@drawable/delete" />
 
 </menu>
