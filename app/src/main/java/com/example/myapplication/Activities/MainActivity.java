@@ -29,7 +29,6 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityMainBinding;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Locale;
 
@@ -38,7 +37,6 @@ public class MainActivity extends BaseActivity {
     DatabaseAccess databaseAccess;
     ConstraintLayout empty;
     ImageView imageView, setting;
-    FloatingActionButton add_button;
     Button add_dessert;
     ViewPager2 viewPager;
     SharedPreferences prefs = null;
@@ -106,7 +104,6 @@ public class MainActivity extends BaseActivity {
         viewPager = findViewById(R.id.view_pager);
         add_dessert = findViewById(R.id.add_dessert);
         imageView = findViewById(R.id.imageView);
-//        add_button = findViewById(R.id.buttons2);
         empty = findViewById(R.id.empty);
 
         FragmentAdapter fragmentAdapter = new FragmentAdapter(this, bnv);
@@ -130,7 +127,7 @@ public class MainActivity extends BaseActivity {
                 toolbar.setSubtitle(R.string.liked);
                 return true;
             } else if (itemId == R.id.add) {
-                startActivity(new Intent(this, AddDessertActivity.class), ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+                startActivity(new Intent(this, AddDessertActivity.class));
                 return true;
             }
             return false;
@@ -156,12 +153,15 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        setting.setOnClickListener(view -> {startActivity(new Intent(this, SettingActivity.class), ActivityOptions.makeSceneTransitionAnimation(this).toBundle());});
+        setting.setOnClickListener(view -> {
+
+            startActivity(new Intent(this, SettingActivity.class), ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        });
 
         imageView.setVisibility(View.INVISIBLE);
 
     }
-
 
 
 
@@ -202,20 +202,6 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    private void delete(String tableName) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.delete_all))
-                .setCancelable(true)
-                .setPositiveButton(getText(R.string.yes), (dialog, which) -> {
-                    databaseAccess.clearAllDataFromTable(tableName);
-                    refresh(); // Assuming you have a method to refresh the UI
-                })
-                .setNegativeButton(getText(R.string.no), (dialog, which) -> dialog.cancel());
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.show();
-    }
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void updateStatusBarColor() {
         Window window = getWindow();

@@ -116,7 +116,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
                 .crop()	    			//Crop image(Optional), Check Customization for more option
                 .compress(1024)			//Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                .crop(1f, 1f)
+                .crop(3f, 4f)
                 .start();
     }
     private void findView() {
@@ -163,6 +163,17 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             }
         });
     }
+    private boolean isValidNumber(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
     private boolean updateTitleIfNotExists() {
 
         ContentValues contentValues = new ContentValues();
@@ -174,7 +185,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         try {
             contentValues.put("image", ImageViewToByte(edit_image));
 
-        } catch (Exception e) {contentValues.put("image", String.valueOf(edit_image));}
+        } catch (Exception e) {contentValues.put("image", valueOf(edit_image));}
 
         if (edit_price.getText().toString().isEmpty() || edit_value.getText().toString().isEmpty()) {
 
@@ -184,28 +195,32 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
                 contentValues.put("value", 0);
             }
         } else {
+            if (isValidNumber(edit_price.getText().toString()) && isValidNumber(edit_value.getText().toString())) {
+                double a = parseDouble(valueOf(edit_price.getText()));
+                double b = parseDouble(valueOf(edit_value.getText()));
+                double c = a * b;
+                if (autoComplete.getText().toString().equals(items[1])) {
 
-            double a = parseDouble(valueOf(edit_price.getText()));
-            double b = parseDouble(valueOf(edit_value.getText()));
-            double c = a * b;
-            if (autoComplete.getText().toString().equals(items[1])) {
+                    contentValues.put("value", edit_value.getText().toString());
+                    contentValues.put("units", items[1]);
+                    contentValues.put("gram_price", c);
 
-                contentValues.put("value", edit_value.getText().toString());
-                contentValues.put("units", items[1]);
-                contentValues.put("gram_price", c);
-
-            } else if (autoComplete.getText().toString().equals(items[0])){
-                double v = b /1000;
-                double r = v * a ;
-                contentValues.put("gram_price",r);
-                contentValues.put("value", edit_value.getText().toString());
-                contentValues.put("units", items[0]);
+                } else if (autoComplete.getText().toString().equals(items[0])) {
+                    double v = b / 1000;
+                    double r = v * a;
+                    contentValues.put("gram_price", r);
+                    contentValues.put("value", edit_value.getText().toString());
+                    contentValues.put("units", items[0]);
+                } else {
+                    double v = b / 1000;
+                    double r = v * a;
+                    contentValues.put("gram_price", r);
+                    contentValues.put("value", edit_value.getText().toString());
+                    contentValues.put("units", items[2]);
+                }
             }else {
-                double v = b /1000;
-                double r = v * a ;
-                contentValues.put("gram_price", r);
-                contentValues.put("value", edit_value.getText().toString());
-                contentValues.put("units", items[2]);
+                Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
+                return false;
             }
         }
         if (autoComplete.getText().toString().isEmpty()){
@@ -250,15 +265,16 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
             edit_value.setText(value);
             autoComplete.setText(units);
+            textView77.setText(units);
 
             if (units.equals(items[0])){
-                textView77.setText("1 " + kg + " " + prices);
+                textInputLayout.setText("1 " + kg + " " + prices);
             }
             if (units.equals(items[2])){
-                textView77.setText("1 " + liter + " " + prices);
+                textInputLayout.setText("1 " + liter + " " + prices);
             }
             if (units.equals(items[1])){
-                textView77.setText("1 " + piece + " " + prices);
+                textInputLayout.setText("1 " + piece + " " + prices);
             }
 
             edit_title.setText(title);

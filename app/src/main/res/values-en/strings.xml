@@ -4,7 +4,7 @@
     <string name="title">Title</string>
     <string name="kg_price">Kg/price</string>
     <string name="gram">Gram</string>
-    <string name="dessert_name">dessert name</string>
+    <string name="dessert_name">Dessert name</string>
     <string name="price">Price</string>
     <string name="small_price">price</string>
     <string name="save">Save</string>
@@ -64,4 +64,8 @@
     <string name="dark_mode">Dark mode</string>
     <string name="blue_mode">Blue mode</string>
     <string name="setting">Setting</string>
+    <string name="invalid_number_format">Invalid number format</string>
+    <string name="foto">Foto</string>
+    <string name="dessert">Dessert</string>
+    <string name="portion">Portion</string>
 </resources>

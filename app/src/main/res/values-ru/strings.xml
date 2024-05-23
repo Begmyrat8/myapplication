@@ -39,7 +39,7 @@
 
     <string name="sm">см</string>
     <string name="dessert_size">Размер десерта</string>
-    <string name="portion_size">Размер куска</string>
+    <string name="portion_size">Размер порции</string>
     <string name="select_unit">Выберите единицу</string>
 
     <string name="how_many">Сколько</string>
@@ -73,4 +73,8 @@
     <string name="dark_mode">Тёмный режим</string>
     <string name="blue_mode">Синий режим</string>
     <string name="setting">Настройки</string>
+    <string name="invalid_number_format">Неверный формат числа</string>
+    <string name="foto">Фото</string>
+    <string name="dessert">Десерт</string>
+    <string name="portion">Порция</string>
 </resources>

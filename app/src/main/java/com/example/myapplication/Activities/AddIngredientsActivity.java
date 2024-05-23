@@ -166,7 +166,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
                 .crop()	    			//Crop image(Optional), Check Customization for more option
                 .compress(1024)			//Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                .crop(1f, 1f)
+                .crop(3f, 4f)
                 .start();
     }
 
@@ -177,6 +177,18 @@ public class AddIngredientsActivity extends AppCompatActivity {
         Uri uri = data.getData();
         set_image.setImageURI(uri);
     }
+    private boolean isValidNumber(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     private boolean insertTitleIfNotExists(String title) {
         try (Cursor cursor = database.rawQuery("SELECT * FROM list WHERE title = ?", new String[]{title})) {
 
@@ -195,7 +207,6 @@ public class AddIngredientsActivity extends AppCompatActivity {
                 }
 
                 if (Objects.requireNonNull(set_price.getText()).toString().isEmpty() || Objects.requireNonNull(set_value.getText()).toString().isEmpty()) {
-
 
                     if (set_price.getText().toString().isEmpty()) {
                         contentValues.put(COL_PRICE, 0);
@@ -220,33 +231,39 @@ public class AddIngredientsActivity extends AppCompatActivity {
 
                     }
                 } else {
-                    contentValues.put(COL_PRICE, set_price.getText().toString());
-                    contentValues.put(COL_VALUE, set_value.getText().toString());
-                    double a = parseDouble(valueOf(set_price.getText()));
-                    double b = parseDouble(valueOf(set_value.getText()));
-                    double c = a * b;
+                    if (isValidNumber(set_price.getText().toString()) && isValidNumber(set_value.getText().toString())) {
+                        contentValues.put(COL_PRICE, set_price.getText().toString());
+                        contentValues.put(COL_VALUE, set_value.getText().toString());
+                        double a = parseDouble(valueOf(set_price.getText()));
+                        double b = parseDouble(valueOf(set_value.getText()));
+                        double c = a * b;
 
-                    if (autoComplete.getText().toString().equals(items[1])) {
-                        contentValues.put(COL_GRAM_PRICE, c);
-                        contentValues.put(COL_UNIT, items[1]);
+                        if (autoComplete.getText().toString().equals(items[1])) {
+                            contentValues.put(COL_GRAM_PRICE, c);
+                            contentValues.put(COL_UNIT, items[1]);
 
-                    } else if (autoComplete.getText().toString().equals(items[0])) {
-                        double v = b / 1000;
-                        double r = v * a;
-                        contentValues.put(COL_GRAM_PRICE, r);
-                        contentValues.put(COL_UNIT, items[0]);
+                        } else if (autoComplete.getText().toString().equals(items[0])) {
+                            double v = b / 1000;
+                            double r = v * a;
+                            contentValues.put(COL_GRAM_PRICE, r);
+                            contentValues.put(COL_UNIT, items[0]);
 
-                    } else if (autoComplete.getText().toString().equals(items[2])) {
-                        double v = b / 1000;
-                        double r = v * a;
-                        contentValues.put(COL_GRAM_PRICE, r);
-                        contentValues.put(COL_UNIT, items[2]);
+                        } else if (autoComplete.getText().toString().equals(items[2])) {
+                            double v = b / 1000;
+                            double r = v * a;
+                            contentValues.put(COL_GRAM_PRICE, r);
+                            contentValues.put(COL_UNIT, items[2]);
+                        }
+                    } else {
+                        Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
+                        return false;
                     }
                 }
-                if (autoComplete.getText().toString().isEmpty()){
+
+                if (autoComplete.getText().toString().isEmpty()) {
                     return false;
                 }
-                if (set_title.getText().toString().isEmpty()){
+                if (set_title.getText().toString().isEmpty()) {
                     return false;
                 }
 
@@ -256,8 +273,6 @@ public class AddIngredientsActivity extends AppCompatActivity {
                 return false;
             }
         }
-        // Закройте курсор после завершения операции
-
     }
 
     @SuppressLint("SetTextI18n")

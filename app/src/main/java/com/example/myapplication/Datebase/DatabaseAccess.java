@@ -102,6 +102,18 @@ public class DatabaseAccess {
 
         return sAmount;
     }
+    public String getPortionWeight(String dessertId, double portions){
+        String sAmount;
+        String sQuery = "select sum(value) from list where dessert_id ='" + dessertId + "' and units != 'piece'";
+        c = database.rawQuery(sQuery,null);
+        if (c.moveToFirst()){
+            sAmount = String.valueOf(c.getDouble(0) / portions);
+        }else {
+            sAmount = "0";
+        }
+
+        return sAmount;
+    }
     public String getSumGram(String dessertId){
         String sAmount;
         String sQuery = "select sum(value) from list where dessert_id ='" + dessertId + "' and units != 'piece'";
@@ -111,6 +123,19 @@ public class DatabaseAccess {
         }else {
             sAmount = "0";
         }
+
+        return sAmount;
+    }
+    public String getSumDessertId(String dessertId){
+        String sAmount;
+        String sQuery = "select count(dessert_id) from list where dessert_id ='" + dessertId + "';";
+        c = database.rawQuery(sQuery,null);
+        if (c.moveToFirst()){
+            sAmount = String.valueOf(c.getInt(0));
+        }else {
+            sAmount = "0";
+        }
+
 
         return sAmount;
     }

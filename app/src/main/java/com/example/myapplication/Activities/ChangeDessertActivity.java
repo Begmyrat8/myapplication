@@ -86,7 +86,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
                 .crop()	    			//Crop image(Optional), Check Customization for more option
                 .compress(1024)			//Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                .crop(1f, 1f)
+                .crop(10f, 10f)
                 .start();
     }
     void get_and_set_intent_data(){
@@ -146,6 +146,17 @@ public class ChangeDessertActivity extends AppCompatActivity {
             }
         });
     }
+    private boolean isValidNumber(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
     private boolean updateTitleIfNotExists() {
 
         ContentValues contentValues = new ContentValues();
@@ -162,10 +173,15 @@ public class ChangeDessertActivity extends AppCompatActivity {
             contentValues.put("dessert_size", update_dessert_size.getText().toString());
             contentValues.put("portion_size", update_portion_size.getText().toString());
 
-            double a = Double.parseDouble(String.valueOf(update_dessert_size.getText()));
-            double b = Double.parseDouble(String.valueOf(update_portion_size.getText()));
-
-            contentValues.put("portion", a / b);
+            if (isValidNumber(update_dessert_size.getText().toString()) && isValidNumber(update_portion_size.getText().toString())) {
+                double a = Double.parseDouble(String.valueOf(update_dessert_size.getText()));
+                double b = Double.parseDouble(String.valueOf(update_portion_size.getText()));
+                contentValues.put("portion", a / b);
+            } else {
+                // Handle invalid input case, e.g., show a message to the user
+                Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
 
         try {

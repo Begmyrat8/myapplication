@@ -1,6 +1,7 @@
 package com.example.myapplication.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -47,7 +48,7 @@ public class SettingActivity extends AppCompatActivity {
             applyTheme(); // Apply theme without restarting the app
         });
         back.setOnClickListener(view -> {
-            finish();
+            onBackPressed();
         });
 
     }
@@ -201,7 +202,7 @@ public class SettingActivity extends AppCompatActivity {
     }
     private void restartApp() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
         finish();
     }
     private void previewLanguage(String language) {

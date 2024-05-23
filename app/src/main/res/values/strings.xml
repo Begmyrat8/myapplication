@@ -74,4 +74,8 @@
     <string name="dark_mode">Garaňkylyk režim</string>
     <string name="blue_mode">Gök režim</string>
     <string name="setting">Sazlamalar</string>
+    <string name="invalid_number_format">Nädogry san formaty</string>
+    <string name="foto">Surat</string>
+    <string name="dessert">Desert</string>
+    <string name="portion">Bölek</string>
 </resources>

@@ -71,6 +71,7 @@ public class AddDessertActivity extends AppCompatActivity {
 
     }
 
+
     private void setMode() {
         String mode = getSharedPreferences("Settings", MODE_PRIVATE).getString("mode", "light");
 
@@ -86,23 +87,6 @@ public class AddDessertActivity extends AppCompatActivity {
                 setTheme(R.style.AppTheme);
                 break;
         }
-    }
-
-    private void insertData (){
-        add_btn.setOnClickListener(view -> {
-            boolean inserted = insertTitleIfNotExists(set_name.getText().toString());
-
-            if (set_name.getText().toString().isEmpty()){
-                Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
-            }else {
-                if (inserted) {
-                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
     private void findView(){
         setting = findViewById(R.id.setting);
@@ -141,7 +125,7 @@ public class AddDessertActivity extends AppCompatActivity {
                 .crop()	    			//Crop image(Optional), Check Customization for more option
                 .compress(1024)			//Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                .crop(1f, 1f)
+                .crop(3f, 4f)
                 .start();
     }
 
@@ -152,6 +136,38 @@ public class AddDessertActivity extends AppCompatActivity {
         Uri uri = data.getData();
         image.setImageURI(uri);
     }
+
+    private void insertData (){
+        add_btn.setOnClickListener(view -> {
+            boolean inserted = insertTitleIfNotExists(set_name.getText().toString());
+
+            if (set_name.getText().toString().isEmpty()){
+                Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
+            } else {
+                if (inserted) {
+                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    // [existing methods remain unchanged]
+
+    private boolean isValidNumber(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     private boolean insertTitleIfNotExists(String title) {
         // Check if the title exists in the database
         Cursor cursor = database.rawQuery("SELECT * FROM " + "dessert" + " WHERE " + "title" + " = ?", new String[]{title});
@@ -163,7 +179,7 @@ public class AddDessertActivity extends AppCompatActivity {
         // Insert the title
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_TITLE, set_name.getText().toString());
-        if (set_dessert_size.getText().toString().isEmpty() || set_portion_size.getText().toString().isEmpty()){
+        if (set_dessert_size.getText().toString().isEmpty()){
             if (set_dessert_size.getText().toString().isEmpty()){
                 contentValues.put("dessert_size", 0);
             }else {
@@ -173,10 +189,15 @@ public class AddDessertActivity extends AppCompatActivity {
             contentValues.put("dessert_size", set_dessert_size.getText().toString());
             contentValues.put("portion_size", set_portion_size.getText().toString());
 
-            double a = Double.parseDouble(String.valueOf(set_dessert_size.getText()));
-            double b = Double.parseDouble(String.valueOf(set_portion_size.getText()));
-
-            contentValues.put("portion", a / b);
+            if (isValidNumber(set_dessert_size.getText().toString()) && isValidNumber(set_portion_size.getText().toString())) {
+                double a = Double.parseDouble(String.valueOf(set_dessert_size.getText()));
+                double b = Double.parseDouble(String.valueOf(set_portion_size.getText()));
+                contentValues.put("portion", a / b);
+            } else {
+                // Handle invalid input case, e.g., show a message to the user
+                Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
 
         try {
