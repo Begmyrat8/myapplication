@@ -20,6 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/c"
             android:layout_width="match_parent"
@@ -30,33 +31,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.454">
-
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:gravity="center_vertical"
-                android:padding="10dp"
-                android:text="@string/title"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/change_dessert"
-                app:layout_constraintEnd_toStartOf="@+id/like_dessert"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/change_dessert" />
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <TextView
                 android:id="@+id/hint_ingredients"
                 android:layout_width="0dp"
                 android:layout_height="20dp"
-                android:layout_margin="5dp"
                 android:paddingStart="10dp"
+                android:layout_marginTop="5dp"
                 android:src="@drawable/ingredients"
                 android:text="@string/ingredients"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/result"
                 tools:ignore="RtlSymmetry" />
@@ -69,28 +55,87 @@
                 android:text="0"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/hint_ingredients"
-                app:layout_constraintEnd_toEndOf="@+id/change_dessert"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toEndOf="@+id/result"
                 app:layout_constraintTop_toTopOf="@+id/hint_ingredients" />
 
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:padding="10dp"
+                android:text="@string/title"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/empty_img"
+                app:layout_constraintEnd_toStartOf="@+id/like_dessert"
+                app:layout_constraintStart_toEndOf="@+id/empty_img"
+                app:layout_constraintTop_toTopOf="@+id/empty_img" />
+
+
+            <ImageView
+                android:id="@+id/empty_img"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:background="@drawable/edit_text_orange_border"
+                android:src="@drawable/noun_cake_6710939"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/word_lang"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/todo"
+                android:background="@drawable/edit_text_orange_border"
+                app:layout_constraintEnd_toEndOf="@+id/empty_img"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/change_dessert"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/menu"
+                app:layout_constraintBottom_toBottomOf="@+id/name"
+                app:layout_constraintEnd_toEndOf="@+id/result"
+                app:layout_constraintTop_toTopOf="@+id/name" />
+
+            <ImageView
+                android:id="@+id/like_dessert"
+                android:layout_width="25dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/like_border"
+                app:layout_constraintBottom_toBottomOf="@+id/change_dessert"
+                app:layout_constraintEnd_toStartOf="@+id/change_dessert"
+                app:layout_constraintTop_toTopOf="@+id/change_dessert" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/result"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/change_dessert">
+                app:layout_constraintTop_toBottomOf="@+id/empty_img">
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout2"
-                    android:layout_width="0dp"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="RtlSymmetry">
@@ -136,7 +181,7 @@
                         app:layout_constraintTop_toTopOf="@+id/hint_dessert_size" />
 
                     <TextView
-                        android:id="@+id/dessert"
+                        android:id="@+id/desserts"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:background="@android:color/transparent"
@@ -184,12 +229,11 @@
                         android:id="@+id/hint_dessert"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginStart="10dp"
                         android:gravity="start"
                         android:src="@drawable/cake"
                         android:text="dessert size"
                         android:textColor="@color/grey"
-                        app:layout_constraintStart_toEndOf="@+id/empty_img"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
                     <TextView
@@ -203,40 +247,17 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/empty_img"
-                        android:layout_width="70dp"
-                        android:layout_height="0dp"
-                        android:gravity="center"
-                        android:paddingStart="3dp"
-                        android:src="@drawable/noun_cake_6710939"
-                        android:textColor="@color/black"
-                        android:visibility="visible"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/dessert" />
-
-                    <ImageView
-                        android:id="@+id/word_lang"
-                        android:layout_width="70dp"
-                        android:layout_height="0dp"
-                        android:contentDescription="@string/todo"
-                        android:paddingStart="3dp"
-                        android:visibility="invisible"
-                        app:layout_constraintBottom_toBottomOf="@+id/empty_img"
-                        app:layout_constraintEnd_toEndOf="@+id/empty_img"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/dessert" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:paddingStart="5dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+                    app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="RtlSymmetry">
 
                     <TextView
@@ -354,29 +375,6 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <ImageButton
-                android:id="@+id/change_dessert"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/todo"
-                android:src="@drawable/menu"
-                app:layout_constraintEnd_toEndOf="@+id/result"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/like_dessert"
-                android:layout_width="25dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="10dp"
-                android:contentDescription="@string/todo"
-                android:src="@drawable/like_border"
-                app:layout_constraintBottom_toBottomOf="@+id/change_dessert"
-                app:layout_constraintEnd_toStartOf="@+id/change_dessert"
-                app:layout_constraintTop_toTopOf="@+id/change_dessert" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

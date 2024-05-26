@@ -63,41 +63,15 @@ public class IngredientActivity extends AppCompatActivity {
         add_button = findViewById(R.id.buttons);
         empty = findViewById(R.id.empty_ingredients);
 
+
         setting.setVisibility(View.GONE);
         imageView.setOnClickListener(v -> finish());
 
-        dessertName = getIntent().getStringExtra("dessertName");
-        dessertId = getIntent().getStringExtra("dessertId");
-
-
-//        delete.setOnClickListener(v -> {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle(R.string.delete_all)
-//                    .setCancelable(true)
-//
-//                    .setPositiveButton(R.string.yes, (dialog, which) -> {
-//                        database.delete("list","dessert_id=" + dessertId, null);
-//
-//                        List = databaseAccess.getDessertData(dessertId);
-//                        setRecycler(List);
-//                        if (Adaptor.isEmpty()) {
-//                            Recycler.setVisibility(View.GONE);
-//                            empty.setVisibility(View.VISIBLE);
-//                        }else {
-//                            Recycler.setVisibility(View.VISIBLE);
-//                            empty.setVisibility(View.GONE);
-//                        }
-//                    })
-//
-//                    .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
-//
-//            AlertDialog alertDialog = builder.create();
-//            alertDialog.setCanceledOnTouchOutside(false);
-//            alertDialog.show();
-//
-//        });
 
         toolbar.setSubtitle(R.string.ingredients);
+
+        dessertName = getIntent().getStringExtra("dessertName");
+        dessertId = getIntent().getStringExtra("dessertId");
 
 
         add_button.setOnClickListener(view -> {

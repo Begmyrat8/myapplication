@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:text="@string/select_language"
@@ -40,21 +40,21 @@
             android:id="@+id/radioEnglish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:text="English" />
 
         <RadioButton
             android:id="@+id/radioRus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:text="Русский" />
 
         <RadioButton
             android:id="@+id/radioTurkmen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:text="Türkmen" />
 
     </RadioGroup>
@@ -84,22 +84,66 @@
             android:id="@+id/radioLight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:text="@string/light_mode" />
 
         <RadioButton
             android:id="@+id/radioDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:text="@string/dark_mode" />
 
         <RadioButton
             android:id="@+id/radioBlue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:text="@string/blue_mode" />
 
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/select_currency"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ModeRadioGroup" />
+
+    <RadioGroup
+        android:id="@+id/currencyRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/currency"
+        tools:layout_editor_absoluteX="10dp">
+
+        <RadioButton
+            android:id="@+id/radioTMT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="TMT" />
+
+        <RadioButton
+            android:id="@+id/radioUSD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="USD" />
+
+        <RadioButton
+            android:id="@+id/radioEUR"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="RUB" />
+    </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

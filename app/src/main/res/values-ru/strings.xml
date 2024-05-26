@@ -59,15 +59,15 @@
     <string name="exit">Выход</string>
     <string name="do_you_really_want_exit">Хотели бы вы выйти?</string>
     <string name="delete">Удалить</string>
-    <string name="please_select_unit">Пожалуйста, выберите единицу</string>
-    <string name="please_add_title">Пожалуйста, добавьте название</string>
-    <string name="please_change_title">Пожалуйста, измените название</string>
+    <string name="please_select_unit">Пожалуйста, выберите единицу!</string>
+    <string name="please_add_title">Пожалуйста, добавьте название!</string>
+    <string name="please_change_title">Пожалуйста, измените название!</string>
 
     <string name="liked">Понравившиеся</string>
     <string name="home">Главная</string>
 
     <string name="no_favorites">Нет понравившиеся</string>
-    <string name="desserts">Десерты</string>
+    <string name="dessert_model">Десерты</string>
     <string name="select_mode">Выберите режим</string>
     <string name="light_mode">Светлый режим</string>
     <string name="dark_mode">Тёмный режим</string>
@@ -77,4 +77,9 @@
     <string name="foto">Фото</string>
     <string name="dessert">Десерт</string>
     <string name="portion">Порция</string>
+    <string name="please_add_number_except_0">Пожалуйста, выберите число кроме 0!</string>
+    <string name="please_add_portion_size">Пожалуйста, добавьте размер порции!</string>
+    <string name="please_add_dessert_size">Пожалуйста, добавьте размер десерта!</string>
+    <string name="please_add_dessert_number">Пожалуйста, добавьте количество десертов!</string>
+    <string name="select_currency">Выбеерите валюту</string>
 </resources>

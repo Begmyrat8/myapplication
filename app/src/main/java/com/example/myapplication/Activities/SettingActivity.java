@@ -20,7 +20,7 @@ import java.util.Locale;
 
 public class SettingActivity extends AppCompatActivity {
 
-    RadioGroup lang, modes;
+    RadioGroup lang, modes, currency;
     ImageView setting, back;
     Toolbar toolbar;
 
@@ -47,6 +47,12 @@ public class SettingActivity extends AppCompatActivity {
             savePreferences();
             applyTheme(); // Apply theme without restarting the app
         });
+
+        currency.setOnCheckedChangeListener((group, checkedId) -> {
+            savePreferences();
+            recreate(); // Recreate the activity to apply new currency
+        });
+
         back.setOnClickListener(view -> {
             onBackPressed();
         });
@@ -54,6 +60,7 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void findView() {
+        currency = findViewById(R.id.currencyRadioGroup);
         back = findViewById(R.id.imageView);
         setting = findViewById(R.id.setting);
         toolbar = findViewById(R.id.toolbar);
@@ -65,6 +72,7 @@ public class SettingActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
         String language = sharedPreferences.getString("language", "English");
         String mode = sharedPreferences.getString("mode", "light");
+        String currency = sharedPreferences.getString("currency", "TMT");
 
         if (language.equals("English")) {
             lang.check(R.id.radioEnglish);
@@ -80,6 +88,14 @@ public class SettingActivity extends AppCompatActivity {
             modes.check(R.id.radioBlue);
         } else {
             modes.check(R.id.radioLight);
+        }
+
+        if (currency.equals("USD")) {
+            this.currency.check(R.id.radioUSD);
+        } else if (currency.equals("RUB")) {
+            this.currency.check(R.id.radioEUR);
+        } else {
+            this.currency.check(R.id.radioTMT);
         }
     }
 
@@ -100,11 +116,15 @@ public class SettingActivity extends AppCompatActivity {
             selectedMode = "blue";
         }
 
+        int selectedCurrencyId = currency.getCheckedRadioButtonId();
+        RadioButton selectedCurrencyButton = findViewById(selectedCurrencyId);
+        String selectedCurrency = selectedCurrencyButton.getText().toString();
+
         editor.putString("language", selectedLanguage);
         editor.putString("mode", selectedMode);
+        editor.putString("currency", selectedCurrency);
         editor.apply();
     }
-
     private void applyLanguage() {
         SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
         String language = sharedPreferences.getString("language", "English");

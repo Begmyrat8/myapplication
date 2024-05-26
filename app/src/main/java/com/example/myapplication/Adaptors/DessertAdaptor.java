@@ -69,6 +69,9 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
         databaseAccess.open();
         DecimalFormat decimalFormat = new DecimalFormat();
 
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        String currency = sharedPreferences.getString("currency", "TMT");
+
         boolean isLiked = sharedPreferences.getBoolean(dessert.getTitle(), false);
 
         // Set the tag and image resource based on the liked state
@@ -81,38 +84,43 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
         double dessert_size = Double.parseDouble(String.valueOf(dessert.getDessert_size()));
 
-        double sum = Double.parseDouble(String.format("%s", databaseAccess.getSumPrice(id)));
+        double dessert_num = dessert.getDesserts();
+
+        double sum = Double.parseDouble(String.format("%s", databaseAccess.getSumPrice(id, dessert_num)));
 
         double weight = Double.parseDouble(String.format("%s", databaseAccess.getSumGram(id)));
 
         double portion_size = Double.parseDouble(String.valueOf(dessert.getPortion_size()));
 
-        double portion = Double.parseDouble(String.valueOf(dessert.getPortion()));
+        int portion = (int) dessert.getPortion();
 
-        double portion_weight = Double.parseDouble(databaseAccess.getPortionWeight(id,portion));
+        if (portion == 0){
+            holder.portion_weight.setText("0" + " " + holder.gram);
+        }else {
+            String portion_weight = databaseAccess.getPortionWeight(id, portion);
+            holder.portion_weight.setText(portion_weight + " "+ holder.gram);
+            holder.portion.setText(decimalFormat.format(portion));
+        }
+        holder.sum.setText(decimalFormat.format(sum )+ " " + currency);
 
-        holder.portion_weight.setText(portion_weight + " g");
+        holder.weight.setText(decimalFormat.format(weight)  + " "+ holder.kg);
 
-        holder.sum.setText(decimalFormat.format(sum )+ " TMT");
+        holder.portion_size.setText(decimalFormat.format(portion_size) + " " + holder.sm);
 
-        holder.weight.setText(decimalFormat.format(weight)  + " kg");
 
-        holder.portion_size.setText(decimalFormat.format(portion_size) + " cm");
-
-        holder.portion.setText(decimalFormat.format(portion));
+        holder.dessert_num.setText(decimalFormat.format(dessert_num));
 
 
         if (portion == 0 && sum == 0){
-            holder.portion_price.setText("0 TMT");
+            holder.portion_price.setText("0 " + currency);
         }else {
             double portion_price = sum / portion;
-            holder.portion_price.setText(decimalFormat.format(portion_price) + " TMT");
+            holder.portion_price.setText(decimalFormat.format(portion_price) + " " + currency);
 
         }
 
 
-
-        holder.dessert_size.setText(decimalFormat.format(dessert_size) + " cm");
+        holder.dessert_size.setText(decimalFormat.format(dessert_size) + " "+ holder.sm);
 
         byte[] image =  desserts.get(position).getImage();
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
@@ -173,6 +181,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
                     intent.putExtra("portion_size", String.valueOf(dessert.getPortion_size()));
                     intent.putExtra("dessert_size", String.valueOf(dessert.getDessert_size()));
                     intent.putExtra("style",((MainActivity)context).getMyStyleId());
+                    intent.putExtra("desserts", String.valueOf(dessert.getDesserts()));
                     context.startActivity(intent);
                     return true;
                 }
@@ -198,6 +207,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
                 contentValues.put("weight", holder.weight.getText().toString());
                 contentValues.put("portion", holder.portion.getText().toString());
                 contentValues.put("image", image);
+                contentValues.put("desserts", dessert_num);
 
                 database.insert("bookmark", null, contentValues);
                 holder.like.setImageResource(R.drawable.like);
@@ -205,7 +215,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
                 editor.putBoolean(desserts.get(position).getTitle(), true);
             } else {
                 // Title found, remove bookmark
-                database.delete("bookmark", "title = ?", new String[]{title});
+                database.delete("bookmark", "id = ?", new String[]{title});
                 holder.like.setImageResource(R.drawable.like_border);
                 holder.like.setTag(0); // Update tag to unliked state
                 editor.putBoolean(desserts.get(position).getTitle(), false);
@@ -242,8 +252,10 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
         ImageView dessertImage, empty_img,like;
         ImageButton  change_dessert;
-        TextView dessertTitle, sum, weight, portion, portion_price, dessert_size, portion_size, ingredients, portion_weight;
+        TextView dessertTitle, sum, weight, portion, portion_price, dessert_size, portion_size, ingredients, portion_weight, dessert_num;
+        String kg, gram, sm;
 
+        @SuppressLint("ResourceType")
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -260,6 +272,11 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
             portion_size = itemView.findViewById(R.id.portion_size);
             ingredients = itemView.findViewById(R.id.ingredients);
             portion_weight = itemView.findViewById(R.id.portion_weight);
+            dessert_num = itemView.findViewById(R.id.desserts);
+            kg = itemView.getResources().getString(R.string.kg);
+            gram = itemView.getResources().getString(R.string.gram);
+            sm = itemView.getResources().getString(R.string.sm);
+
         }
     }
 

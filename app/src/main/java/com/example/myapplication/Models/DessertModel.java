@@ -11,7 +11,8 @@ public class DessertModel {
     double portion_price;
     byte [] image;
     private boolean liked;
-    public DessertModel(int id, String title, double sum, double weight, byte[] image, double dessert_size, double portion, double portion_size, double portion_price){
+    int desserts;
+    public DessertModel(int id, String title, double sum, double weight, byte[] image, double dessert_size, double portion, double portion_size, double portion_price, int desserts){
         this.id = id;
         this.title = title;
         this.sum = sum;
@@ -21,10 +22,15 @@ public class DessertModel {
         this.portion = portion;
         this.portion_size = portion_size;
         this.portion_price = portion_price;
+        this.desserts = desserts;
 
     }
     public boolean isLiked() {
         return liked;
+    }
+
+    public int getDesserts() {
+        return desserts;
     }
 
     public void setLiked(boolean liked) {

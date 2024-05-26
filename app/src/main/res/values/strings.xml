@@ -60,15 +60,15 @@
     <string name="do_you_really_want_exit">Çykmak isleýäňizmi?</string>
     <string name="delete">Pozmak</string>
 
-    <string name="please_select_unit">Haýyş, birlik saýlaň</string>
-    <string name="please_add_title">Haýyş, ad goşuň</string>
-    <string name="please_change_title">Haýyş, ady üýtgediň</string>
+    <string name="please_select_unit">Haýyş, birlik saýlaň!</string>
+    <string name="please_add_title">Haýyş, ad goşuň!</string>
+    <string name="please_change_title">Haýyş, ady üýtgediň!</string>
 
     <string name="liked">Halananlar</string>
     <string name="home">Esasy</string>
 
     <string name="no_favorites">Halananlar ýok</string>
-    <string name="desserts">Desertler</string>
+    <string name="dessert_model">Desertler</string>
     <string name="select_mode">Režim saýlaň</string>
     <string name="light_mode">Ýagtylyk režim</string>
     <string name="dark_mode">Garaňkylyk režim</string>
@@ -78,4 +78,10 @@
     <string name="foto">Surat</string>
     <string name="dessert">Desert</string>
     <string name="portion">Bölek</string>
+
+    <string name="please_add_number_except_0">Haýyş, 0-dan başga san goşaýyň!</string>
+    <string name="please_add_portion_size">Haýyş, bölegiň ululygyny goşaýyň!</string>
+    <string name="please_add_dessert_size">Haýyş, deserdiň ululygyny goşaýyň!</string>
+    <string name="please_add_dessert_number">Haýyş, deserdiň sanyny goşaýyň!</string>
+    <string name="select_currency">Walýuta saýlaň</string>
 </resources>

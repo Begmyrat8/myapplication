@@ -34,8 +34,8 @@ import java.util.Objects;
 public class ChangeDessertActivity extends AppCompatActivity {
 
     SQLiteDatabase database;
-    TextInputEditText edit_title, update_dessert_size, update_portion_size;
-    String title, id, dessert_size, portion_size;
+    TextInputEditText edit_title, update_dessert_size, update_portion_size,change_desserts;
+    String title, id, dessert_size, portion_size, desserts;
     byte [] img;
     ImageView imageView, edit_image, setting;
     Toolbar toolbar;
@@ -74,6 +74,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
         change_dessert_img = findViewById(R.id.change_dessert_img);
         update_dessert_size = findViewById(R.id.update_dessert_size);
         update_portion_size = findViewById(R.id.update_portion_size);
+        change_desserts = findViewById(R.id.change_dessert_model);
 
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -86,12 +87,12 @@ public class ChangeDessertActivity extends AppCompatActivity {
                 .crop()	    			//Crop image(Optional), Check Customization for more option
                 .compress(1024)			//Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                .crop(10f, 10f)
+                .crop(1f, 1f)
                 .start();
     }
     void get_and_set_intent_data(){
 
-        if (getIntent().hasExtra("id") && getIntent().hasExtra("title")  && getIntent().hasExtra("image") && getIntent().hasExtra("portion_size") && getIntent().hasExtra("dessert_size")){
+        if (getIntent().hasExtra("id") && getIntent().hasExtra("title")  && getIntent().hasExtra("image") && getIntent().hasExtra("portion_size") && getIntent().hasExtra("dessert_size")&& getIntent().hasExtra("desserts")){
 
 
             id = getIntent().getStringExtra("id");
@@ -99,10 +100,12 @@ public class ChangeDessertActivity extends AppCompatActivity {
             img = getIntent().getByteArrayExtra("image");
             portion_size = getIntent().getStringExtra("portion_size");
             dessert_size = getIntent().getStringExtra("dessert_size");
+            desserts = getIntent().getStringExtra("desserts");
 
             edit_title.setText(title);
             update_portion_size.setText(portion_size);
             update_dessert_size.setText(dessert_size);
+            change_desserts.setText(desserts);
 
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             if (bitmap != null){
@@ -134,16 +137,9 @@ public class ChangeDessertActivity extends AppCompatActivity {
         save_btn.setOnClickListener(view -> {
             boolean inserted = updateTitleIfNotExists();
 
-            if (Objects.requireNonNull(edit_title.getText()).toString().isEmpty()){
-                Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
-            }else {
                 if (inserted) {
-                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
                     finish();
-                } else {
-                    Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
                 }
-            }
         });
     }
     private boolean isValidNumber(String str) {
@@ -162,13 +158,29 @@ public class ChangeDessertActivity extends AppCompatActivity {
         ContentValues contentValues = new ContentValues();
         String title = Objects.requireNonNull(edit_title.getText()).toString();
         contentValues.put("title", title);
+        contentValues.put("desserts", change_desserts.getText().toString());
+        if (Objects.requireNonNull(edit_title.getText()).toString().isEmpty()){
+            Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
-        if (Objects.requireNonNull(update_dessert_size.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty()) {
-            if (update_dessert_size.getText().toString().isEmpty()) {
-                contentValues.put("dessert_size", 0);
+        if (Objects.requireNonNull(update_dessert_size.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty() || change_desserts.getText().toString().isEmpty()) {
+            if (update_dessert_size.getText().toString().isEmpty()){
+                Toast.makeText(this, R.string.please_add_dessert_size, Toast.LENGTH_SHORT).show();
+            } else if (update_portion_size.getText().toString().isEmpty()) {
+                Toast.makeText(this, R.string.please_add_portion_size, Toast.LENGTH_SHORT).show();
             } else {
-                contentValues.put("portion_size", 0);
+                Toast.makeText(this, R.string.please_add_dessert_number, Toast.LENGTH_SHORT).show();
             }
+            return false;
+        } else if (update_dessert_size.getText().toString().equals("0") || update_portion_size.getText().toString().equals("0") || change_desserts.getText().toString().equals("0")) {
+            Toast.makeText(this, R.string.please_add_number_except_0, Toast.LENGTH_SHORT).show();
+            return false;
+
+        } else if (update_dessert_size.getText().toString().equals(".") || update_portion_size.getText().toString().equals(".") || change_desserts.getText().toString().equals(".")) {
+            Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
+            return false;
+
         } else {
             contentValues.put("dessert_size", update_dessert_size.getText().toString());
             contentValues.put("portion_size", update_portion_size.getText().toString());
@@ -190,9 +202,6 @@ public class ChangeDessertActivity extends AppCompatActivity {
             contentValues.put("image", String.valueOf(edit_image));
         }
 
-        if (title.isEmpty()){
-            return false;
-        }
 
 // Check if the title already exists in the database
         Cursor cursor = database.query("dessert", new String[]{"COUNT(*)"}, "title=?", new String[]{title}, null, null, null);
@@ -201,13 +210,15 @@ public class ChangeDessertActivity extends AppCompatActivity {
             int count = cursor.getInt(0);
             cursor.close();
 
-            if (count > 1) { // assuming you want to check for more than one occurrence
+            if (count > 1) {
+                Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
 
 // Proceed with the update
         database.update("dessert", contentValues, "id=" + id, null);
+        Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
         return true;
 
 

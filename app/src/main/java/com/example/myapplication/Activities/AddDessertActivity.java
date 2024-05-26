@@ -36,7 +36,7 @@ public class AddDessertActivity extends AppCompatActivity {
     String COL_TITLE = "title";
     String COL_IMAGE = "image";
     ImageView imageView, image, setting;
-    EditText set_name;
+    EditText set_name,desserts;
     TextView set_dessert_size, set_portion_size;
     Toolbar toolbar;
     ImageButton add_img;
@@ -98,6 +98,7 @@ public class AddDessertActivity extends AppCompatActivity {
         add_img = findViewById(R.id.add_dessert_img);
         set_dessert_size = findViewById(R.id.set_dessert_size);
         set_portion_size = findViewById(R.id.set_portion_size);
+        desserts = findViewById(R.id.dessert_model);
 
 
     }
@@ -125,7 +126,7 @@ public class AddDessertActivity extends AppCompatActivity {
                 .crop()	    			//Crop image(Optional), Check Customization for more option
                 .compress(1024)			//Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                .crop(3f, 4f)
+                .crop(1f, 1f)
                 .start();
     }
 
@@ -139,16 +140,10 @@ public class AddDessertActivity extends AppCompatActivity {
 
     private void insertData (){
         add_btn.setOnClickListener(view -> {
-            boolean inserted = insertTitleIfNotExists(set_name.getText().toString());
+            boolean inserted = insertTitleIfNotExists();{
 
-            if (set_name.getText().toString().isEmpty()){
-                Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
-            } else {
                 if (inserted) {
-                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
                     finish();
-                } else {
-                    Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -156,22 +151,12 @@ public class AddDessertActivity extends AppCompatActivity {
 
     // [existing methods remain unchanged]
 
-    private boolean isValidNumber(String str) {
-        if (str == null || str.isEmpty()) {
-            return false;
-        }
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
 
-    private boolean insertTitleIfNotExists(String title) {
+    private boolean insertTitleIfNotExists() {
         // Check if the title exists in the database
-        Cursor cursor = database.rawQuery("SELECT * FROM " + "dessert" + " WHERE " + "title" + " = ?", new String[]{title});
+        Cursor cursor = database.rawQuery("SELECT * FROM " + "dessert" + " WHERE " + "title" + " = ?", new String[]{set_name.getText().toString()});
         if (cursor.getCount() > 0) {
+            Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
             cursor.close();
             return false; // Title already exists
         }
@@ -179,25 +164,39 @@ public class AddDessertActivity extends AppCompatActivity {
         // Insert the title
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_TITLE, set_name.getText().toString());
-        if (set_dessert_size.getText().toString().isEmpty()){
+        contentValues.put("desserts", desserts.getText().toString());
+
+        if (set_name.getText().toString().isEmpty()){
+            Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (set_dessert_size.getText().toString().isEmpty() || set_portion_size.getText().toString().isEmpty() || desserts.getText().toString().isEmpty()){
             if (set_dessert_size.getText().toString().isEmpty()){
-                contentValues.put("dessert_size", 0);
-            }else {
-                contentValues.put("portion_size", 0);
+                Toast.makeText(this, R.string.please_add_dessert_size, Toast.LENGTH_SHORT).show();
+            } else if (set_portion_size.getText().toString().isEmpty()) {
+                Toast.makeText(this, R.string.please_add_portion_size, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.please_add_dessert_number, Toast.LENGTH_SHORT).show();
             }
-        }else {
+            return false;
+
+        } else if (set_dessert_size.getText().toString().equals("0") || set_portion_size.getText().toString().equals("0") || desserts.getText().toString().equals("0")) {
+            Toast.makeText(this, R.string.please_add_number_except_0, Toast.LENGTH_SHORT).show();
+            return false;
+
+        } else if (set_dessert_size.getText().toString().equals(".") || set_portion_size.getText().toString().equals(".") || desserts.getText().toString().equals(".")) {
+            Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
+            return false;
+
+        } else {
             contentValues.put("dessert_size", set_dessert_size.getText().toString());
             contentValues.put("portion_size", set_portion_size.getText().toString());
+            
+            double a = Double.parseDouble(String.valueOf(set_dessert_size.getText()));
+            double b = Double.parseDouble(String.valueOf(set_portion_size.getText()));
+            contentValues.put("portion", a / b);
 
-            if (isValidNumber(set_dessert_size.getText().toString()) && isValidNumber(set_portion_size.getText().toString())) {
-                double a = Double.parseDouble(String.valueOf(set_dessert_size.getText()));
-                double b = Double.parseDouble(String.valueOf(set_portion_size.getText()));
-                contentValues.put("portion", a / b);
-            } else {
-                // Handle invalid input case, e.g., show a message to the user
-                Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
-                return false;
-            }
         }
 
         try {
@@ -206,12 +205,10 @@ public class AddDessertActivity extends AppCompatActivity {
         } catch (Exception e) {
             contentValues.put(COL_IMAGE, String.valueOf(image));
         }
-        if (set_name.getText().toString().isEmpty()){
-            return false;
-        }
+
 
         database.insert("dessert", null, contentValues);
-
+        Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
         cursor.close();
         return true; // Title inserted successfully
     }

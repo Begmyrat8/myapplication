@@ -89,12 +89,12 @@ public class DatabaseAccess {
 
         }
     }
-    public String getSumPrice(String dessertId){
+    public String getSumPrice(String dessertId, double deserts){
         String sAmount;
         String sQuery = "select sum(gram_price) from list where dessert_id ='" + dessertId + "';";
         c = database.rawQuery(sQuery,null);
         if (c.moveToFirst()){
-            sAmount = String.valueOf(c.getDouble(0));
+            sAmount = String.valueOf(c.getDouble(0) * deserts);
         }else {
             sAmount = "0";
         }
@@ -102,7 +102,7 @@ public class DatabaseAccess {
 
         return sAmount;
     }
-    public String getPortionWeight(String dessertId, double portions){
+    public String getPortionWeight(String dessertId, int portions){
         String sAmount;
         String sQuery = "select sum(value) from list where dessert_id ='" + dessertId + "' and units != 'piece'";
         c = database.rawQuery(sQuery,null);
@@ -185,8 +185,9 @@ public class DatabaseAccess {
             double portion = c.getDouble(6);
             double portion_size = c.getDouble(8);
             double portion_price = c.getDouble(7);
+            int desserts = c.getInt(9);
 
-            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size,portion_price));
+            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size,portion_price,desserts));
         }
         return stringArrayList;
     }
@@ -203,8 +204,9 @@ public class DatabaseAccess {
             double portion = c.getDouble(5);
             double portion_size = c.getDouble(4);
             double portion_price = c.getDouble(6);
+            int desserts = c.getInt(9);
 
-            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size,portion_price));
+            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size, portion_price, desserts));
         }
         return stringArrayList;
     }
