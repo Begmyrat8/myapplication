@@ -80,7 +80,7 @@
                         android:id="@+id/gram_container"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="@+id/price_container"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -142,15 +142,91 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/down"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/gram_price_container" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/c"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView4">
+
+                        <TextView
+                            android:id="@+id/gram_c"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:gravity="end|center_vertical"
+                            android:text="a"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/hint_gram_c"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/hint_gram_c"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:gravity="start|center"
+                            android:text="@string/gram"
+                            android:textColor="@color/grey"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/gram_price_container_c"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/c">
+
+                        <TextView
+                            android:id="@+id/gram_price_c"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:gravity="end|center"
+                            android:text="@string/unit_price"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/hint_gram_price_c"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:gravity="start|center"
+                            android:text="@string/price"
+                            android:textColor="@color/grey"
+                            app:layout_constraintEnd_toStartOf="@+id/gram_price_c"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/price_container"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
+                        android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/gram_price_container">
+                        app:layout_constraintTop_toBottomOf="@+id/gram_price_container_c">
 
                         <TextView
                             android:id="@+id/price"
@@ -185,7 +261,6 @@
                     android:layout_width="90dp"
                     android:layout_height="100dp"
                     android:importantForAccessibility="no"
-                    app:layout_constraintBottom_toBottomOf="@+id/containers"
                     app:layout_constraintStart_toStartOf="@+id/title_and_btn"
                     app:layout_constraintTop_toTopOf="@+id/containers" />
 
@@ -195,7 +270,6 @@
                     android:layout_height="100dp"
                     android:gravity="center"
                     android:src="@drawable/noun_cake_6710939"
-                    app:layout_constraintBottom_toBottomOf="@+id/containers"
                     app:layout_constraintStart_toStartOf="@+id/title_and_btn"
                     app:layout_constraintTop_toTopOf="@+id/containers" />
 

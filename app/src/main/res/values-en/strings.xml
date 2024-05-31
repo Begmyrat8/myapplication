@@ -72,5 +72,5 @@
     <string name="please_add_portion_size">Please, add portion size</string>
     <string name="please_add_dessert_size">Please, add dessert size</string>
     <string name="please_add_dessert_number">Please, add the amount dessert</string>
-    <string name="select_currency">Select current</string>
+    <string name="select_currency">Select currency</string>
 </resources>

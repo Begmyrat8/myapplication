@@ -155,23 +155,6 @@ public class DatabaseAccess {
         return str;
     }
 
-    public List<Model> getAllList() {
-        c = database.rawQuery("select * from list", null);
-        List<Model> stringArrayList = new ArrayList<>();
-        while (c.moveToNext()) {
-            int id = c.getInt(0);
-            String title = c.getString(1);
-            double price = c.getDouble(2);
-            String units = c.getString(3);
-            double gram_price = c.getDouble(4);
-            byte[] image = c.getBlob(5);
-            int value = c.getInt(6);
-
-
-            stringArrayList.add(new Model(id, title, price, units, gram_price, image, value));
-        }
-        return stringArrayList;
-    }
     public List<DessertModel> getDessertList() {
         c = database.rawQuery("select * from dessert", null);
         List<DessertModel> stringArrayList = new ArrayList<>();
@@ -187,7 +170,7 @@ public class DatabaseAccess {
             double portion_price = c.getDouble(7);
             int desserts = c.getInt(9);
 
-            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size,portion_price,desserts));
+            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size, portion_price, desserts));
         }
         return stringArrayList;
     }
@@ -221,11 +204,11 @@ public class DatabaseAccess {
             double gram_price = c.getDouble(5);
             byte[] image = c.getBlob(6);
             int value = c.getInt(7);
+            double coefficient = c.getDouble(8);
 
 
 
-
-            stringArrayList.add(new Model(id, title, price, units, gram_price, image, value));
+            stringArrayList.add(new Model(id, title, price, units, gram_price, image, value,coefficient));
         }
         return stringArrayList;
     }

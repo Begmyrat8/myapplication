@@ -1,5 +1,7 @@
 package com.example.myapplication.Adaptors;
 
+import static android.view.View.VISIBLE;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -16,6 +18,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Activities.ChangeIngredientsActivity;
@@ -77,29 +80,36 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             holder.price.setText(decimalFormat.format(price) + " TMT");
         }
 
-        int value = list.get(position).getValue();
+        double value = list.get(position).getValue();
         String units = list.get(position).getUnits();
         double gram_price = list.get(position).getGram_price();
 
 
         if (Objects.equals(units, holder.items[0])){
             holder.hint_price.setText("1 " + holder.kg + " " + holder.small_price);
-            holder.hint_unit_price.setText( holder.gram+ " " + holder.small_price);
+            holder.hint_unit_price.setText( holder.gram + " " + holder.small_price);
+            holder.hint_gram_price_c.setText( holder.gram + " " + holder.small_price);
             holder.hint_unit.setText(holder.gram);
+            holder.hint_gram_c.setText(holder.gram);
         }
         if (Objects.equals(units, holder.items[1])){
             holder.hint_price.setText("1 " + holder.piece + " " + holder.small_price);
             holder.hint_unit_price.setText(holder.piece + " " + holder.small_price);
+            holder.hint_gram_price_c.setText(holder.piece + " " + holder.small_price);
             holder.hint_unit.setText(holder.piece);
+            holder.hint_gram_c.setText(holder.piece);
         }
         if (Objects.equals(units, holder.items[2])){
             holder.hint_price.setText("1 " + holder.liter + " " + holder.small_price);
             holder.hint_unit_price.setText(holder.milliliter + " " + holder.small_price);
+            holder.hint_gram_price_c.setText(holder.milliliter + " " + holder.small_price);
             holder.hint_unit.setText(holder.milliliter);
+            holder.hint_gram_c.setText(holder.milliliter);
         }
+        double a =(value / list.get(position).getCoefficient());
         holder.value.setText(decimalFormat.format(value));
+        holder.gram_c.setText(decimalFormat.format(a));
         holder.gram_price.setText(decimalFormat.format(gram_price)  + " TMT");
-
 
 
 
@@ -108,10 +118,10 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
         if (bitmap == null){
             holder.img.setVisibility(View.INVISIBLE);
-            holder.empty_avatar.setVisibility(View.VISIBLE);
+            holder.empty_avatar.setVisibility(VISIBLE);
         }else {
             holder.empty_avatar.setVisibility(View.INVISIBLE);
-            holder.img.setVisibility(View.VISIBLE);
+            holder.img.setVisibility(VISIBLE);
             holder.img.setImageBitmap(bitmap);
 
         }
@@ -173,16 +183,25 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
     public static  class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-       TextView title,  price, value, gram_price, hint_unit, hint_price, hint_unit_price;
-       ImageView img, empty_avatar;
+       TextView title,  price, value, gram_price, hint_unit, hint_price, hint_unit_price, gram_price_c, gram_c, hint_gram_c,hint_gram_price_c;
+       ImageView img, empty_avatar, imageView4;
        ImageButton change_btn;
        String kg, small_price, piece, liter, unit, gram, milliliter;
        String[] items;
+       ConstraintLayout c, gram_price_container_c, price_container;
 
         @SuppressLint("WrongViewCast")
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            hint_gram_price_c = itemView.findViewById(R.id.hint_gram_price_c);
+            gram_price_c = itemView.findViewById(R.id.gram_price_c);
+            hint_gram_c = itemView.findViewById(R.id.hint_gram_c);
+            gram_c = itemView.findViewById(R.id.gram_c);
+            price_container = itemView.findViewById(R.id.price_container);
+            gram_price_container_c = itemView.findViewById(R.id.gram_price_container_c);
+            c = itemView.findViewById(R.id.c);
+            imageView4 = itemView.findViewById(R.id.imageView4);
             hint_price = itemView.findViewById(R.id.hint_price);
             hint_unit = itemView.findViewById(R.id.hint_gram);
             title = itemView.findViewById(R.id.title_edit_text);

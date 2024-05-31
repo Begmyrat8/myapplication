@@ -266,6 +266,8 @@ public class AddIngredientsActivity extends AppCompatActivity {
                 if (set_title.getText().toString().isEmpty()) {
                     return false;
                 }
+                String coif = getSharedPreferences("a", MODE_PRIVATE).getString("coefficient", "a");
+                Toast.makeText(this, coif, Toast.LENGTH_SHORT).show();
 
                 database.insert("list", null, contentValues);
                 return true;

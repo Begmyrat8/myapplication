@@ -19,6 +19,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Activities.ChangeDessertActivity;
@@ -241,6 +242,14 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
             intent.putExtra("style",((MainActivity)context).getMyStyleId());
             context.startActivity(intent);
         });
+
+        holder.imageView3.setOnClickListener(v -> {
+            if (holder.result.equals(View.GONE)){
+                holder.result.setVisibility(View.VISIBLE);
+            }else {
+                holder.result.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -250,8 +259,9 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
     public static final class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView dessertImage, empty_img,like;
+        ImageView dessertImage, empty_img,like ,imageView3;
         ImageButton  change_dessert;
+        ConstraintLayout result;
         TextView dessertTitle, sum, weight, portion, portion_price, dessert_size, portion_size, ingredients, portion_weight, dessert_num;
         String kg, gram, sm;
 
@@ -259,6 +269,8 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            result = itemView.findViewById(R.id.result);
+            imageView3 = itemView.findViewById(R.id.imageView3);
             like = itemView.findViewById(R.id.like_dessert);
             empty_img = itemView.findViewById(R.id.empty_img);
             dessertImage = itemView.findViewById(R.id.word_lang);

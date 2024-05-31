@@ -124,12 +124,7 @@
         app:layout_constraintTop_toBottomOf="@+id/currency"
         tools:layout_editor_absoluteX="10dp">
 
-        <RadioButton
-            android:id="@+id/radioTMT"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="TMT" />
+
 
         <RadioButton
             android:id="@+id/radioUSD"
@@ -144,6 +139,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="RUB" />
+
+        <RadioButton
+            android:id="@+id/radioTMT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="TMT" />
     </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
