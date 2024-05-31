@@ -252,9 +252,12 @@
                 android:id="@+id/shape_circle"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
                 android:checked="true"
                 android:text="Circle" />
+<!--            <ImageView-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:src="@drawable/cake"/>-->
 
             <RadioButton
                 android:id="@+id/shape_rectangle"

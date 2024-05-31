@@ -1,5 +1,7 @@
 package com.example.myapplication.Adaptors;
 
+import static android.view.View.VISIBLE;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -83,7 +85,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
         String dessertName = desserts.get(position).getTitle();
         holder.dessertTitle.setText(dessertName);
 
-        double dessert_size = Double.parseDouble(String.valueOf(dessert.getDessert_size()));
+        double dessert_size = Double.parseDouble(String.valueOf(dessert.getNew_dessert_width()));
 
         double dessert_num = dessert.getDesserts();
 
@@ -128,10 +130,10 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
         if (bitmap == null){
             holder.dessertImage.setVisibility(View.INVISIBLE);
-            holder.empty_img.setVisibility(View.VISIBLE);
+            holder.empty_img.setVisibility(VISIBLE);
         }else {
             holder.empty_img.setVisibility(View.INVISIBLE);
-            holder.dessertImage.setVisibility(View.VISIBLE);
+            holder.dessertImage.setVisibility(VISIBLE);
             holder.dessertImage.setImageBitmap(bitmap);
 
         }
@@ -180,9 +182,12 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
                     intent.putExtra("title", String.valueOf(dessert.getTitle()));
                     intent.putExtra("image", dessert.getImage());
                     intent.putExtra("portion_size", String.valueOf(dessert.getPortion_size()));
-                    intent.putExtra("dessert_size", String.valueOf(dessert.getDessert_size()));
-                    intent.putExtra("style",((MainActivity)context).getMyStyleId());
+                    intent.putExtra("new_dessert_width", String.valueOf(dessert.getNew_dessert_width()));
                     intent.putExtra("desserts", String.valueOf(dessert.getDesserts()));
+                    intent.putExtra("new_dessert_height", String.valueOf(dessert.getNew_dessert_height()));
+                    intent.putExtra("dessert_height", String.valueOf(dessert.getDessert_height()));
+                    intent.putExtra("dessert_width", String.valueOf(dessert.getDessert_width()));
+                    intent.putExtra("shape_name", String.valueOf(dessert.getShape_name()));
                     context.startActivity(intent);
                     return true;
                 }
@@ -240,16 +245,22 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
             intent.putExtra("dessertName", dessertName);
             intent.putExtra("dessertId", String.valueOf(desserts.get(position).getId()));
             intent.putExtra("style",((MainActivity)context).getMyStyleId());
+            intent.putExtra("coefficient", String.valueOf(desserts.get(position).getCoefficient()));
             context.startActivity(intent);
         });
 
         holder.imageView3.setOnClickListener(v -> {
-            if (holder.result.equals(View.GONE)){
-                holder.result.setVisibility(View.VISIBLE);
-            }else {
-                holder.result.setVisibility(View.GONE);
+            if (holder.constraintLayout2.getVisibility() != View.GONE) {
+                holder.constraintLayout2.setVisibility(View.GONE);
+                holder.constraintLayout3.setVisibility(View.GONE);
+                holder.imageView3.setImageResource(R.drawable.down);
+            } else {
+                holder.constraintLayout2.setVisibility(VISIBLE);
+                holder.constraintLayout3.setVisibility(VISIBLE);
+                holder.imageView3.setImageResource(R.drawable.up);
             }
         });
+
     }
 
     @Override
@@ -261,7 +272,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
         ImageView dessertImage, empty_img,like ,imageView3;
         ImageButton  change_dessert;
-        ConstraintLayout result;
+        ConstraintLayout result, constraintLayout2, constraintLayout3;
         TextView dessertTitle, sum, weight, portion, portion_price, dessert_size, portion_size, ingredients, portion_weight, dessert_num;
         String kg, gram, sm;
 
@@ -269,6 +280,8 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            constraintLayout3 = itemView.findViewById(R.id.constraintLayout3);
+            constraintLayout2 = itemView.findViewById(R.id.constraintLayout2);
             result = itemView.findViewById(R.id.result);
             imageView3 = itemView.findViewById(R.id.imageView3);
             like = itemView.findViewById(R.id.like_dessert);
@@ -280,7 +293,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
             change_dessert = itemView.findViewById(R.id.change_dessert);
             portion = itemView.findViewById(R.id.portion);
             portion_price = itemView.findViewById(R.id.portion_price);
-            dessert_size = itemView.findViewById(R.id.dessert_size);
+            dessert_size = itemView.findViewById(R.id.new_dessert_width);
             portion_size = itemView.findViewById(R.id.portion_size);
             ingredients = itemView.findViewById(R.id.ingredients);
             portion_weight = itemView.findViewById(R.id.portion_weight);

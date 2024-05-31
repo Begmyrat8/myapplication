@@ -9,10 +9,8 @@ public class Model {
     byte [] image;
     int value;
 
-    double coefficient;
 
-
-    public Model(int id, String title, double price, String units, double gram_price, byte[] image, int value, double coefficient) {
+    public Model(int id, String title, double price, String units, double gram_price, byte[] image, int value) {
         this.id = id;
         this.title = title;
         this.price = price;
@@ -20,7 +18,6 @@ public class Model {
         this.gram_price = gram_price;
         this.value = value;
         this.image = image;
-        this.coefficient = coefficient;
 
     }
 
@@ -28,9 +25,6 @@ public class Model {
         return id;
     }
 
-    public double getCoefficient() {
-        return coefficient;
-    }
 
     public void setId(int id) {
         this.id = id;

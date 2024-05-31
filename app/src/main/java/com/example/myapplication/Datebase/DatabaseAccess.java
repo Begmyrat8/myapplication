@@ -169,8 +169,14 @@ public class DatabaseAccess {
             double portion_size = c.getDouble(8);
             double portion_price = c.getDouble(7);
             int desserts = c.getInt(9);
+            double coefficient= c.getDouble(10);
+            double new_dessert_height = c.getDouble(11);
+            double dessert_width = c.getDouble(12);
+            double dessert_height = c.getDouble(13);
+            String shape_name = c.getString(14);
 
-            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size, portion_price, desserts));
+
+            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size, portion_price, desserts, coefficient, new_dessert_height, dessert_width, dessert_height, shape_name));
         }
         return stringArrayList;
     }
@@ -188,8 +194,13 @@ public class DatabaseAccess {
             double portion_size = c.getDouble(4);
             double portion_price = c.getDouble(6);
             int desserts = c.getInt(9);
+            double coefficient = c.getDouble(10);
+            double new_dessert_height = c.getDouble(11);
+            double dessert_width = c.getDouble(12);
+            double dessert_height = c.getDouble(13);
+            String shape_name = c.getString(14);
 
-            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size, portion_price, desserts));
+            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size, portion_price, desserts, coefficient, new_dessert_height, dessert_width,dessert_height,shape_name));
         }
         return stringArrayList;
     }
@@ -204,11 +215,10 @@ public class DatabaseAccess {
             double gram_price = c.getDouble(5);
             byte[] image = c.getBlob(6);
             int value = c.getInt(7);
-            double coefficient = c.getDouble(8);
 
 
 
-            stringArrayList.add(new Model(id, title, price, units, gram_price, image, value,coefficient));
+            stringArrayList.add(new Model(id, title, price, units, gram_price, image, value));
         }
         return stringArrayList;
     }

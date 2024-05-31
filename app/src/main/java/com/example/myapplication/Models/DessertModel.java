@@ -5,24 +5,37 @@ public class DessertModel {
     String title;
     double sum;
     double weight;
-    double dessert_size;
+    double new_dessert_width;
     double portion;
     double portion_size;
     double portion_price;
     byte [] image;
     private boolean liked;
     int desserts;
-    public DessertModel(int id, String title, double sum, double weight, byte[] image, double dessert_size, double portion, double portion_size, double portion_price, int desserts){
+    double coefficient;
+    double new_dessert_height;
+    double dessert_height;
+    double dessert_width;
+    String shape_name;
+
+
+
+    public DessertModel(int id, String title, double sum, double weight, byte[] image, double new_dessert_width, double portion, double portion_size, double portion_price, int desserts, double coefficient, double new_dessert_height, double dessert_height, double dessert_width, String shape_name){
         this.id = id;
         this.title = title;
         this.sum = sum;
         this.weight = weight;
         this.image = image;
-        this.dessert_size = dessert_size;
+        this.new_dessert_width = new_dessert_width;
         this.portion = portion;
         this.portion_size = portion_size;
         this.portion_price = portion_price;
         this.desserts = desserts;
+        this.coefficient = coefficient;
+        this.new_dessert_height = new_dessert_height;
+        this.dessert_height = dessert_height;
+        this.dessert_width = dessert_width;
+        this.shape_name = shape_name;
 
     }
     public boolean isLiked() {
@@ -31,6 +44,22 @@ public class DessertModel {
 
     public int getDesserts() {
         return desserts;
+    }
+
+    public String getShape_name() {
+        return shape_name;
+    }
+
+    public double getNew_dessert_height() {
+        return new_dessert_height;
+    }
+
+    public double getDessert_height() {
+        return dessert_height;
+    }
+
+    public double getDessert_width() {
+        return dessert_width;
     }
 
     public void setLiked(boolean liked) {
@@ -64,8 +93,8 @@ public class DessertModel {
         return portion_size;
     }
 
-    public double getDessert_size(){
-        return dessert_size;
+    public double getNew_dessert_width(){
+        return new_dessert_width;
     }
 
     private boolean isDeleted;
@@ -77,4 +106,7 @@ public class DessertModel {
         isDeleted = deleted;
     }
 
+    public double getCoefficient() {
+        return coefficient;
+    }
 }

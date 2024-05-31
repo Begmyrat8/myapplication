@@ -234,23 +234,23 @@ public class AddIngredientsActivity extends AppCompatActivity {
                     if (isValidNumber(set_price.getText().toString()) && isValidNumber(set_value.getText().toString())) {
                         contentValues.put(COL_PRICE, set_price.getText().toString());
                         contentValues.put(COL_VALUE, set_value.getText().toString());
-                        double a = parseDouble(valueOf(set_price.getText()));
-                        double b = parseDouble(valueOf(set_value.getText()));
-                        double c = a * b;
+                        double price = parseDouble(valueOf(set_price.getText()));
+                        double value = parseDouble(valueOf(set_value.getText()));
+                        double c = price * value;
 
                         if (autoComplete.getText().toString().equals(items[1])) {
                             contentValues.put(COL_GRAM_PRICE, c);
                             contentValues.put(COL_UNIT, items[1]);
 
                         } else if (autoComplete.getText().toString().equals(items[0])) {
-                            double v = b / 1000;
-                            double r = v * a;
+                            double v = value / 1000;
+                            double r = v * price;
                             contentValues.put(COL_GRAM_PRICE, r);
                             contentValues.put(COL_UNIT, items[0]);
 
                         } else if (autoComplete.getText().toString().equals(items[2])) {
-                            double v = b / 1000;
-                            double r = v * a;
+                            double v = value / 1000;
+                            double r = v * price;
                             contentValues.put(COL_GRAM_PRICE, r);
                             contentValues.put(COL_UNIT, items[2]);
                         }
@@ -266,8 +266,6 @@ public class AddIngredientsActivity extends AppCompatActivity {
                 if (set_title.getText().toString().isEmpty()) {
                     return false;
                 }
-                String coif = getSharedPreferences("a", MODE_PRIVATE).getString("coefficient", "a");
-                Toast.makeText(this, coif, Toast.LENGTH_SHORT).show();
 
                 database.insert("list", null, contentValues);
                 return true;

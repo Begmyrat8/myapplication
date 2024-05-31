@@ -62,73 +62,35 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/dessert_size"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@+id/input_layout2"
-            app:layout_constraintTop_toBottomOf="@+id/input_layout" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout2"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="?attr/colorSecondary"
-            app:boxStrokeWidth="0.1dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/update_dessert_size"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:gravity="start|center"
-                android:inputType="numberDecimal"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="@string/portion_size"
             android:textColor="@color/black"
             android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/input_layout3"
             app:layout_constraintStart_toStartOf="@+id/input_layout3"
-            app:layout_constraintTop_toBottomOf="@+id/input_layout2" />
+            app:layout_constraintTop_toBottomOf="@+id/input_layout" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout3"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textColorHint="@color/black"
             app:boxStrokeColor="?attr/colorSecondary"
             app:boxStrokeWidth="0.1dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/update_portion_size"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:gravity="start|center"
                 android:inputType="numberDecimal"
-                android:text="2.5"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -138,30 +100,29 @@
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:text="@string/dessert"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@+id/input_layout3"
-            app:layout_constraintTop_toBottomOf="@+id/input_layout3" />
+            app:layout_constraintEnd_toEndOf="@+id/input_layout4"
+            app:layout_constraintStart_toStartOf="@+id/input_layout4"
+            app:layout_constraintTop_toTopOf="@+id/textView5" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout4"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textColorHint="@color/black"
             app:boxStrokeColor="?attr/colorSecondary"
             app:boxStrokeWidth="0.1dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/change_dessert_model"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:gravity="start|center"
                 android:inputType="numberDecimal"
                 android:textColor="@color/black"
@@ -170,6 +131,189 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/original_cake_width_input_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="?attr/colorSecondary"
+            app:boxStrokeWidth="0.1dp"
+            app:layout_constraintStart_toStartOf="@+id/input_layout3"
+            app:layout_constraintTop_toBottomOf="@+id/cake_shape_group2">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/original_cake_width2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start|center"
+                android:inputType="numberDecimal"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/original_cake_height_input_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="?attr/colorSecondary"
+            app:boxStrokeWidth="0.1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cake_shape_group2">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/original_cake_height2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start|center"
+                android:inputType="numberDecimal"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/new_cake_width_input_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="?attr/colorSecondary"
+            app:boxStrokeWidth="0.1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/a2">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/new_cake_width2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start|center"
+                android:inputType="numberDecimal"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/new_cake_height_input_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="?attr/colorSecondary"
+            app:boxStrokeWidth="0.1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/a2">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/new_cake_height2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start|center"
+                android:inputType="numberDecimal"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/cake_shape_label2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Select Cake Shape In Recipes"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/cake_shape_group2"
+            app:layout_constraintStart_toStartOf="@+id/cake_shape_group2"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout3" />
+
+        <RadioGroup
+            android:id="@+id/cake_shape_group2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/input_layout"
+            app:layout_constraintStart_toStartOf="@+id/input_layout"
+            app:layout_constraintTop_toBottomOf="@+id/cake_shape_label2">
+
+            <RadioButton
+                android:id="@+id/shape_circle2"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="Circle" />
+            <!--            <ImageView-->
+            <!--                android:layout_width="50dp"-->
+            <!--                android:layout_height="50dp"-->
+            <!--                android:src="@drawable/cake"/>-->
+
+            <RadioButton
+                android:id="@+id/shape_rectangle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="Rectangle" />
+
+            <RadioButton
+                android:id="@+id/shape_square2"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Square" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/My_form2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Your Cake Shape"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/a2"
+            app:layout_constraintStart_toStartOf="@+id/a2"
+            app:layout_constraintTop_toBottomOf="@+id/original_cake_height_input_layout" />
+
+        <RadioGroup
+            android:id="@+id/a2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/input_layout"
+            app:layout_constraintStart_toStartOf="@+id/input_layout"
+            app:layout_constraintTop_toBottomOf="@+id/My_form2">
+
+            <RadioButton
+                android:id="@+id/my_circle2"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="Circle" />
+
+            <RadioButton
+                android:id="@+id/my_rectangle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="Rectangle" />
+
+            <RadioButton
+                android:id="@+id/my_square2"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Square" />
+
+        </RadioGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

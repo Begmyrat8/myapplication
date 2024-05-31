@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -67,6 +68,24 @@ public class AddDessertActivity extends AppCompatActivity {
         toolbar.setSubtitle(R.string.add_dessert);
 
         imageView.setOnClickListener(v -> finish());
+
+        originalCakeHeight.setVisibility(View.INVISIBLE);
+        newCakeHeight.setVisibility(View.INVISIBLE);
+
+        shapeRectangle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                originalCakeHeight.setVisibility(View.VISIBLE);
+            } else {
+                originalCakeHeight.setVisibility(View.INVISIBLE);
+            }
+        });
+        myRectangle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                newCakeHeight.setVisibility(View.VISIBLE);
+            } else {
+                newCakeHeight.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     private void setMode() {
@@ -138,19 +157,19 @@ public class AddDessertActivity extends AppCompatActivity {
     }
 
     private boolean insertTitleIfNotExists() {
-        // Check if the title exists in the database
-        Cursor cursor = database.rawQuery("SELECT * FROM " + "dessert" + " WHERE " + "title" + " = ?", new String[]{set_name.getText().toString()});
+        // Проверка существования заголовка в базе данных
+        Cursor cursor = database.rawQuery("SELECT * FROM dessert WHERE title = ?", new String[]{set_name.getText().toString()});
         if (cursor.getCount() > 0) {
             Toast.makeText(this, R.string.dessert_already_exists, Toast.LENGTH_SHORT).show();
             cursor.close();
-            return false; // Title already exists
+            return false; // Заголовок уже существует
         }
 
-        // Insert the title
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_TITLE, set_name.getText().toString());
         contentValues.put("desserts", desserts.getText().toString());
 
+        // Проверка на пустые значения
         if (set_name.getText().toString().isEmpty()) {
             Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
             return false;
@@ -174,53 +193,87 @@ public class AddDessertActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
             return false;
         } else {
-            contentValues.put("dessert_size", newCakeWidth.getText().toString());
+            contentValues.put("new_dessert_width", newCakeWidth.getText().toString());
             contentValues.put("portion_size", set_portion_size.getText().toString());
             double a = Double.parseDouble(newCakeWidth.getText().toString());
             double b = Double.parseDouble(set_portion_size.getText().toString());
             contentValues.put("portion", a / b);
         }
 
-        // Add shape-specific coefficient
         double coefficient = 1.0;
+        String originalShape = "";
+        String newShape = "";
+
         if (shapeCircle.isChecked()) {
-            String originalDiameterStr = originalCakeWidth.getText().toString();
-            String newDiameterStr = newCakeWidth.getText().toString();
-            if (originalDiameterStr.isEmpty() || newDiameterStr.isEmpty()) {
-                Toast.makeText(this, "Please enter values for both original and new cake diameter", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            double originalDiameter = Double.parseDouble(originalDiameterStr);
-            double newDiameter = Double.parseDouble(newDiameterStr);
-            coefficient = Math.pow(newDiameter, 2) / Math.pow(originalDiameter, 2);
+            originalShape = "circle";
+            double originalDiameter = Double.parseDouble(originalCakeWidth.getText().toString());
+            contentValues.put("dessert_width", originalDiameter);
         } else if (shapeRectangle.isChecked()) {
-            String originalWidthStr = originalCakeWidth.getText().toString();
-            String originalHeightStr = originalCakeHeight.getText().toString();
-            String newWidthStr = newCakeWidth.getText().toString();
-            String newHeightStr = newCakeHeight.getText().toString();
-            if (originalWidthStr.isEmpty() || originalHeightStr.isEmpty() || newWidthStr.isEmpty() || newHeightStr.isEmpty()) {
-                Toast.makeText(this, "Please enter values for all dimensions of original and new cakes", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            double originalWidth = Double.parseDouble(originalWidthStr);
-            double originalHeight = Double.parseDouble(originalHeightStr);
-            double newWidth = Double.parseDouble(newWidthStr);
-            double newHeight = Double.parseDouble(newHeightStr);
-            double originalArea = originalWidth * originalHeight;
-            double newArea = newWidth * newHeight;
-            coefficient = newArea / originalArea;
+            originalShape = "rectangle";
+            double originalWidth = Double.parseDouble(originalCakeWidth.getText().toString());
+            double originalHeight = Double.parseDouble(originalCakeHeight.getText().toString());
+            contentValues.put("dessert_width", originalWidth);
+            contentValues.put("dessert_height", originalHeight);
         } else if (shapeSquare.isChecked()) {
-            String originalSideStr = originalCakeWidth.getText().toString();
-            String newSideStr = newCakeWidth.getText().toString();
-            if (originalSideStr.isEmpty() || newSideStr.isEmpty()) {
-                Toast.makeText(this, "Please enter values for both original and new cake side length", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            double originalSide = Double.parseDouble(originalSideStr);
-            double newSide = Double.parseDouble(newSideStr);
-            coefficient = Math.pow(newSide, 2) / Math.pow(originalSide, 2);
+            originalShape = "square";
+            double originalSide = Double.parseDouble(originalCakeWidth.getText().toString());
+            contentValues.put("dessert_width", originalSide);
         }
 
+        if (myCircle.isChecked()) {
+            newShape = "circle";
+            double newDiameter = Double.parseDouble(newCakeWidth.getText().toString());
+            if (originalShape.equals("circle")) {
+                double originalDiameter = Double.parseDouble(originalCakeWidth.getText().toString());
+                coefficient = Math.pow(newDiameter / originalDiameter, 2);
+            } else if (originalShape.equals("rectangle") || originalShape.equals("square")) {
+                double originalArea = originalShape.equals("rectangle") ?
+                        Double.parseDouble(originalCakeWidth.getText().toString()) * Double.parseDouble(originalCakeHeight.getText().toString()) :
+                        Math.pow(Double.parseDouble(originalCakeWidth.getText().toString()), 2);
+                double newArea = Math.PI * Math.pow(newDiameter / 2, 2);
+                coefficient = newArea / originalArea;
+            }
+            contentValues.put("new_dessert_width", newDiameter);
+        } else if (myRectangle.isChecked()) {
+            newShape = "rectangle";
+            double newWidth = Double.parseDouble(newCakeWidth.getText().toString());
+            double newHeight = Double.parseDouble(newCakeHeight.getText().toString());
+            if (originalShape.equals("circle")) {
+                double originalDiameter = Double.parseDouble(originalCakeWidth.getText().toString());
+                double originalArea = Math.PI * Math.pow(originalDiameter / 2, 2);
+                double newArea = newWidth * newHeight;
+                coefficient = newArea / originalArea;
+            } else if (originalShape.equals("rectangle") || originalShape.equals("square")) {
+                double originalArea = originalShape.equals("rectangle") ?
+                        Double.parseDouble(originalCakeWidth.getText().toString()) * Double.parseDouble(originalCakeHeight.getText().toString()) :
+                        Math.pow(Double.parseDouble(originalCakeWidth.getText().toString()), 2);
+                double newArea = newWidth * newHeight;
+                coefficient = newArea / originalArea;
+            }
+            contentValues.put("new_dessert_width", newWidth);
+            contentValues.put("new_dessert_height", newHeight);
+        } else if (mySquare.isChecked()) {
+            newShape = "square";
+            double newSide = Double.parseDouble(newCakeWidth.getText().toString());
+            if (originalShape.equals("circle")) {
+                double originalDiameter = Double.parseDouble(originalCakeWidth.getText().toString());
+                double originalArea = Math.PI * Math.pow(originalDiameter / 2, 2);
+                double newArea = Math.pow(newSide, 2);
+                coefficient = newArea / originalArea;
+            } else if (originalShape.equals("rectangle") || originalShape.equals("square")) {
+                double originalArea = originalShape.equals("rectangle") ?
+                        Double.parseDouble(originalCakeWidth.getText().toString()) * Double.parseDouble(originalCakeHeight.getText().toString()) :
+                        Math.pow(Double.parseDouble(originalCakeWidth.getText().toString()), 2);
+                double newArea = Math.pow(newSide, 2);
+                coefficient = newArea / originalArea;
+            }
+            contentValues.put("new_dessert_width", newSide);
+        }
+
+        contentValues.put("shape_name", newShape);
+        contentValues.put("coefficient", coefficient);
+
+        // Сохранение изображения и других данных
         try {
             contentValues.put(COL_IMAGE, ImageViewToByte(image));
         } catch (Exception e) {
@@ -230,7 +283,7 @@ public class AddDessertActivity extends AppCompatActivity {
         database.insert("dessert", null, contentValues);
         Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
         cursor.close();
-        return true; // Title inserted successfully
+        return true;
     }
 
     private void insertData() {

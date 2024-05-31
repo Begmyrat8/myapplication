@@ -158,5 +158,15 @@ public class IngredientActivity extends AppCompatActivity {
         }
         return mode;
     }
+    public double getCoif(){
+        String coefficient = getIntent().getStringExtra("coefficient");
+        if (coefficient != null){
+            double coef = Double.parseDouble(coefficient);
+            return coef;
+        }else {
+            return 0.0;
+        }
+
+    }
 
 }

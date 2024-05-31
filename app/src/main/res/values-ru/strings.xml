@@ -38,7 +38,7 @@
     <string name="add_dessert">Добавить десерт</string>
 
     <string name="sm">см</string>
-    <string name="dessert_size">Размер десерта</string>
+    <string name="new_dessert_width">Размер десерта</string>
     <string name="portion_size">Размер порции</string>
     <string name="select_unit">Выберите единицу</string>
 

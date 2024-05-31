@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -34,12 +36,14 @@ import java.util.Objects;
 public class ChangeDessertActivity extends AppCompatActivity {
 
     SQLiteDatabase database;
-    TextInputEditText edit_title, update_dessert_size, update_portion_size,change_desserts;
+    TextInputEditText edit_title, update_portion_size, change_desserts, originalCakeWidth, originalCakeHeight, newCakeWidth, newCakeHeight;
     String title, id, dessert_size, portion_size, desserts;
     byte [] img;
     ImageView imageView, edit_image, setting;
     Toolbar toolbar;
     ImageButton change_dessert_img;
+    RadioGroup shapeGroup, a;
+    RadioButton shapeCircle, shapeRectangle, shapeSquare, myCircle, myRectangle, mySquare;
     Button save_btn;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
@@ -65,16 +69,27 @@ public class ChangeDessertActivity extends AppCompatActivity {
 
     }
     private void findView(){
-        setting =findViewById(R.id.setting);
+        setting = findViewById(R.id.setting);
         edit_image = findViewById(R.id.dessert_image);
         imageView = findViewById(R.id.imageView);
         toolbar = findViewById(R.id.toolbar);
         edit_title = findViewById(R.id.set_dessert_name);
         save_btn = findViewById(R.id.save_dessert);
         change_dessert_img = findViewById(R.id.change_dessert_img);
-        update_dessert_size = findViewById(R.id.update_dessert_size);
         update_portion_size = findViewById(R.id.update_portion_size);
         change_desserts = findViewById(R.id.change_dessert_model);
+        originalCakeWidth = findViewById(R.id.original_cake_width2);
+        originalCakeHeight = findViewById(R.id.original_cake_height2);
+        newCakeWidth = findViewById(R.id.new_cake_width2);
+        newCakeHeight = findViewById(R.id.new_cake_height2);
+        shapeGroup = findViewById(R.id.cake_shape_group2);
+        shapeCircle = findViewById(R.id.shape_circle2);
+        shapeRectangle = findViewById(R.id.shape_rectangle2);
+        shapeSquare = findViewById(R.id.shape_square2);
+        a = findViewById(R.id.a2);
+        myCircle = findViewById(R.id.my_circle2);
+        myRectangle = findViewById(R.id.my_rectangle2);
+        mySquare = findViewById(R.id.my_square2);
 
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -92,20 +107,41 @@ public class ChangeDessertActivity extends AppCompatActivity {
     }
     void get_and_set_intent_data(){
 
-        if (getIntent().hasExtra("id") && getIntent().hasExtra("title")  && getIntent().hasExtra("image") && getIntent().hasExtra("portion_size") && getIntent().hasExtra("dessert_size")&& getIntent().hasExtra("desserts")){
+        if (getIntent().hasExtra("id")
+                && getIntent().hasExtra("title")
+                && getIntent().hasExtra("image")
+                && getIntent().hasExtra("portion_size")
+                && getIntent().hasExtra("new_dessert_width")
+                && getIntent().hasExtra("desserts")
+                && getIntent().hasExtra("new_dessert_height")
+                && getIntent().hasExtra("dessert_height")
+                && getIntent().hasExtra("dessert_width")
+                && getIntent().hasExtra("shape_name")){
 
 
             id = getIntent().getStringExtra("id");
             title = getIntent().getStringExtra("title");
             img = getIntent().getByteArrayExtra("image");
             portion_size = getIntent().getStringExtra("portion_size");
-            dessert_size = getIntent().getStringExtra("dessert_size");
+            dessert_size = getIntent().getStringExtra("new_dessert_width");
             desserts = getIntent().getStringExtra("desserts");
+
 
             edit_title.setText(title);
             update_portion_size.setText(portion_size);
-            update_dessert_size.setText(dessert_size);
+            newCakeWidth.setText(dessert_size);
             change_desserts.setText(desserts);
+            newCakeHeight.setText(getIntent().getStringExtra("new_dessert_height"));
+            originalCakeHeight.setText(getIntent().getStringExtra("dessert_height"));
+            originalCakeWidth.setText(getIntent().getStringExtra("dessert_width"));
+
+            if (Objects.equals(getIntent().getStringExtra("shape_name"), "circle")){
+                shapeGroup.check(R.id.shape_circle2);
+            }else if (Objects.equals(getIntent().getStringExtra("shape_name"), "rectangle")){
+                shapeGroup.check(R.id.shape_rectangle2);
+            }else {
+                shapeGroup.check(R.id.shape_square2);
+            }
 
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             if (bitmap != null){
@@ -153,19 +189,20 @@ public class ChangeDessertActivity extends AppCompatActivity {
             return false;
         }
     }
-    private boolean updateTitleIfNotExists() {
 
+    private boolean updateTitleIfNotExists() {
         ContentValues contentValues = new ContentValues();
         String title = Objects.requireNonNull(edit_title.getText()).toString();
         contentValues.put("title", title);
         contentValues.put("desserts", change_desserts.getText().toString());
+
         if (Objects.requireNonNull(edit_title.getText()).toString().isEmpty()){
             Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (Objects.requireNonNull(update_dessert_size.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty() || change_desserts.getText().toString().isEmpty()) {
-            if (update_dessert_size.getText().toString().isEmpty()){
+        if (Objects.requireNonNull(newCakeWidth.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty() || change_desserts.getText().toString().isEmpty()) {
+            if (newCakeWidth.getText().toString().isEmpty()){
                 Toast.makeText(this, R.string.please_add_dessert_size, Toast.LENGTH_SHORT).show();
             } else if (update_portion_size.getText().toString().isEmpty()) {
                 Toast.makeText(this, R.string.please_add_portion_size, Toast.LENGTH_SHORT).show();
@@ -173,28 +210,100 @@ public class ChangeDessertActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.please_add_dessert_number, Toast.LENGTH_SHORT).show();
             }
             return false;
-        } else if (update_dessert_size.getText().toString().equals("0") || update_portion_size.getText().toString().equals("0") || change_desserts.getText().toString().equals("0")) {
+        } else if (newCakeWidth.getText().toString().equals("0") || update_portion_size.getText().toString().equals("0") || change_desserts.getText().toString().equals("0")) {
             Toast.makeText(this, R.string.please_add_number_except_0, Toast.LENGTH_SHORT).show();
             return false;
 
-        } else if (update_dessert_size.getText().toString().equals(".") || update_portion_size.getText().toString().equals(".") || change_desserts.getText().toString().equals(".")) {
+        } else if (newCakeWidth.getText().toString().equals(".") || update_portion_size.getText().toString().equals(".") || change_desserts.getText().toString().equals(".")) {
             Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
             return false;
 
         } else {
-            contentValues.put("dessert_size", update_dessert_size.getText().toString());
+            contentValues.put("new_dessert_width", newCakeWidth.getText().toString());
             contentValues.put("portion_size", update_portion_size.getText().toString());
 
-            if (isValidNumber(update_dessert_size.getText().toString()) && isValidNumber(update_portion_size.getText().toString())) {
-                double a = Double.parseDouble(String.valueOf(update_dessert_size.getText()));
+            if (isValidNumber(newCakeWidth.getText().toString()) && isValidNumber(update_portion_size.getText().toString())) {
+                double a = Double.parseDouble(String.valueOf(newCakeWidth.getText()));
                 double b = Double.parseDouble(String.valueOf(update_portion_size.getText()));
                 contentValues.put("portion", a / b);
             } else {
-                // Handle invalid input case, e.g., show a message to the user
                 Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
+
+        double coefficient = 1.0;
+        String originalShape = "";
+        String newShape = "";
+
+        if (shapeCircle.isChecked()) {
+            originalShape = "circle";
+            double originalDiameter = Double.parseDouble(originalCakeWidth.getText().toString());
+            contentValues.put("dessert_width", originalDiameter);
+        } else if (shapeRectangle.isChecked()) {
+            originalShape = "rectangle";
+            double originalWidth = Double.parseDouble(originalCakeWidth.getText().toString());
+            double originalHeight = Double.parseDouble(originalCakeHeight.getText().toString());
+            contentValues.put("dessert_width", originalWidth);
+            contentValues.put("dessert_height", originalHeight);
+        } else if (shapeSquare.isChecked()) {
+            originalShape = "square";
+            double originalSide = Double.parseDouble(originalCakeWidth.getText().toString());
+            contentValues.put("dessert_width", originalSide);
+        }
+
+        if (myCircle.isChecked()) {
+            newShape = "circle";
+            double newDiameter = Double.parseDouble(newCakeWidth.getText().toString());
+            if (originalShape.equals("circle")) {
+                double originalDiameter = Double.parseDouble(originalCakeWidth.getText().toString());
+                coefficient = Math.pow(newDiameter / originalDiameter, 2);
+            } else if (originalShape.equals("rectangle") || originalShape.equals("square")) {
+                double originalArea = originalShape.equals("rectangle") ?
+                        Double.parseDouble(originalCakeWidth.getText().toString()) * Double.parseDouble(originalCakeHeight.getText().toString()) :
+                        Math.pow(Double.parseDouble(originalCakeWidth.getText().toString()), 2);
+                double newArea = Math.PI * Math.pow(newDiameter / 2, 2);
+                coefficient = newArea / originalArea;
+            }
+            contentValues.put("new_dessert_width", newDiameter);
+        } else if (myRectangle.isChecked()) {
+            newShape = "rectangle";
+            double newWidth = Double.parseDouble(newCakeWidth.getText().toString());
+            double newHeight = Double.parseDouble(newCakeHeight.getText().toString());
+            if (originalShape.equals("circle")) {
+                double originalDiameter = Double.parseDouble(originalCakeWidth.getText().toString());
+                double originalArea = Math.PI * Math.pow(originalDiameter / 2, 2);
+                double newArea = newWidth * newHeight;
+                coefficient = newArea / originalArea;
+            } else if (originalShape.equals("rectangle") || originalShape.equals("square")) {
+                double originalArea = originalShape.equals("rectangle") ?
+                        Double.parseDouble(originalCakeWidth.getText().toString()) * Double.parseDouble(originalCakeHeight.getText().toString()) :
+                        Math.pow(Double.parseDouble(originalCakeWidth.getText().toString()), 2);
+                double newArea = newWidth * newHeight;
+                coefficient = newArea / originalArea;
+            }
+            contentValues.put("new_dessert_width", newWidth);
+            contentValues.put("new_dessert_height", newHeight);
+        } else if (mySquare.isChecked()) {
+            newShape = "square";
+            double newSide = Double.parseDouble(newCakeWidth.getText().toString());
+            if (originalShape.equals("circle")) {
+                double originalDiameter = Double.parseDouble(originalCakeWidth.getText().toString());
+                double originalArea = Math.PI * Math.pow(originalDiameter / 2, 2);
+                double newArea = Math.pow(newSide, 2);
+                coefficient = newArea / originalArea;
+            } else if (originalShape.equals("rectangle") || originalShape.equals("square")) {
+                double originalArea = originalShape.equals("rectangle") ?
+                        Double.parseDouble(originalCakeWidth.getText().toString()) * Double.parseDouble(originalCakeHeight.getText().toString()) :
+                        Math.pow(Double.parseDouble(originalCakeWidth.getText().toString()), 2);
+                double newArea = Math.pow(newSide, 2);
+                coefficient = newArea / originalArea;
+            }
+            contentValues.put("new_dessert_width", newSide);
+        }
+
+        contentValues.put("shape_name", newShape);
+        contentValues.put("coefficient", coefficient);
 
         try {
             contentValues.put("image", ImageViewToByte(edit_image));
@@ -202,8 +311,6 @@ public class ChangeDessertActivity extends AppCompatActivity {
             contentValues.put("image", String.valueOf(edit_image));
         }
 
-
-// Check if the title already exists in the database
         Cursor cursor = database.query("dessert", new String[]{"COUNT(*)"}, "title=?", new String[]{title}, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -216,13 +323,11 @@ public class ChangeDessertActivity extends AppCompatActivity {
             }
         }
 
-// Proceed with the update
         database.update("dessert", contentValues, "id=" + id, null);
         Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
         return true;
-
-
     }
+
     private void setMode() {
         String mode = getSharedPreferences("Settings", MODE_PRIVATE).getString("mode", "light");
 
