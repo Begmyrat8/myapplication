@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +21,6 @@ import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
 import com.example.myapplication.Models.Model;
 import com.example.myapplication.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class IngredientActivity extends AppCompatActivity {
     String dessertId;
     Toolbar toolbar;
     ImageView imageView, setting;
-    FloatingActionButton add_button;
+    ImageButton add_button;
     Button add_ingredient;
     SQLiteDatabase database;
 
@@ -53,6 +53,8 @@ public class IngredientActivity extends AppCompatActivity {
         DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this);
         database = dbHelper.getWritableDatabase();
 
+
+
         Recycler = findViewById(R.id.List);
         Recycler.setHasFixedSize(true);
 
@@ -68,7 +70,7 @@ public class IngredientActivity extends AppCompatActivity {
         imageView.setOnClickListener(v -> finish());
 
 
-        toolbar.setSubtitle(R.string.ingredients);
+        toolbar.setSubtitle("Части десерта");
 
         dessertName = getIntent().getStringExtra("dessertName");
         dessertId = getIntent().getStringExtra("dessertId");
@@ -92,8 +94,8 @@ public class IngredientActivity extends AppCompatActivity {
         });
 
 
-
         List = databaseAccess.getDessertData(dessertId);
+
         setRecycler(List);
 
         if (Adaptor.isEmpty()) {
@@ -122,6 +124,7 @@ public class IngredientActivity extends AppCompatActivity {
         super.onResume();
         databaseAccess = DatabaseAccess.getInstances(this.getApplicationContext());
         databaseAccess.open();
+
 
         Recycler = findViewById(R.id.List);
         Recycler.setHasFixedSize(true);
@@ -161,12 +164,50 @@ public class IngredientActivity extends AppCompatActivity {
     public double getCoif(){
         String coefficient = getIntent().getStringExtra("coefficient");
         if (coefficient != null){
-            double coef = Double.parseDouble(coefficient);
-            return coef;
+            return Double.parseDouble(coefficient);
         }else {
             return 0.0;
         }
 
+    }
+    public String getShape(){
+        return getIntent().getStringExtra("originalShape");
+    }
+    public String getNewShape(){
+        return getIntent().getStringExtra("newShape");
+    }
+
+    public double getNewWidth(){
+        String newWidth = getIntent().getStringExtra("newWidth");
+        if (newWidth != null){
+            return Double.parseDouble(newWidth);
+        }else {
+            return 0.0;
+        }
+    }
+    public double getOriginalWidth(){
+        String originalWidth = getIntent().getStringExtra("originalWidth");
+        if (originalWidth != null){
+            return Double.parseDouble(originalWidth);
+        }else {
+            return 0.0;
+        }
+    }
+    public double getNewHeight(){
+        String newHeight = getIntent().getStringExtra("newHeight");
+        if (newHeight != null){
+            return Double.parseDouble(newHeight);
+        }else {
+            return 0.0;
+        }
+    }
+    public double getOriginalHeight(){
+        String originalHeight = getIntent().getStringExtra("originalHeight");
+        if (originalHeight != null){
+            return Double.parseDouble(originalHeight);
+        }else {
+            return 0.0;
+        }
     }
 
 }

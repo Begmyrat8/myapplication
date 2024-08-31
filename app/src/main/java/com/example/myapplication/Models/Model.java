@@ -1,7 +1,7 @@
 package com.example.myapplication.Models;
 
 public class Model {
-    int id;
+    int id, dessert_id;
     String title;
     double price;
     String units;
@@ -10,7 +10,7 @@ public class Model {
     int value;
 
 
-    public Model(int id, String title, double price, String units, double gram_price, byte[] image, int value) {
+    public Model(int id, String title, double price, String units, double gram_price, byte[] image, int value, int dessert_id) {
         this.id = id;
         this.title = title;
         this.price = price;
@@ -18,6 +18,7 @@ public class Model {
         this.gram_price = gram_price;
         this.value = value;
         this.image = image;
+        this.dessert_id = dessert_id;
 
     }
 
@@ -25,6 +26,9 @@ public class Model {
         return id;
     }
 
+    public int getDessert_id() {
+        return dessert_id;
+    }
 
     public void setId(int id) {
         this.id = id;

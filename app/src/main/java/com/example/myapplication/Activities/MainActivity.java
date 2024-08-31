@@ -5,7 +5,6 @@ import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,7 +29,7 @@ import com.example.myapplication.databinding.ActivityMainBinding;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.Locale;
+import java.io.File;
 
 public class MainActivity extends BaseActivity {
 
@@ -53,22 +52,23 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onViewReady(Bundle savedInstanceState,Intent intent) {
         SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
-        String language = sharedPreferences.getString("language", "English");
+//        String language = sharedPreferences.getString("language", "English");
         String mode = sharedPreferences.getString("mode", "light");
 
+
         // Apply language
-        Locale locale;
-        if (language.equals("English")) {
-            locale = new Locale("en");
-        } else if (language.equals("Русский")) {
-            locale = new Locale("ru");
-        } else {
-            locale = new Locale(" ");
-        }
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+//        Locale locale;
+//        if (language.equals("English")) {
+//            locale = new Locale("en");
+//        } else if (language.equals("Русский")) {
+//            locale = new Locale("ru");
+//        } else {
+//            locale = new Locale(" ");
+//        }
+//        Locale.setDefault(locale);
+//        Configuration config = new Configuration();
+//        config.locale = locale;
+//        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
 
         int color;
         // Apply mode
@@ -218,6 +218,18 @@ public class MainActivity extends BaseActivity {
             window.setStatusBarColor(getResources().getColor(R.color.dark_chocolate, getTheme()));
         }
 
+    }
+    public void clearApplicationData() {
+        File cacheDirectory = getCacheDir();
+        File applicationDirectory = new File(cacheDirectory.getParent());
+        if (applicationDirectory.exists()) {
+            String[] fileNames = applicationDirectory.list();
+            for (String fileName : fileNames) {
+                if (!fileName.equals("lib")) {
+                    deleteFile(String.valueOf(new File(applicationDirectory, fileName)));
+                }
+            }
+        }
     }
 
 }

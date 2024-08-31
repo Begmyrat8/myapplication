@@ -8,40 +8,40 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Activities.ChangeIngredientsActivity;
 import com.example.myapplication.Activities.IngredientActivity;
 import com.example.myapplication.Datebase.DatabaseAccess;
 import com.example.myapplication.Datebase.DatabaseOpenHelper;
+import com.example.myapplication.Models.IngredientsModel;
 import com.example.myapplication.Models.Model;
 import com.example.myapplication.R;
 
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Objects;
 
-public class
-Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
+public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
-    Context context;
-    List<Model> list;
-    SQLiteDatabase database;
-    DatabaseOpenHelper databaseHelper;
-
-
+    private final Context context;
+    private final List<Model> list;
+    private SQLiteDatabase database;
 
     public Adaptor(Context context, List<Model> list) {
         this.context = context;
@@ -55,148 +55,35 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         return new CategoryViewHolder(categoryItems);
     }
 
-    @SuppressLint({"SetTextI18n", "NotifyDataSetChanged", "ResourceAsColor"})
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        databaseHelper = new DatabaseOpenHelper(context);
+        DatabaseOpenHelper databaseHelper = new DatabaseOpenHelper(context);
         database = databaseHelper.getWritableDatabase();
 
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstances(context.getApplicationContext());
-        databaseAccess.open();
-
-        SharedPreferences sharedPreferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        String currency = sharedPreferences.getString("currency", "TMT");
-
-        DecimalFormat decimalFormat = new DecimalFormat();
 
 
+
+        // Сохраняем id текущего элемента в настройках
+        SharedPreferences preferences = context.getSharedPreferences("Setting", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("id", String.valueOf(list.get(position).getId() + 1));
+        editor.apply();
+
+        // Устанавливаем название элемента
         String name = list.get(position).getTitle();
         holder.title.setText(name);
 
+        // Обработчик для кнопки изменения (показываем меню)
+        holder.change_btn.setOnClickListener(v -> showPopupMenu(v, position));
 
-        double price = list.get(position).getPrice();
-        if (price == 0){
-            holder.price.setText(0 + " " + currency);
-        }else {
-            holder.price.setText(decimalFormat.format(price) + " " + currency);
-        }
+        // Обработчик для кнопки сворачивания/разворачивания деталей
+        holder.imageView4.setOnClickListener(v -> toggleDetailVisibility(holder));
 
-        double value = list.get(position).getValue();
-        String units = list.get(position).getUnits();
-        double gram_price = list.get(position).getGram_price();
-
-
-        if (Objects.equals(units, holder.items[0])){
-            holder.hint_price.setText("1 " + holder.kg + " " + holder.small_price);
-            holder.hint_price_c.setText("1 " + holder.kg + " " + holder.small_price);
-            holder.hint_unit_price.setText( holder.gram + " " + holder.small_price);
-            holder.hint_gram_price_c.setText( holder.gram + " " + holder.small_price);
-            holder.hint_unit.setText(holder.gram);
-            holder.hint_gram_c.setText(holder.gram);
-        }
-        if (Objects.equals(units, holder.items[1])){
-            holder.hint_price.setText("1 " + holder.piece + " " + holder.small_price);
-            holder.hint_price_c.setText("1 " + holder.piece + " " + holder.small_price);
-            holder.hint_unit_price.setText(holder.piece + " " + holder.small_price);
-            holder.hint_gram_price_c.setText(holder.piece + " " + holder.small_price);
-            holder.hint_unit.setText(holder.piece);
-            holder.hint_gram_c.setText(holder.piece);
-        }
-        if (Objects.equals(units, holder.items[2])){
-            holder.hint_price.setText("1 " + holder.liter + " " + holder.small_price);
-            holder.hint_price_c.setText("1 " + holder.liter + " " + holder.small_price);
-            holder.hint_unit_price.setText(holder.milliliter + " " + holder.small_price);
-            holder.hint_gram_price_c.setText(holder.milliliter + " " + holder.small_price);
-            holder.hint_unit.setText(holder.milliliter);
-            holder.hint_gram_c.setText(holder.milliliter);
-        }
-        double a = ((IngredientActivity)context).getCoif();
-        double b = (a * value);
-        holder.value.setText(decimalFormat.format(value));
-        holder.gram_c.setText(decimalFormat.format(b));
-        holder.gram_price.setText(decimalFormat.format(gram_price)  + " " + currency);
-        holder.gram_price_c.setText(decimalFormat.format(value / 1000 * price) + " " + currency);
-
-        if (value == 0){
-            holder.price_c.setText(0 + " " + currency);
-        }else{
-            holder.price_c.setText(decimalFormat.format(b / value * 1000) + " " + currency);
-        }
-
-
-        byte[] image =  list.get(position).getImage();
-        Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-        if (bitmap == null){
-            holder.img.setVisibility(View.INVISIBLE);
-            holder.empty_avatar.setVisibility(VISIBLE);
-        }else {
-            holder.empty_avatar.setVisibility(View.INVISIBLE);
-            holder.img.setVisibility(VISIBLE);
-            holder.img.setImageBitmap(bitmap);
-
-        }
-
-        holder.change_btn.setOnClickListener(v -> {
-
-            PopupMenu popupMenu = new PopupMenu(context, v);
-            popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
-
-            // Set a click listener for each menu item
-            popupMenu.setOnMenuItemClickListener(item -> {
-                int itemId = item.getItemId();
-                if (itemId == R.id.nav_delete) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle(R.string.do_you_want_delete)
-                            .setCancelable(true)
-                            .setPositiveButton((R.string.yes), (dialog, which) -> {
-                                database.delete("list","id=" + list.get(position).getId(),null);
-                                list.remove(position);
-                                notifyItemRemoved(position);
-
-                                ((IngredientActivity) context).refresh();
-                            })
-
-                            .setNegativeButton((R.string.no), (dialog, which) -> dialog.cancel());
-
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.setCanceledOnTouchOutside(false);
-                    alertDialog.show();
-
-                    return true;
-                } else if (itemId == R.id.nav_edit) {
-                    Intent intent = new Intent(context, ChangeIngredientsActivity.class);
-                    intent.putExtra("id", String.valueOf(list.get(position).getId()));
-                    intent.putExtra("title", String.valueOf(list.get(position).getTitle()));
-                    intent.putExtra("value", String.valueOf(list.get(position).getValue()));
-                    intent.putExtra("price", String.valueOf(list.get(position).getPrice()));
-                    intent.putExtra("image", list.get(position).getImage());
-                    intent.putExtra("units", String.valueOf(list.get(position).getUnits()));
-                    intent.putExtra("styles",((IngredientActivity) context).setMode());
-
-                    context.startActivity(intent);
-                    return true;
-                }
-                return false;
-            });
-
-            // Show the popup menu
-            popupMenu.show();
-        });
-
-        holder.imageView4.setOnClickListener(v -> {
-            if (holder.c.getVisibility() == View.GONE) {
-                holder.c.setVisibility(View.VISIBLE);
-                holder.gram_price_container_c.setVisibility(VISIBLE);
-                holder.price_container_c.setVisibility(VISIBLE);
-                holder.imageView4.setImageResource(R.drawable.up);
-            } else {
-                holder.c.setVisibility(View.GONE);
-                holder.gram_price_container_c.setVisibility(View.GONE);
-                holder.price_container_c.setVisibility(View.GONE);
-                holder.imageView4.setImageResource(R.drawable.down);
-            }
-        });
-
+        // Добавляем динамические TextView в контейнеры
+        addDynamicTextViews(holder.fromRecipeContainer, list.get(position).getId());
+        addDynamicTextViews2(holder.yourContainer, list.get(position).getId());
+        addDynamicTextViews4(holder.resultContainer2,list.get(position).getId());
     }
 
     @Override
@@ -204,41 +91,24 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         return list.size();
     }
 
-    public static  class CategoryViewHolder extends RecyclerView.ViewHolder{
-
-       TextView title,  price, value, gram_price, hint_unit, hint_price, hint_unit_price, gram_price_c, gram_c, hint_gram_c, hint_gram_price_c, price_c, hint_price_c;
-       ImageView img, empty_avatar, imageView4;
-       ImageButton change_btn;
-       String kg, small_price, piece, liter, unit, gram, milliliter;
-       String[] items;
-       ConstraintLayout c, gram_price_container_c, price_container_c;
+    public static class CategoryViewHolder extends RecyclerView.ViewHolder {
+        TextView title, textView5;
+        ImageView imageView4;
+        ImageButton change_btn;
+        String kg, small_price, piece, liter, unit, gram, milliliter;
+        String[] items;
+        ConstraintLayout c, gram_price_container_c, price_container_c;
+        LinearLayout fromRecipeContainer, yourContainer, resultContainer, resultContainer2;
 
         @SuppressLint("WrongViewCast")
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            hint_price_c = itemView.findViewById(R.id.hint_price_c);
-            price_c = itemView.findViewById(R.id.price_c);
-            hint_gram_price_c = itemView.findViewById(R.id.hint_gram_price_c);
-            gram_price_c = itemView.findViewById(R.id.gram_price_c);
-            hint_gram_c = itemView.findViewById(R.id.hint_gram_c);
-            gram_c = itemView.findViewById(R.id.gram_c);
-            price_container_c = itemView.findViewById(R.id.price_container_c);
-            gram_price_container_c = itemView.findViewById(R.id.gram_price_container_c);
+            textView5 = itemView.findViewById(R.id.textView5);
             c = itemView.findViewById(R.id.c);
             imageView4 = itemView.findViewById(R.id.imageView4);
-            hint_price = itemView.findViewById(R.id.hint_price);
-            hint_unit = itemView.findViewById(R.id.hint_gram);
             title = itemView.findViewById(R.id.title_edit_text);
-            price = itemView.findViewById(R.id.price);
-            value = itemView.findViewById(R.id.gram);
-            gram_price = itemView.findViewById(R.id.gram_price);
-            hint_unit_price = itemView.findViewById(R.id.hint_gram_price);
             change_btn = itemView.findViewById(R.id.change_btn);
-            img = itemView.findViewById(R.id.avatar);
-            empty_avatar = itemView.findViewById(R.id.empty_avatar);
             items = itemView.getResources().getStringArray(R.array.items);
-
             kg = itemView.getResources().getString(R.string.kg);
             small_price = itemView.getResources().getString(R.string.small_price);
             liter = itemView.getResources().getString(R.string.liter);
@@ -246,12 +116,468 @@ Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             unit = itemView.getResources().getString(R.string.unit);
             gram = itemView.getResources().getString(R.string.gram);
             milliliter = itemView.getResources().getString(R.string.milliliter);
-
+            fromRecipeContainer = itemView.findViewById(R.id.fromRecipeContainer);
+            yourContainer = itemView.findViewById(R.id.yourContainer);
+            resultContainer = itemView.findViewById(R.id.resultContainer);
+            resultContainer2 = itemView.findViewById(R.id.resultContainer2);
 
         }
+    }
+
+    private void calculateShapeConversion(double value, TextView textView) {
+        IngredientActivity activity = (IngredientActivity) context;
+        String shape = activity.getShape();
+        String newShape = activity.getNewShape();
+        double newWidth = activity.getNewWidth();
+        double newHeight = activity.getNewHeight();
+        double originalWidth = activity.getOriginalWidth();
+        double originalHeight = activity.getOriginalHeight();
+        double coefficient = activity.getCoif();
+
+        DecimalFormat decimalFormat = new DecimalFormat("#0");
+
+        if (shape.equals("circle") && (newShape.equals("rectangle") || newShape.equals("square"))) {
+            double originalArea = newShape.equals("rectangle") ?
+                    newWidth * newHeight :
+                    Math.pow(newWidth, 2);
+            double newArea = Math.PI * Math.pow(newWidth / 2, 2);
+            if (originalArea < newArea) {
+                coefficient = newArea / originalArea;
+                textView.setText(decimalFormat.format((coefficient * value)));
+            } else {
+                coefficient = originalArea / newArea;
+                textView.setText(decimalFormat.format((coefficient / value)));
+            }
+        } else if (newShape.equals("circle") && (shape.equals("rectangle") || shape.equals("square"))) {
+            double originalArea = shape.equals("rectangle") ?
+                    originalWidth * originalHeight :
+                    Math.pow(originalWidth, 2);
+            double newArea = Math.PI * Math.pow(newWidth / 2, 2);
+            if (originalArea < newArea) {
+                coefficient = newArea / originalArea;
+                textView.setText(decimalFormat.format((coefficient * value)));
+            } else {
+                coefficient = originalArea / newArea;
+                textView.setText(decimalFormat.format((coefficient / value)));
+            }
+        } else {
+            textView.setText(decimalFormat.format(coefficient * value));
+        }
+    }
+
+    private void showPopupMenu(View v, int listPosition) {
+        List<IngredientsModel> ingredients = getIngredientsByListId(list.get(listPosition).getId());
+
+        PopupMenu popupMenu = new PopupMenu(context, v);
+        popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_delete) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(R.string.do_you_want_delete)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.yes, (dialog, which) -> {
+                            database.delete("list", "id=" + list.get(listPosition).getId(), null);
+                            database.delete("ingredients", "id=" + list.get(listPosition).getId(), null);
+                            list.remove(listPosition);
+                            notifyItemRemoved(listPosition);
+
+                            ((IngredientActivity) context).refresh();
+                        })
+                        .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
+
+                return true;
+            } else if (itemId == R.id.nav_edit) {
+                // Ensure the position is valid for the ingredients list
+                IngredientsModel ingredient;
+                if (listPosition < ingredients.size()) {
+                    ingredient = ingredients.get(listPosition);
+                } else {
+                    // Default to the first ingredient if position is out of bounds
+                    ingredient = ingredients.get(0);
+                }
+
+                Intent intent = new Intent(context, ChangeIngredientsActivity.class);
+                intent.putExtra("id", String.valueOf(list.get(listPosition).getId()));
+                intent.putExtra("title", String.valueOf(list.get(listPosition).getTitle()));
+                intent.putExtra("value", String.valueOf(ingredient.getValue()));
+                intent.putExtra("price", String.valueOf(ingredient.getPrice()));
+                intent.putExtra("image", list.get(listPosition).getImage());
+                intent.putExtra("units", String.valueOf(list.get(listPosition).getUnits()));
+                intent.putExtra("styles", ((IngredientActivity) context).setMode());
+                intent.putExtra("ingredientTitle", String.valueOf(ingredient.getTitle()));
+                intent.putExtra("dessert_id", String.valueOf(list.get(listPosition).getDessert_id()));
+
+                context.startActivity(intent);
+                return true;
+            }
+            return false;
+        });
+
+        popupMenu.show();
+    }
+    private void toggleDetailVisibility(CategoryViewHolder holder) {
+        if (holder.c.getVisibility() == View.GONE) {
+            holder.c.setVisibility(View.VISIBLE);
+            holder.gram_price_container_c.setVisibility(VISIBLE);
+            holder.price_container_c.setVisibility(VISIBLE);
+            holder.textView5.setVisibility(VISIBLE);
+            holder.imageView4.setImageResource(R.drawable.up);
+        } else {
+            holder.c.setVisibility(View.GONE);
+            holder.gram_price_container_c.setVisibility(View.GONE);
+            holder.price_container_c.setVisibility(View.GONE);
+            holder.textView5.setVisibility(View.GONE);
+            holder.imageView4.setImageResource(R.drawable.down);
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void addDynamicTextViews(LinearLayout container, int listId) {
+        List<IngredientsModel> ingredients = getIngredientsByListId(listId);
+        container.removeAllViews();
+
+        DecimalFormat format = new DecimalFormat("#0.0");
+        DecimalFormat format2 = new DecimalFormat();
+
+        // Create TableLayout
+        TableLayout tableLayout = new TableLayout(context);
+        tableLayout.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+        tableLayout.setStretchAllColumns(true);
+
+        // Header row
+        TableRow headerRow = new TableRow(context);
+        headerRow.setLayoutParams(new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.MATCH_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT
+        ));
+        headerRow.setPadding(0, 16, 16, 16);  // Padding for headers
+
+        TextView nameHint = new TextView(context);
+        nameHint.setText("Ингредиенты");
+        nameHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        nameHint.setTextColor(ContextCompat.getColor(context, R.color.grey));
+        nameHint.setGravity(Gravity.CENTER);
+        headerRow.addView(nameHint);
+
+        TextView amountHint = new TextView(context);
+        amountHint.setText("Вес");
+        amountHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        amountHint.setTextColor(ContextCompat.getColor(context, R.color.grey));
+        amountHint.setGravity(Gravity.CENTER);
+        headerRow.addView(amountHint);
+
+        TextView kg_priceHint = new TextView(context);
+        kg_priceHint.setText("Кг/цена");
+        kg_priceHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        kg_priceHint.setTextColor(ContextCompat.getColor(context, R.color.grey));
+        kg_priceHint.setGravity(Gravity.CENTER);
+        headerRow.addView(kg_priceHint);
+
+        TextView priceHint = new TextView(context);
+        priceHint.setText("Цена");
+        priceHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        priceHint.setTextColor(ContextCompat.getColor(context, R.color.green));
+        priceHint.setGravity(Gravity.CENTER);
+        headerRow.addView(priceHint);
+
+        tableLayout.addView(headerRow);
+
+        // Add rows for each ingredient
+        for (IngredientsModel ingredient : ingredients) {
+            TableRow row = new TableRow(context);
+            row.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT
+            ));
+            row.setGravity(Gravity.CENTER_VERTICAL);  // Center elements vertically
+
+            TextView nameTextView = new TextView(context);
+            nameTextView.setText(ingredient.getTitle());
+            nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            nameTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
+            nameTextView.setGravity(Gravity.CENTER);
+            nameTextView.setPadding(0, 16, 16, 16);
+            row.addView(nameTextView);
+
+            TextView quantityTextView = new TextView(context);
+            quantityTextView.setText(format2.format(ingredient.getValue()));
+            quantityTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            quantityTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
+            quantityTextView.setGravity(Gravity.CENTER);
+            row.addView(quantityTextView);
+
+            TextView kgPriceTextView = new TextView(context);
+            kgPriceTextView.setText(format.format(ingredient.getPrice()));
+            kgPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            kgPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
+            kgPriceTextView.setGravity(Gravity.CENTER);
+            row.addView(kgPriceTextView);
+
+            TextView actualPriceTextView = new TextView(context);
+            actualPriceTextView.setText(format2.format(ingredient.getGram_price()));
+            actualPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            actualPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
+            actualPriceTextView.setGravity(Gravity.CENTER);
+            row.addView(actualPriceTextView);
+
+            tableLayout.addView(row);
+        }
+
+        // Retrieve total price and weight
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstances(context.getApplicationContext());
+        databaseAccess.open();
+
+        double totalPrice = Double.parseDouble(databaseAccess.getSumPrice2(String.valueOf(listId)));
+        double totalWeight = Double.parseDouble(databaseAccess.getSumGramPies(String.valueOf(listId)));
+        double totalKgPrice = Double.parseDouble(databaseAccess.getSumPrice3(String.valueOf(listId)));
+
+        // Bottom row for total values
+        TableRow bottomRow = new TableRow(context);
+        bottomRow.setLayoutParams(new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.MATCH_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT
+        ));
+        bottomRow.setGravity(Gravity.CENTER_VERTICAL);
+
+        // Empty cell for the first column (Ingredients)
+        TextView total = new TextView(context);
+        total.setText("Итого :");
+        total.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        total.setTextColor(ContextCompat.getColor(context, R.color.red));
+        total.setGravity(Gravity.CENTER);
+        bottomRow.addView(total);
+
+        // Total weight under the "Вес" column
+        TextView totalWeightTextView = new TextView(context);
+        totalWeightTextView.setText(format2.format(totalWeight));
+        totalWeightTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        totalWeightTextView.setTextColor(ContextCompat.getColor(context, R.color.orange));
+        totalWeightTextView.setGravity(Gravity.CENTER);
+        bottomRow.addView(totalWeightTextView);
+
+        // Empty cell for the "Кг/цена" column
+        TextView totalKgPriceTextView = new TextView(context);
+        totalKgPriceTextView.setText(format.format(totalKgPrice));  // No text, just a placeholder
+        totalKgPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        totalKgPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.red));
+        totalKgPriceTextView.setGravity(Gravity.CENTER);
+        bottomRow.addView(totalKgPriceTextView);
+
+        // Total price under the "Цена" column
+        TextView totalPriceTextView = new TextView(context);
+        totalPriceTextView.setText(format.format(totalPrice));
+        totalPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        totalPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
+        totalPriceTextView.setGravity(Gravity.CENTER);
+        bottomRow.addView(totalPriceTextView);
+
+        tableLayout.addView(bottomRow);
+
+        container.addView(tableLayout);  // Add the TableLayout to the main container
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    private void addDynamicTextViews2(LinearLayout container, int listId) {
+        List<IngredientsModel> ingredients = getIngredientsByListId(listId);
+        container.removeAllViews();
+
+        DecimalFormat format = new DecimalFormat("#0.0");
+
+        // Create TableLayout
+        TableLayout tableLayout = new TableLayout(context);
+        tableLayout.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+        tableLayout.setStretchAllColumns(true);
+
+        // Header row
+        TableRow headerRow = new TableRow(context);
+        headerRow.setLayoutParams(new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.MATCH_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT
+        ));
+        headerRow.setPadding(0, 16, 16, 8);  // Padding for headers
+
+        TextView nameHint = new TextView(context);
+        nameHint.setText("Ингредиенты");
+        nameHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        nameHint.setTextColor(ContextCompat.getColor(context, R.color.grey));
+        nameHint.setGravity(Gravity.CENTER);
+        headerRow.addView(nameHint);
+
+        TextView amountHint = new TextView(context);
+        amountHint.setText("Вес");
+        amountHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        amountHint.setTextColor(ContextCompat.getColor(context, R.color.grey));
+        amountHint.setGravity(Gravity.CENTER);
+        headerRow.addView(amountHint);
+
+        TextView kg_priceHint = new TextView(context);
+        kg_priceHint.setText("Кг/цена");
+        kg_priceHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        kg_priceHint.setTextColor(ContextCompat.getColor(context, R.color.grey));
+        kg_priceHint.setGravity(Gravity.CENTER);
+        headerRow.addView(kg_priceHint);
+
+        TextView priceHint = new TextView(context);
+        priceHint.setText("Цена");
+        priceHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        priceHint.setTextColor(ContextCompat.getColor(context, R.color.green));
+        priceHint.setGravity(Gravity.CENTER);
+        headerRow.addView(priceHint);
+
+        tableLayout.addView(headerRow);
+
+        for (IngredientsModel ingredient : ingredients) {
+            TableRow row = new TableRow(context);
+            row.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT
+            ));
+            row.setGravity(Gravity.CENTER_VERTICAL);  // Center elements vertically
+
+            TextView nameTextView = new TextView(context);
+            nameTextView.setText(ingredient.getTitle());
+            nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            nameTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
+            nameTextView.setPadding(0, 16, 16, 16);
+            nameTextView.setGravity(Gravity.CENTER);
+            row.addView(nameTextView);
+
+            TextView quantityTextView = new TextView(context);
+            calculateShapeConversion(ingredient.getValue(), quantityTextView);
+            quantityTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            quantityTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
+            quantityTextView.setGravity(Gravity.CENTER);
+            row.addView(quantityTextView);
+
+            TextView kgPriceTextView = new TextView(context);
+            kgPriceTextView.setText(format.format(ingredient.getPrice()));
+            kgPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            kgPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
+            kgPriceTextView.setGravity(Gravity.CENTER);
+            row.addView(kgPriceTextView);
+
+            // Calculating the actual price
+            String quantityStr = quantityTextView.getText().toString().replace("\u00A0", "").replace(" ", "").replace(",", ".");
+            String priceStr = kgPriceTextView.getText().toString().replace("\u00A0", "").replace(" ", "").replace(",", ".");
+
+            double a = Double.parseDouble(quantityStr);
+            double b = Double.parseDouble(priceStr);
+            String r = format.format((a / 1000) * b);
+
+            TextView actualPriceTextView = new TextView(context);
+            actualPriceTextView.setText(r);
+            actualPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            actualPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
+            actualPriceTextView.setGravity(Gravity.CENTER);
+            row.addView(actualPriceTextView);
+
+            tableLayout.addView(row);
+        }
+
+        // Retrieve total price and weight
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstances(context.getApplicationContext());
+        databaseAccess.open();
+
+        double totalPrice = Double.parseDouble(databaseAccess.getSumPrice2(String.valueOf(listId)));
+        double totalWeight = Double.parseDouble(databaseAccess.getSumGramPies(String.valueOf(listId)));
+        double totalKgPrice = Double.parseDouble(databaseAccess.getSumPrice3(String.valueOf(listId)));
+
+        // Bottom row for total values
+        TableRow bottomRow = new TableRow(context);
+        bottomRow.setLayoutParams(new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.MATCH_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT
+        ));
+        bottomRow.setGravity(Gravity.CENTER_VERTICAL);
+
+        // TextView для Итого
+        TextView allpriceTextView = new TextView(context);
+        allpriceTextView.setText("Итого: ");
+        allpriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        allpriceTextView.setTextColor(ContextCompat.getColor(context, R.color.red));
+        allpriceTextView.setGravity(Gravity.CENTER);
+        bottomRow.addView(allpriceTextView);
+
+        // Значение вес ингредиента
+        TextView allactualPriceTextView = new TextView(context);
+        allactualPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        allactualPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.orange));
+        allactualPriceTextView.setGravity(Gravity.CENTER);
+        bottomRow.addView(allactualPriceTextView);
+
+        // Установка значения цены
+        calculateShapeConversion(totalWeight, allactualPriceTextView);
+
+        // TextView для текста кг/цены
+        TextView allkgPriceTextView = new TextView(context);
+        allkgPriceTextView.setText(format.format(totalKgPrice));
+        allkgPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        allkgPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.red));
+        allkgPriceTextView.setGravity(Gravity.CENTER);
+        bottomRow.addView(allkgPriceTextView);
+
+        // Значение цены ингредиента
+        TextView allactualKgPriceTextView = new TextView(context);
+        allactualKgPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        allactualKgPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
+        allactualKgPriceTextView.setGravity(Gravity.CENTER);
+        bottomRow.addView(allactualKgPriceTextView);
+
+        // Установка значения веса
+        calculateShapeConversion(totalPrice, allactualKgPriceTextView);
+
+        // Добавляем горизонтальный layout для кг/цены в основной контейнер
+        tableLayout.addView(bottomRow);
+
+        container.addView(tableLayout);
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    private void addDynamicTextViews4(LinearLayout container, int listId){
+        container.removeAllViews();
+
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstances(context.getApplicationContext());
+        databaseAccess.open();
+
+        double price = Double.parseDouble(databaseAccess.getSumPrice2(String.valueOf(listId)));
+        double weight = Double.parseDouble(databaseAccess.getSumGramPies(String.valueOf(listId)));
+
+        DecimalFormat format = new DecimalFormat("#0.0");
+
+        // Horizontal LinearLayout для цены
+        LinearLayout allpriceLayout = new LinearLayout(context);
+        allpriceLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+        allpriceLayout.setOrientation(LinearLayout.HORIZONTAL);
+        allpriceLayout.setGravity(Gravity.CENTER_VERTICAL); // Выравнивание по вертикали
+
+
+    }
+
+    private List<IngredientsModel> getIngredientsByListId(int listId) {
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstances(context.getApplicationContext());
+        databaseAccess.open();
+        return databaseAccess.getIngredientsByListId(listId);
     }
 
     public boolean isEmpty() {
         return list.isEmpty();
     }
 }
+

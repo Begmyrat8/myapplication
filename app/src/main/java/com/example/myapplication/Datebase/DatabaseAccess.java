@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.widget.ImageView;
 
 import com.example.myapplication.Models.DessertModel;
+import com.example.myapplication.Models.IngredientsModel;
 import com.example.myapplication.Models.Model;
 
 import java.io.ByteArrayOutputStream;
@@ -89,12 +90,12 @@ public class DatabaseAccess {
 
         }
     }
-    public String getSumPrice(String dessertId, double deserts){
+    public String getSumPrice(String dessertId){
         String sAmount;
-        String sQuery = "select sum(gram_price) from list where dessert_id ='" + dessertId + "';";
+        String sQuery = "select sum(gram_price) from ingredients where dessert_id ='" + dessertId + "';";
         c = database.rawQuery(sQuery,null);
         if (c.moveToFirst()){
-            sAmount = String.valueOf(c.getDouble(0) * deserts);
+            sAmount = String.valueOf(c.getDouble(0) );
         }else {
             sAmount = "0";
         }
@@ -104,7 +105,7 @@ public class DatabaseAccess {
     }
     public String getPortionWeight(String dessertId, int portions){
         String sAmount;
-        String sQuery = "select sum(value) from list where dessert_id ='" + dessertId + "' and units != 'piece'";
+        String sQuery = "select sum(value) from ingredients where dessert_id ='" + dessertId + "';";
         c = database.rawQuery(sQuery,null);
         if (c.moveToFirst()){
             sAmount = String.valueOf(c.getDouble(0) / portions);
@@ -116,7 +117,7 @@ public class DatabaseAccess {
     }
     public String getSumGram(String dessertId){
         String sAmount;
-        String sQuery = "select sum(value) from list where dessert_id ='" + dessertId + "' and units != 'piece'";
+        String sQuery = "select sum(value) from ingredients where dessert_id ='" + dessertId + "';";
         c = database.rawQuery(sQuery,null);
         if (c.moveToFirst()){
             sAmount = String.valueOf(c.getDouble(0) /1000);
@@ -132,6 +133,46 @@ public class DatabaseAccess {
         c = database.rawQuery(sQuery,null);
         if (c.moveToFirst()){
             sAmount = String.valueOf(c.getInt(0));
+        }else {
+            sAmount = "0";
+        }
+
+
+        return sAmount;
+    }
+
+    public String getSumPrice2(String listId){
+        String sAmount;
+        String sQuery = "select sum(gram_price) from ingredients where list_id ='" + listId + "';";
+        c = database.rawQuery(sQuery,null);
+        if (c.moveToFirst()){
+            sAmount = String.valueOf(c.getDouble(0));
+        }else {
+            sAmount = "0";
+        }
+
+
+        return sAmount;
+    }
+    public String getSumGramPies(String listId){
+        String sAmount;
+        String sQuery = "select sum(value) from ingredients where list_id ='" + listId + "';";
+        c = database.rawQuery(sQuery,null);
+        if (c.moveToFirst()){
+            sAmount = String.valueOf(c.getDouble(0));
+        }else {
+            sAmount = "0";
+        }
+
+        return sAmount;
+    }
+
+    public String getSumPrice3(String listId){
+        String sAmount;
+        String sQuery = "select sum(price) from ingredients where list_id ='" + listId + "';";
+        c = database.rawQuery(sQuery,null);
+        if (c.moveToFirst()){
+            sAmount = String.valueOf(c.getDouble(0));
         }else {
             sAmount = "0";
         }
@@ -174,9 +215,10 @@ public class DatabaseAccess {
             double dessert_width = c.getDouble(12);
             double dessert_height = c.getDouble(13);
             String shape_name = c.getString(14);
+            String new_shape_name = c.getString(15);
 
 
-            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size, portion_price, desserts, coefficient, new_dessert_height, dessert_width, dessert_height, shape_name));
+            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size, portion_price, desserts, coefficient, new_dessert_height, dessert_width, dessert_height, shape_name, new_shape_name));
         }
         return stringArrayList;
     }
@@ -199,8 +241,9 @@ public class DatabaseAccess {
             double dessert_width = c.getDouble(12);
             double dessert_height = c.getDouble(13);
             String shape_name = c.getString(14);
+            String new_shape_name = c.getString(15);
 
-            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size, portion_price, desserts, coefficient, new_dessert_height, dessert_width,dessert_height,shape_name));
+            stringArrayList.add(new DessertModel(id, title, sum, weight, image, dessert_size, portion, portion_size, portion_price, desserts, coefficient, new_dessert_height, dessert_width,dessert_height, shape_name, new_shape_name));
         }
         return stringArrayList;
     }
@@ -209,6 +252,7 @@ public class DatabaseAccess {
         List<Model> stringArrayList = new ArrayList<>();
         while (c.moveToNext()) {
             int id = c.getInt(0);
+            int dessert_id = c.getInt(1);
             String title = c.getString(2);
             double price = c.getDouble(3);
             String units = c.getString(4);
@@ -218,9 +262,50 @@ public class DatabaseAccess {
 
 
 
-            stringArrayList.add(new Model(id, title, price, units, gram_price, image, value));
+            stringArrayList.add(new Model(id, title, price, units, gram_price, image, value, dessert_id));
         }
         return stringArrayList;
     }
+
+    public List<IngredientsModel> getIngredientData(String list_id) {
+        c = database.rawQuery("select * from ingredients where list_id ='" + list_id + "';" , null);
+        List<IngredientsModel> stringArrayList = new ArrayList<>();
+        while (c.moveToNext()) {
+            int id = c.getInt(0);
+            String title = c.getString(2);
+            double price = c.getDouble(3);
+            double value = c.getDouble(5);
+            double gram_price = c.getDouble(6);
+            int kg = c.getInt(7);
+            int dessert_id = c.getInt(8);
+
+
+            stringArrayList.add(new IngredientsModel(id, title, price, value, gram_price, kg, dessert_id));
+        }
+        return stringArrayList;
+    }
+    @SuppressLint("Range")
+    public List<IngredientsModel> getIngredientsByListId(int listId) {
+        List<IngredientsModel> ingredientsList = new ArrayList<>();
+        String query = "SELECT id, title, price, value, gram_price, kg, dessert_id FROM ingredients WHERE list_id = ?";
+        Cursor cursor = database.rawQuery(query, new String[]{String.valueOf(listId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex("id"));
+                 String title = cursor.getString(cursor.getColumnIndex("title"));
+                 double price = cursor.getDouble(cursor.getColumnIndex("price"));
+                 int value = cursor.getInt(cursor.getColumnIndex("value"));
+                double gram_price = cursor.getDouble(cursor.getColumnIndex("gram_price"));
+                int kg = cursor.getInt(cursor.getColumnIndex("kg"));
+                int dessert_id = cursor.getInt(cursor.getColumnIndex("dessert_id"));
+                IngredientsModel ingredient = new IngredientsModel(id, title, price, value, gram_price, kg, dessert_id);
+                ingredientsList.add(ingredient);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return ingredientsList;
+    }
+
 }
 

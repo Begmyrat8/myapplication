@@ -82,4 +82,9 @@
     <string name="please_add_dessert_size">Пожалуйста, добавьте размер десерта!</string>
     <string name="please_add_dessert_number">Пожалуйста, добавьте количество десертов!</string>
     <string name="select_currency">Выбеерите валюту</string>
+    <string name="circle">Круг</string>
+    <string name="rectangle">Прямоуголник</string>
+    <string name="square">Квадрат</string>
+    <string name="select_cake_shape_in_recipes">Выберите форму из рецепта</string>
+    <string name="select_your_cake_shape">Выберите вашу форму</string>
 </resources>

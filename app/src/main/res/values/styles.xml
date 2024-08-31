@@ -7,7 +7,7 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/chocolate</item>
         <item name="colorSecondaryVariant">@color/light_grey</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
@@ -40,5 +40,9 @@
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/anonymous_pro</item>
     </style>
+
+    <style name="TextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense" />
+
+    <style name="TextInputWithDropDown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu" />
 
 </resources>

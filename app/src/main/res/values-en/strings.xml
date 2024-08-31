@@ -54,7 +54,7 @@
     <string name="please_add_title">Please, add title</string>
     <string name="please_change_title">Please, change title</string>
 
-    <string name="liked">Favorites</string>
+    <string name="expanded">Favorites</string>
     <string name="home">Main</string>
 
     <string name="no_favorites">No favorites</string>
@@ -73,4 +73,9 @@
     <string name="please_add_dessert_size">Please, add dessert size</string>
     <string name="please_add_dessert_number">Please, add the amount dessert</string>
     <string name="select_currency">Select currency</string>
+    <string name="circle">Circle</string>
+    <string name="rectangle">Rectangle</string>
+    <string name="square">Square</string>
+    <string name="select_cake_shape_in_recipes">Выберите форму из рецепта</string>
+    <string name="select_your_cake_shape">Выберите вашу форму</string>
 </resources>

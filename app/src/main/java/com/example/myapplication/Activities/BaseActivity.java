@@ -1,7 +1,6 @@
 package com.example.myapplication.Activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -11,13 +10,15 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.R;
+import com.example.myapplication.Datebase.DatabaseAccess;
 
 import java.util.Locale;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
     SharedPreferences prefs = null;
+    DatabaseAccess databaseAccess;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,33 +35,42 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
     public void showLanguagePicker(Activity activity, boolean isFirstRun) {
 
-        final String[] langs = {"Türkmen", "Русский", "English"};
+        databaseAccess = DatabaseAccess.getInstances(this.getApplicationContext());
+        databaseAccess.open();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(R.string.select_language);
-        builder.setCancelable(true);
-        builder.setSingleChoiceItems(langs, -1, (dialog, which) -> {
-            if (which == 0) {
-                setLocale("tk");
+        setLocale("ru");
 
-                if(isFirstRun) changeFirstTime(activity, MainActivity.class);
-                else restartActivity();
-            } else if (which == 1) {
-                setLocale("ru");
 
-                if(isFirstRun) changeFirstTime(activity, MainActivity.class);
-                else restartActivity();
-            }else if (which == 2) {
-                setLocale("en");
+        if(isFirstRun) changeFirstTime(activity, MainActivity.class);
+        else restartActivity();
 
-                if(isFirstRun) changeFirstTime(activity, MainActivity.class);
-                else restartActivity();
-            }
-            dialog.dismiss();
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+//        final String[] langs = {"Türkmen", "Русский", "English"};
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+//        builder.setTitle(R.string.select_language);
+//        builder.setCancelable(true);
+//        builder.setSingleChoiceItems(langs, -1, (dialog, which) -> {
+//            if (which == 0) {
+//                setLocale("tk");
+//
+//                if(isFirstRun) changeFirstTime(activity, MainActivity.class);
+//                else restartActivity();
+//            } else if (which == 1) {
+//                setLocale("ru");
+//
+//                if(isFirstRun) changeFirstTime(activity, MainActivity.class);
+//                else restartActivity();
+//            }else if (which == 2) {
+//                setLocale("en");
+//
+//                if(isFirstRun) changeFirstTime(activity, MainActivity.class);
+//                else restartActivity();
+//            }
+//            dialog.dismiss();
+//        });
+//
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
 
     }
 

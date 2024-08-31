@@ -1,5 +1,6 @@
 package com.example.myapplication.Fragments;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
@@ -82,6 +83,7 @@ public class HomeFragment extends Fragment {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onResume() {
         super.onResume();
@@ -100,6 +102,7 @@ public class HomeFragment extends Fragment {
             Recycler.setVisibility(View.VISIBLE);
             empty.setVisibility(View.GONE);
         }
+        adaptor.notifyDataSetChanged();
     }
 
     private void setRecycler(List<DessertModel> categoryList) {

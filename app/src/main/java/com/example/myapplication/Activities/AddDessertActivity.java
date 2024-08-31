@@ -37,7 +37,7 @@ public class AddDessertActivity extends AppCompatActivity {
     String COL_TITLE = "title";
     String COL_IMAGE = "image";
     ImageView imageView, image;
-    EditText set_name, set_portion_size, originalCakeWidth, originalCakeHeight, newCakeWidth, newCakeHeight, desserts;
+    EditText set_name, set_portion_size, originalCakeWidth, originalCakeHeight, newCakeWidth, newCakeHeight;
     Toolbar toolbar;
     ImageButton add_img;
     RadioGroup shapeGroup, a;
@@ -117,7 +117,6 @@ public class AddDessertActivity extends AppCompatActivity {
         originalCakeHeight = findViewById(R.id.original_cake_height);
         newCakeWidth = findViewById(R.id.new_cake_width);
         newCakeHeight = findViewById(R.id.new_cake_height);
-        desserts = findViewById(R.id.dessert_model);
         shapeGroup = findViewById(R.id.cake_shape_group);
         shapeCircle = findViewById(R.id.shape_circle);
         shapeRectangle = findViewById(R.id.shape_rectangle);
@@ -167,7 +166,6 @@ public class AddDessertActivity extends AppCompatActivity {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_TITLE, set_name.getText().toString());
-        contentValues.put("desserts", desserts.getText().toString());
 
         // Проверка на пустые значения
         if (set_name.getText().toString().isEmpty()) {
@@ -175,7 +173,7 @@ public class AddDessertActivity extends AppCompatActivity {
             return false;
         }
 
-        if (newCakeWidth.getText().toString().isEmpty() || set_portion_size.getText().toString().isEmpty() || desserts.getText().toString().isEmpty()) {
+        if (newCakeWidth.getText().toString().isEmpty() || set_portion_size.getText().toString().isEmpty()) {
             if (newCakeWidth.getText().toString().isEmpty()) {
                 Toast.makeText(this, R.string.please_add_dessert_size, Toast.LENGTH_SHORT).show();
             } else if (set_portion_size.getText().toString().isEmpty()) {
@@ -186,10 +184,10 @@ public class AddDessertActivity extends AppCompatActivity {
             return false;
         }
 
-        if (newCakeWidth.getText().toString().equals("0") || set_portion_size.getText().toString().equals("0") || desserts.getText().toString().equals("0")) {
+        if (newCakeWidth.getText().toString().equals("0") || set_portion_size.getText().toString().equals("0")) {
             Toast.makeText(this, R.string.please_add_number_except_0, Toast.LENGTH_SHORT).show();
             return false;
-        } else if (newCakeWidth.getText().toString().equals(".") || set_portion_size.getText().toString().equals(".") || desserts.getText().toString().equals(".")) {
+        } else if (newCakeWidth.getText().toString().equals(".") || set_portion_size.getText().toString().equals(".")) {
             Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
             return false;
         } else {
@@ -231,7 +229,11 @@ public class AddDessertActivity extends AppCompatActivity {
                         Double.parseDouble(originalCakeWidth.getText().toString()) * Double.parseDouble(originalCakeHeight.getText().toString()) :
                         Math.pow(Double.parseDouble(originalCakeWidth.getText().toString()), 2);
                 double newArea = Math.PI * Math.pow(newDiameter / 2, 2);
-                coefficient = newArea / originalArea;
+                if (originalArea < newArea) {
+                    coefficient = newArea / originalArea;
+                }else {
+                    coefficient = originalArea / newArea;
+                }
             }
             contentValues.put("new_dessert_width", newDiameter);
         } else if (myRectangle.isChecked()) {
@@ -270,7 +272,8 @@ public class AddDessertActivity extends AppCompatActivity {
             contentValues.put("new_dessert_width", newSide);
         }
 
-        contentValues.put("shape_name", newShape);
+        contentValues.put("shape_name", originalShape);
+        contentValues.put("new_shape_name", newShape);
         contentValues.put("coefficient", coefficient);
 
         // Сохранение изображения и других данных

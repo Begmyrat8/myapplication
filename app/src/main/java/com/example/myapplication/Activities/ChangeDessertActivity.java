@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -36,7 +35,7 @@ import java.util.Objects;
 public class ChangeDessertActivity extends AppCompatActivity {
 
     SQLiteDatabase database;
-    TextInputEditText edit_title, update_portion_size, change_desserts, originalCakeWidth, originalCakeHeight, newCakeWidth, newCakeHeight;
+    TextInputEditText edit_title, update_portion_size, originalCakeWidth, originalCakeHeight, newCakeWidth, newCakeHeight;
     String title, id, dessert_size, portion_size, desserts;
     byte [] img;
     ImageView imageView, edit_image, setting;
@@ -59,13 +58,15 @@ public class ChangeDessertActivity extends AppCompatActivity {
         
         findView();
         get_and_set_intent_data();
-        imagePick();
         insertData();
 
         toolbar.setSubtitle(getString(R.string.change));
         setting.setVisibility(View.GONE);
 
         imageView.setOnClickListener(v -> finish());
+
+
+
 
     }
     private void findView(){
@@ -77,7 +78,6 @@ public class ChangeDessertActivity extends AppCompatActivity {
         save_btn = findViewById(R.id.save_dessert);
         change_dessert_img = findViewById(R.id.change_dessert_img);
         update_portion_size = findViewById(R.id.update_portion_size);
-        change_desserts = findViewById(R.id.change_dessert_model);
         originalCakeWidth = findViewById(R.id.original_cake_width2);
         originalCakeHeight = findViewById(R.id.original_cake_height2);
         newCakeWidth = findViewById(R.id.new_cake_width2);
@@ -94,8 +94,8 @@ public class ChangeDessertActivity extends AppCompatActivity {
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void imagePick(){
-        change_dessert_img.setOnClickListener(v -> {pickFromGallery();});
-        edit_image.setOnClickListener(view -> {pickFromGallery();});
+        change_dessert_img.setOnClickListener(v -> pickFromGallery());
+        edit_image.setOnClickListener(view -> pickFromGallery());
     }
     private void pickFromGallery() {
         ImagePicker.with(this)
@@ -116,7 +116,8 @@ public class ChangeDessertActivity extends AppCompatActivity {
                 && getIntent().hasExtra("new_dessert_height")
                 && getIntent().hasExtra("dessert_height")
                 && getIntent().hasExtra("dessert_width")
-                && getIntent().hasExtra("shape_name")){
+                && getIntent().hasExtra("shape_name")
+                && getIntent().hasExtra("new_shape_name")){
 
 
             id = getIntent().getStringExtra("id");
@@ -130,25 +131,53 @@ public class ChangeDessertActivity extends AppCompatActivity {
             edit_title.setText(title);
             update_portion_size.setText(portion_size);
             newCakeWidth.setText(dessert_size);
-            change_desserts.setText(desserts);
             newCakeHeight.setText(getIntent().getStringExtra("new_dessert_height"));
-            originalCakeHeight.setText(getIntent().getStringExtra("dessert_height"));
-            originalCakeWidth.setText(getIntent().getStringExtra("dessert_width"));
+            originalCakeWidth.setText(getIntent().getStringExtra("dessert_height"));
+            originalCakeHeight.setText(getIntent().getStringExtra("dessert_width"));
 
-            if (Objects.equals(getIntent().getStringExtra("shape_name"), "circle")){
+            if (Objects.equals(getIntent().getStringExtra("new_shape_name"), "circle")){
                 shapeGroup.check(R.id.shape_circle2);
-            }else if (Objects.equals(getIntent().getStringExtra("shape_name"), "rectangle")){
+                originalCakeHeight.setVisibility(View.INVISIBLE);
+
+            }else if (Objects.equals(getIntent().getStringExtra("new_shape_name"), "rectangle")){
                 shapeGroup.check(R.id.shape_rectangle2);
+                originalCakeHeight.setVisibility(View.VISIBLE);
             }else {
                 shapeGroup.check(R.id.shape_square2);
+                originalCakeHeight.setVisibility(View.INVISIBLE);
             }
 
-            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
-            if (bitmap != null){
-                edit_image.setImageBitmap(bitmap);
+            if (Objects.equals(getIntent().getStringExtra("shape_name"), "circle")){
+                a.check(R.id.my_circle2);
+                newCakeHeight.setVisibility(View.INVISIBLE);
+            }else if (Objects.equals(getIntent().getStringExtra("shape_name"), "rectangle")){
+                a.check(R.id.my_rectangle2);
+                newCakeHeight.setVisibility(View.VISIBLE);
             }else {
-                edit_image.setImageResource(R.drawable.noun_cake_6710939);
+                newCakeHeight.setVisibility(View.INVISIBLE);
+                a.check(R.id.my_square2);
             }
+            shapeRectangle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    originalCakeHeight.setVisibility(View.VISIBLE);
+                } else {
+                    originalCakeHeight.setVisibility(View.INVISIBLE);
+                }
+            });
+            myRectangle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    newCakeHeight.setVisibility(View.VISIBLE);
+                } else {
+                    newCakeHeight.setVisibility(View.INVISIBLE);
+                }
+            });
+
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+//            if (bitmap != null){
+//                edit_image.setImageBitmap(bitmap);
+//            }else {
+//                edit_image.setImageResource(R.drawable.noun_cake_6710939);
+//            }
 
         }else {
             Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
@@ -194,27 +223,26 @@ public class ChangeDessertActivity extends AppCompatActivity {
         ContentValues contentValues = new ContentValues();
         String title = Objects.requireNonNull(edit_title.getText()).toString();
         contentValues.put("title", title);
-        contentValues.put("desserts", change_desserts.getText().toString());
 
         if (Objects.requireNonNull(edit_title.getText()).toString().isEmpty()){
             Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (Objects.requireNonNull(newCakeWidth.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty() || change_desserts.getText().toString().isEmpty()) {
+        if (Objects.requireNonNull(newCakeWidth.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty()) {
             if (newCakeWidth.getText().toString().isEmpty()){
                 Toast.makeText(this, R.string.please_add_dessert_size, Toast.LENGTH_SHORT).show();
-            } else if (update_portion_size.getText().toString().isEmpty()) {
+            } else if (Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty()) {
                 Toast.makeText(this, R.string.please_add_portion_size, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, R.string.please_add_dessert_number, Toast.LENGTH_SHORT).show();
             }
             return false;
-        } else if (newCakeWidth.getText().toString().equals("0") || update_portion_size.getText().toString().equals("0") || change_desserts.getText().toString().equals("0")) {
+        } else if (newCakeWidth.getText().toString().equals("0") || update_portion_size.getText().toString().equals("0") ) {
             Toast.makeText(this, R.string.please_add_number_except_0, Toast.LENGTH_SHORT).show();
             return false;
 
-        } else if (newCakeWidth.getText().toString().equals(".") || update_portion_size.getText().toString().equals(".") || change_desserts.getText().toString().equals(".")) {
+        } else if (newCakeWidth.getText().toString().equals(".") || update_portion_size.getText().toString().equals(".")) {
             Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
             return false;
 
@@ -238,17 +266,17 @@ public class ChangeDessertActivity extends AppCompatActivity {
 
         if (shapeCircle.isChecked()) {
             originalShape = "circle";
-            double originalDiameter = Double.parseDouble(originalCakeWidth.getText().toString());
+            double originalDiameter = Double.parseDouble(Objects.requireNonNull(originalCakeWidth.getText()).toString());
             contentValues.put("dessert_width", originalDiameter);
         } else if (shapeRectangle.isChecked()) {
             originalShape = "rectangle";
-            double originalWidth = Double.parseDouble(originalCakeWidth.getText().toString());
-            double originalHeight = Double.parseDouble(originalCakeHeight.getText().toString());
+            double originalWidth = Double.parseDouble(Objects.requireNonNull(originalCakeWidth.getText()).toString());
+            double originalHeight = Double.parseDouble(Objects.requireNonNull(originalCakeHeight.getText()).toString());
             contentValues.put("dessert_width", originalWidth);
             contentValues.put("dessert_height", originalHeight);
         } else if (shapeSquare.isChecked()) {
             originalShape = "square";
-            double originalSide = Double.parseDouble(originalCakeWidth.getText().toString());
+            double originalSide = Double.parseDouble(Objects.requireNonNull(originalCakeWidth.getText()).toString());
             contentValues.put("dessert_width", originalSide);
         }
 
@@ -269,7 +297,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
         } else if (myRectangle.isChecked()) {
             newShape = "rectangle";
             double newWidth = Double.parseDouble(newCakeWidth.getText().toString());
-            double newHeight = Double.parseDouble(newCakeHeight.getText().toString());
+            double newHeight = Double.parseDouble(Objects.requireNonNull(newCakeHeight.getText()).toString());
             if (originalShape.equals("circle")) {
                 double originalDiameter = Double.parseDouble(originalCakeWidth.getText().toString());
                 double originalArea = Math.PI * Math.pow(originalDiameter / 2, 2);
@@ -302,14 +330,15 @@ public class ChangeDessertActivity extends AppCompatActivity {
             contentValues.put("new_dessert_width", newSide);
         }
 
-        contentValues.put("shape_name", newShape);
+        contentValues.put("shape_name", originalShape);
+        contentValues.put("new_shape_name", newShape);
         contentValues.put("coefficient", coefficient);
 
-        try {
-            contentValues.put("image", ImageViewToByte(edit_image));
-        } catch (Exception e) {
-            contentValues.put("image", String.valueOf(edit_image));
-        }
+//        try {
+//            contentValues.put("image", ImageViewToByte(edit_image));
+//        } catch (Exception e) {
+//            contentValues.put("image", String.valueOf(edit_image));
+//        }
 
         Cursor cursor = database.query("dessert", new String[]{"COUNT(*)"}, "title=?", new String[]{title}, null, null, null);
         if (cursor != null) {

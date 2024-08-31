@@ -33,9 +33,11 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="@string/title"
             android:textColor="@color/black"
             android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/input_layout"
             app:layout_constraintStart_toStartOf="@+id/input_layout"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -80,51 +82,18 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout3"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="?attr/colorSecondary"
-            app:boxStrokeWidth="0.1dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/set_portion_size"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start|center"
-                android:inputType="numberDecimal"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dessert"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+id/input_layout4"
-            app:layout_constraintStart_toStartOf="@+id/input_layout4"
-            app:layout_constraintTop_toTopOf="@+id/textView5" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout4"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textColorHint="@color/black"
             app:boxStrokeColor="?attr/colorSecondary"
             app:boxStrokeWidth="0.1dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dessert_model"
+                android:id="@+id/set_portion_size"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start|center"
@@ -231,7 +200,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Select Cake Shape In Recipes"
+            android:text="@string/select_cake_shape_in_recipes"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/cake_shape_group"
@@ -240,7 +209,7 @@
 
         <RadioGroup
             android:id="@+id/cake_shape_group"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
@@ -250,27 +219,24 @@
 
             <RadioButton
                 android:id="@+id/shape_circle"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
                 android:checked="true"
-                android:text="Circle" />
-<!--            <ImageView-->
-<!--                android:layout_width="50dp"-->
-<!--                android:layout_height="50dp"-->
-<!--                android:src="@drawable/cake"/>-->
+                android:layout_marginEnd="10dp"
+                android:text="@string/circle" />
 
             <RadioButton
                 android:id="@+id/shape_rectangle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:text="Rectangle" />
+                android:layout_marginEnd="10dp"
+                android:text="@string/rectangle" />
 
             <RadioButton
                 android:id="@+id/shape_square"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Square" />
+                android:text="@string/square" />
 
         </RadioGroup>
 
@@ -278,7 +244,7 @@
             android:id="@+id/My_form"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Your Cake Shape"
+            android:text="@string/select_your_cake_shape"
             android:textColor="@color/black"
             android:layout_marginTop="15dp"
             android:textSize="16sp"
@@ -288,7 +254,7 @@
 
         <RadioGroup
             android:id="@+id/a"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
@@ -298,24 +264,24 @@
 
             <RadioButton
                 android:id="@+id/my_circle"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="10dp"
                 android:checked="true"
-                android:text="Circle" />
+                android:text="@string/circle" />
 
             <RadioButton
                 android:id="@+id/my_rectangle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:text="Rectangle" />
+                android:layout_marginEnd="10dp"
+                android:text="@string/rectangle" />
 
             <RadioButton
                 android:id="@+id/my_square"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Square" />
+                android:text="@string/square" />
 
         </RadioGroup>
 
@@ -328,6 +294,7 @@
         android:background="@drawable/edit_text_orange_border"
         android:contentDescription="@string/todo"
         android:layout_marginTop="10dp"
+        android:visibility="gone"
         android:padding="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

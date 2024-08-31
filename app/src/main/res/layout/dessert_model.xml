@@ -35,41 +35,16 @@
 
 
             <TextView
-                android:id="@+id/hint_ingredients"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/ingredients"
-                android:text="@string/ingredients"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="@+id/empty_img"
-                app:layout_constraintTop_toBottomOf="@+id/empty_img"
-                tools:ignore="RtlSymmetry" />
-
-            <TextView
-                android:id="@+id/ingredients"
-                android:layout_width="100dp"
-                android:layout_height="0dp"
-                android:gravity="center|end"
-                android:text="0"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/hint_ingredients"
-                app:layout_constraintEnd_toEndOf="@+id/change_dessert"
-                app:layout_constraintTop_toTopOf="@+id/hint_ingredients" />
-
-            <TextView
                 android:id="@+id/name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_margin="10dp"
                 android:padding="10dp"
                 android:text="@string/title"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/empty_img"
                 app:layout_constraintEnd_toStartOf="@+id/like_dessert"
-                app:layout_constraintStart_toEndOf="@+id/empty_img"
-                app:layout_constraintTop_toTopOf="@+id/empty_img" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <ImageView
@@ -78,6 +53,7 @@
                 android:layout_height="70dp"
                 android:layout_margin="5dp"
                 android:gravity="center"
+                android:visibility="gone"
                 android:background="@drawable/edit_text_orange_border"
                 android:src="@drawable/noun_cake_6710939"
                 android:textColor="@color/black"
@@ -89,6 +65,7 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_margin="5dp"
+                android:visibility="gone"
                 android:contentDescription="@string/todo"
                 android:background="@drawable/edit_text_orange_border"
                 app:layout_constraintEnd_toEndOf="@+id/empty_img"
@@ -136,17 +113,43 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:background="@color/white"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/hint_ingredients">
+                app:layout_constraintTop_toBottomOf="@+id/name">
+
+                <ImageView
+                    android:id="@+id/hint_ingredients"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/ingredients"
+                    android:text="@string/ingredients"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+                    tools:ignore="RtlSymmetry" />
+
+                <TextView
+                    android:id="@+id/ingredients"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center|end"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/hint_ingredients"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/hint_ingredients"
+                    app:layout_constraintTop_toTopOf="@+id/hint_ingredients" />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout2"
-                    android:layout_width="180dp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:paddingEnd="5dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="RtlSymmetry">
@@ -191,27 +194,13 @@
                         app:layout_constraintStart_toEndOf="@+id/hint_dessert_size"
                         app:layout_constraintTop_toTopOf="@+id/hint_dessert_size" />
 
-                    <TextView
-                        android:id="@+id/desserts"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:background="@android:color/transparent"
-                        android:gravity="end|center"
-                        android:text="0"
-                        android:textColor="@color/black"
-                        app:layout_constraintBottom_toBottomOf="@+id/hint_dessert"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/hint_sum"
-                        app:layout_constraintTop_toTopOf="@+id/hint_dessert" />
-
                     <ImageView
                         android:id="@+id/hint_sum"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginTop="5dp"
                         android:src="@drawable/noun_cake_purchase_6251397"
-                        app:layout_constraintStart_toStartOf="@+id/hint_dessert"
-                        app:layout_constraintTop_toBottomOf="@+id/hint_dessert" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
                     <ImageView
                         android:id="@+id/hint_weight"
@@ -236,17 +225,6 @@
                         app:layout_constraintStart_toStartOf="@+id/hint_weight"
                         app:layout_constraintTop_toBottomOf="@+id/hint_weight" />
 
-                    <ImageView
-                        android:id="@+id/hint_dessert"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:gravity="start"
-                        android:src="@drawable/cake"
-                        android:text="dessert size"
-                        android:textColor="@color/grey"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
                     <TextView
                         android:id="@+id/textView12"
                         android:layout_width="wrap_content"
@@ -266,7 +244,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:paddingStart="5dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
                     app:layout_constraintTop_toTopOf="parent"
@@ -338,16 +316,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
 
-                    <ImageView
-                        android:id="@+id/hint_portion_size"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="5dp"
-                        android:gravity="start"
-                        android:src="@drawable/noun_1528_2072982"
-                        android:textColor="@color/grey"
-                        app:layout_constraintStart_toStartOf="@+id/hint_portion"
-                        app:layout_constraintTop_toBottomOf="@+id/hint_portion_weight" />
 
                     <ImageView
                         android:id="@+id/hint_piece_price"

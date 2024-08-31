@@ -1,5 +1,6 @@
 package com.example.myapplication.Fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,6 +70,7 @@ public class BookmarkFragment extends Fragment {
             bookmark_empty.setVisibility(View.GONE);
         }
     }
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onResume() {
         super.onResume();
@@ -88,6 +90,7 @@ public class BookmarkFragment extends Fragment {
             recycler.setVisibility(View.VISIBLE);
             bookmark_empty.setVisibility(View.GONE);
         }
+        adaptor.notifyDataSetChanged();
     }
 
     private void setRecycler(java.util.List<DessertModel> bookmarkList) {

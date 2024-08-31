@@ -10,7 +10,7 @@ public class DessertModel {
     double portion_size;
     double portion_price;
     byte [] image;
-    private boolean liked;
+    private boolean expanded;
     int desserts;
     double coefficient;
     double new_dessert_height;
@@ -18,9 +18,11 @@ public class DessertModel {
     double dessert_width;
     String shape_name;
 
+    String new_shape_name;
 
 
-    public DessertModel(int id, String title, double sum, double weight, byte[] image, double new_dessert_width, double portion, double portion_size, double portion_price, int desserts, double coefficient, double new_dessert_height, double dessert_height, double dessert_width, String shape_name){
+
+    public DessertModel(int id, String title, double sum, double weight, byte[] image, double new_dessert_width, double portion, double portion_size, double portion_price, int desserts, double coefficient, double new_dessert_height, double dessert_height, double dessert_width, String shape_name, String new_shape_name){
         this.id = id;
         this.title = title;
         this.sum = sum;
@@ -36,14 +38,19 @@ public class DessertModel {
         this.dessert_height = dessert_height;
         this.dessert_width = dessert_width;
         this.shape_name = shape_name;
+        this.new_shape_name = new_shape_name;
 
     }
-    public boolean isLiked() {
-        return liked;
+    public boolean isExpanded() {
+        return expanded;
     }
 
     public int getDesserts() {
         return desserts;
+    }
+
+    public String getNew_shape_name() {
+        return new_shape_name;
     }
 
     public String getShape_name() {
@@ -62,8 +69,8 @@ public class DessertModel {
         return dessert_width;
     }
 
-    public void setLiked(boolean liked) {
-        this.liked = liked;
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
     }
     public int getId() {
         return id;
