@@ -6,10 +6,11 @@ public class IngredientsModel {
     double price;
     double value, gram_price;
     int kg;
+    String unit;
 
 
 
-    public IngredientsModel(int id, String title, double price, double value, double gram_price, int kg, int dessert_id) {
+    public IngredientsModel(int id, String title, double price, double value, double gram_price, int kg, int dessert_id, String unit) {
         this.id = id;
         this.title = title;
         this.price = price;
@@ -17,6 +18,7 @@ public class IngredientsModel {
         this.gram_price = gram_price;
         this.kg = kg;
         this.dessert_id =dessert_id;
+        this.unit = unit;
 
     }
 
@@ -71,5 +73,9 @@ public class IngredientsModel {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getUnit() {
+        return unit;
     }
 }

@@ -664,7 +664,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
 
                         double r = v * price;
 
-                        insertIngredient(ingredient_id, ingredient, amountStr, price, r, amountStr2, dessert_id);
+                        insertIngredient(ingredient_id, ingredient, amountStr, price, r, amountStr2, dessert_id, unit);
                     }
                     finish();
 
@@ -716,7 +716,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
             }
         }
     }
-    private void insertIngredient(String listId, String ingredient, double amount, double price, double gram_price, int kg, int dessertId) {
+    private void insertIngredient(String listId, String ingredient, double amount, double price, double gram_price, int kg, int dessertId, String unit) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("list_id", listId);
         contentValues.put(COL_TITLE, ingredient);
@@ -725,6 +725,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
         contentValues.put(COL_GRAM_PRICE, gram_price);
         contentValues.put("kg", kg);
         contentValues.put(COL_DESSERT_ID, dessertId);
+        contentValues.put("unit", unit);
 
         long result = database.insert("ingredients", null, contentValues);
         if (result == -1) {

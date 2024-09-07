@@ -267,27 +267,27 @@ public class DatabaseAccess {
         return stringArrayList;
     }
 
-    public List<IngredientsModel> getIngredientData(String list_id) {
-        c = database.rawQuery("select * from ingredients where list_id ='" + list_id + "';" , null);
-        List<IngredientsModel> stringArrayList = new ArrayList<>();
-        while (c.moveToNext()) {
-            int id = c.getInt(0);
-            String title = c.getString(2);
-            double price = c.getDouble(3);
-            double value = c.getDouble(5);
-            double gram_price = c.getDouble(6);
-            int kg = c.getInt(7);
-            int dessert_id = c.getInt(8);
-
-
-            stringArrayList.add(new IngredientsModel(id, title, price, value, gram_price, kg, dessert_id));
-        }
-        return stringArrayList;
-    }
+//    public List<IngredientsModel> getIngredientData(String list_id) {
+//        c = database.rawQuery("select * from ingredients where list_id ='" + list_id + "';" , null);
+//        List<IngredientsModel> stringArrayList = new ArrayList<>();
+//        while (c.moveToNext()) {
+//            int id = c.getInt(0);
+//            String title = c.getString(2);
+//            double price = c.getDouble(3);
+//            double value = c.getDouble(5);
+//            double gram_price = c.getDouble(6);
+//            int kg = c.getInt(7);
+//            int dessert_id = c.getInt(8);
+//
+//
+//            stringArrayList.add(new IngredientsModel(id, title, price, value, gram_price, kg, dessert_id));
+//        }
+//        return stringArrayList;
+//    }
     @SuppressLint("Range")
     public List<IngredientsModel> getIngredientsByListId(int listId) {
         List<IngredientsModel> ingredientsList = new ArrayList<>();
-        String query = "SELECT id, title, price, value, gram_price, kg, dessert_id FROM ingredients WHERE list_id = ?";
+        String query = "SELECT id, title, price, value, gram_price, kg, dessert_id, unit FROM ingredients WHERE list_id = ?";
         Cursor cursor = database.rawQuery(query, new String[]{String.valueOf(listId)});
 
         if (cursor.moveToFirst()) {
@@ -299,7 +299,8 @@ public class DatabaseAccess {
                 double gram_price = cursor.getDouble(cursor.getColumnIndex("gram_price"));
                 int kg = cursor.getInt(cursor.getColumnIndex("kg"));
                 int dessert_id = cursor.getInt(cursor.getColumnIndex("dessert_id"));
-                IngredientsModel ingredient = new IngredientsModel(id, title, price, value, gram_price, kg, dessert_id);
+                String unit = cursor.getString(cursor.getColumnIndex("unit"));
+                IngredientsModel ingredient = new IngredientsModel(id, title, price, value, gram_price, kg, dessert_id, unit);
                 ingredientsList.add(ingredient);
             } while (cursor.moveToNext());
         }

@@ -1,5 +1,6 @@
 package com.example.myapplication.Adaptors;
 
+import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
@@ -62,10 +63,8 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         database = databaseHelper.getWritableDatabase();
 
 
-
-
         // Сохраняем id текущего элемента в настройках
-        SharedPreferences preferences = context.getSharedPreferences("Setting", Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences("Setting", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("id", String.valueOf(list.get(position).getId() + 1));
         editor.apply();
@@ -374,7 +373,7 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
         // Total price under the "Цена" column
         TextView totalPriceTextView = new TextView(context);
-        totalPriceTextView.setText(format.format(totalPrice));
+        totalPriceTextView.setText(format2.format(totalPrice));
         totalPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         totalPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
         totalPriceTextView.setGravity(Gravity.CENTER);
@@ -392,6 +391,7 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         container.removeAllViews();
 
         DecimalFormat format = new DecimalFormat("#0.0");
+        DecimalFormat format2 = new DecimalFormat();
 
         // Create TableLayout
         TableLayout tableLayout = new TableLayout(context);
@@ -475,7 +475,17 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
             double a = Double.parseDouble(quantityStr);
             double b = Double.parseDouble(priceStr);
-            String r = format.format((a / 1000) * b);
+            double v;
+
+            if ("Кг".equals(ingredient.getUnit())) {
+                v = a / 1000; // Если выбран "Кг", делим на 1000
+            } else if ("Штук".equals(ingredient.getUnit())) {
+                v = a; // Если выбран "Штук", не делим
+            } else {
+                v = a / 1000; // По умолчанию делим на 1000
+            }
+
+            String r = format2.format(v * b);
 
             TextView actualPriceTextView = new TextView(context);
             actualPriceTextView.setText(r);

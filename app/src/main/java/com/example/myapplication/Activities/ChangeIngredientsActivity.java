@@ -444,7 +444,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
                             double r = v * price;
                             // Call the updateIngredient method for each ingredient
-                            updateIngredient(String.valueOf(this.id), ingredientTitle, value, price, kg,r);
+                            updateIngredient(String.valueOf(this.id), ingredientTitle, value, price, kg, r, unit);
                         } catch (NumberFormatException e) {
                             Toast.makeText(ChangeIngredientsActivity.this, "Ошибка формата числа", Toast.LENGTH_SHORT).show();
                             return;
@@ -531,7 +531,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
 
                         double r = v * price;
 
-                        insertIngredient(String.valueOf(this.id), ingredient, amountStr, price, r, amountStr2, dessert_id);
+                        insertIngredient(String.valueOf(this.id), ingredient, amountStr, price, r, amountStr2, dessert_id, unit);
                     }
                     finish();
 
@@ -1107,12 +1107,13 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             autoComplete.setSelection(currentText.length());
         }
     }
-    private void updateIngredient(String id, String ingredient, double amount, double price, double kg, double gram_price) {
+    private void updateIngredient(String id, String ingredient, double amount, double price, double kg, double gram_price, String unit) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("value", amount);
         contentValues.put("price", price);
         contentValues.put("kg", kg);
         contentValues.put("gram_price", gram_price);
+        contentValues.put("unit", unit);
 
         // Попробуем сначала выполнить update
         long result = database.update("ingredients", contentValues, "list_id=? AND title=?", new String[]{id, ingredient});
@@ -1132,7 +1133,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         }
     }
 
-    private void insertIngredient(String listId, String ingredient, double amount, double price, double gram_price, int kg, String dessertId) {
+    private void insertIngredient(String listId, String ingredient, double amount, double price, double gram_price, int kg, String dessertId, String unit) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("list_id", listId);
         contentValues.put("title", ingredient);
@@ -1141,6 +1142,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         contentValues.put("gram_price", gram_price);
         contentValues.put("kg", kg);
         contentValues.put("dessert_id", dessertId);
+        contentValues.put("unit", unit);
 
         long result = database.insert("ingredients", null, contentValues);
         if (result == -1) {
