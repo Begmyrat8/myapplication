@@ -46,7 +46,7 @@ public class AddDessertActivity extends AppCompatActivity {
     DatabaseAccess databaseAccess;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "ResourceAsColor"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -84,6 +84,7 @@ public class AddDessertActivity extends AppCompatActivity {
                 newCakeHeight.setVisibility(View.VISIBLE);
             } else {
                 newCakeHeight.setVisibility(View.INVISIBLE);
+                newCakeHeight.setHintTextColor(R.color.light_grey);
             }
         });
     }
@@ -173,21 +174,35 @@ public class AddDessertActivity extends AppCompatActivity {
             return false;
         }
 
-        if (newCakeWidth.getText().toString().isEmpty() || set_portion_size.getText().toString().isEmpty()) {
-            if (newCakeWidth.getText().toString().isEmpty()) {
+        if (newCakeWidth.getText().toString().isEmpty() || set_portion_size.getText().toString().isEmpty() || originalCakeWidth.getText().toString().isEmpty()) {
+//            if (newCakeWidth.getText().toString().isEmpty()) {
+//                Toast.makeText(this, R.string.please_add_dessert_size, Toast.LENGTH_SHORT).show();
+//                newCakeWidth.setText("0");
+//            } else if (set_portion_size.getText().toString().isEmpty()) {
+//                Toast.makeText(this, R.string.please_add_portion_size, Toast.LENGTH_SHORT).show();
+//                set_portion_size.setText("0");
+//            }else if (originalCakeWidth.getText().toString().isEmpty()) {
+//                Toast.makeText(this, R.string.please_add_dessert_size, Toast.LENGTH_SHORT).show();
+//                originalCakeWidth.setText("0");
+//            } else {
+//                Toast.makeText(this, R.string.please_add_dessert_number, Toast.LENGTH_SHORT).show();
+//            }
+            set_portion_size.setText("0");
+
+            if (newCakeWidth.getText().toString().isEmpty()){
                 Toast.makeText(this, R.string.please_add_dessert_size, Toast.LENGTH_SHORT).show();
-            } else if (set_portion_size.getText().toString().isEmpty()) {
-                Toast.makeText(this, R.string.please_add_portion_size, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, R.string.please_add_dessert_number, Toast.LENGTH_SHORT).show();
+                newCakeWidth.setText(originalCakeWidth.getText().toString());
             }
+
             return false;
         }
 
-        if (newCakeWidth.getText().toString().equals("0") || set_portion_size.getText().toString().equals("0")) {
-            Toast.makeText(this, R.string.please_add_number_except_0, Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (newCakeWidth.getText().toString().equals(".") || set_portion_size.getText().toString().equals(".")) {
+//        if (newCakeWidth.getText().toString().equals("0") || set_portion_size.getText().toString().equals("0")) {
+//            Toast.makeText(this, R.string.please_add_number_except_0, Toast.LENGTH_SHORT).show();
+//            return false;
+//        } else
+
+        if (newCakeWidth.getText().toString().equals(".") || set_portion_size.getText().toString().equals(".")) {
             Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
             return false;
         } else {

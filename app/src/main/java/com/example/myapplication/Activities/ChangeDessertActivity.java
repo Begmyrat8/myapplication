@@ -229,18 +229,23 @@ public class ChangeDessertActivity extends AppCompatActivity {
             return false;
         }
 
-        if (Objects.requireNonNull(newCakeWidth.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty()) {
+        if (Objects.requireNonNull(newCakeWidth.getText()).toString().isEmpty() || Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty() || Objects.requireNonNull(originalCakeWidth.getText()).toString().isEmpty()) {
+//            if (newCakeWidth.getText().toString().isEmpty()){
+//                Toast.makeText(this, R.string.please_add_dessert_size, Toast.LENGTH_SHORT).show();
+//            } else if (Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty()) {
+//                Toast.makeText(this, R.string.please_add_portion_size, Toast.LENGTH_SHORT).show();
+//            } else {
+//                Toast.makeText(this, R.string.please_add_dessert_number, Toast.LENGTH_SHORT).show();
+//            }
+            update_portion_size.setText("0");
             if (newCakeWidth.getText().toString().isEmpty()){
                 Toast.makeText(this, R.string.please_add_dessert_size, Toast.LENGTH_SHORT).show();
-            } else if (Objects.requireNonNull(update_portion_size.getText()).toString().isEmpty()) {
-                Toast.makeText(this, R.string.please_add_portion_size, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, R.string.please_add_dessert_number, Toast.LENGTH_SHORT).show();
+                newCakeWidth.setText(originalCakeWidth.getText().toString());
             }
             return false;
-        } else if (newCakeWidth.getText().toString().equals("0") || update_portion_size.getText().toString().equals("0") ) {
-            Toast.makeText(this, R.string.please_add_number_except_0, Toast.LENGTH_SHORT).show();
-            return false;
+//        } else if (newCakeWidth.getText().toString().equals("0") || update_portion_size.getText().toString().equals("0") ) {
+//            Toast.makeText(this, R.string.please_add_number_except_0, Toast.LENGTH_SHORT).show();
+//            return false;
 
         } else if (newCakeWidth.getText().toString().equals(".") || update_portion_size.getText().toString().equals(".")) {
             Toast.makeText(this, R.string.invalid_number_format, Toast.LENGTH_SHORT).show();
