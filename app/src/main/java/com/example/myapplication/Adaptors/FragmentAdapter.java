@@ -25,7 +25,7 @@ public class FragmentAdapter extends FragmentStateAdapter {
         this.bottomNavigationView = bottomNavigationView;
         fragments = new Fragment[NUM_PAGES];
         fragments[0] = new HomeFragment();
-        fragments[1] = new BookmarkFragment();
+       fragments[1] = new BookmarkFragment();
     }
 
     @NonNull

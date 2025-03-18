@@ -56,7 +56,7 @@
                         android:padding="10dp"
                         android:text="@string/title"
                         android:textColor="@color/black"
-                        android:textSize="18dp"
+                        android:textSize="18sp"
                         app:layout_constraintEnd_toStartOf="@+id/imageView4"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

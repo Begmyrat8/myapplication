@@ -1,0 +1,442 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/white">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="15dp"
+        android:backgroundTint="#7CE1B3B3"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/c"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:background="?attr/colorSecondaryVariant"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/title"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/like_dessert"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/empty_img"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/chocolate"
+                android:gravity="center"
+                android:src="@drawable/noun_cake_6710939"
+                android:textColor="@color/black"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
+
+            <ImageView
+                android:id="@+id/word_lang"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/chocolate"
+                android:gravity="center"
+                android:src="@drawable/noun_cake_6710939"
+                android:textColor="@color/black"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
+
+            <ImageButton
+                android:id="@+id/change_dessert"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginEnd="5dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/menu"
+                app:layout_constraintBottom_toBottomOf="@+id/name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/name" />
+
+            <ImageView
+                android:id="@+id/like_dessert"
+                android:layout_width="25dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="5dp"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/like_border"
+                app:layout_constraintBottom_toBottomOf="@+id/name"
+                app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                app:layout_constraintTop_toTopOf="@+id/name" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="25dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/down"
+                app:layout_constraintBottom_toBottomOf="@+id/like_dessert"
+                app:layout_constraintEnd_toStartOf="@+id/change_dessert"
+                app:layout_constraintTop_toTopOf="@+id/like_dessert"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="10dp"
+                android:background="?attr/colorSecondaryVariant"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/empty_img"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/empty_img"
+                app:layout_constraintTop_toTopOf="@+id/empty_img"
+                tools:ignore="RtlSymmetry">
+
+
+                <TextView
+                    android:id="@+id/sum"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="end|center"
+                    android:text="TMT"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/hint_sum"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView7"
+                    app:layout_constraintTop_toTopOf="@+id/hint_sum" />
+
+                <TextView
+                    android:id="@+id/weight"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="end|center"
+                    android:text="@string/kg"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/hint_weight"
+                    app:layout_constraintEnd_toEndOf="@+id/sum"
+                    app:layout_constraintStart_toEndOf="@+id/textView11"
+                    app:layout_constraintTop_toTopOf="@+id/hint_weight" />
+
+                <TextView
+                    android:id="@+id/new_dessert_width"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="end|center"
+                    android:text="@string/sm"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/hint_dessert_size"
+                    app:layout_constraintEnd_toEndOf="@+id/sum"
+                    app:layout_constraintStart_toEndOf="@+id/textView14"
+                    app:layout_constraintTop_toTopOf="@+id/hint_dessert_size" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="Цена"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/hint_sum"
+                    app:layout_constraintStart_toEndOf="@+id/hint_sum"
+                    app:layout_constraintTop_toTopOf="@+id/hint_sum"
+                    tools:ignore="MissingConstraints" />
+
+                <ImageView
+                    android:id="@+id/hint_sum"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/noun_cake_purchase_6251397"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Вес"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/hint_weight"
+                    app:layout_constraintStart_toEndOf="@+id/hint_weight"
+                    app:layout_constraintTop_toBottomOf="@+id/hint_sum"
+                    tools:ignore="MissingConstraints" />
+
+                <ImageView
+                    android:id="@+id/hint_weight"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="start"
+                    android:src="@drawable/noun_weight_scale_4683187"
+                    android:textColor="@color/grey"
+                    app:layout_constraintStart_toStartOf="@+id/hint_sum"
+                    app:layout_constraintTop_toBottomOf="@+id/hint_sum" />
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Размер"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/hint_dessert_size"
+                    app:layout_constraintStart_toEndOf="@+id/hint_dessert_size"
+                    app:layout_constraintTop_toBottomOf="@+id/hint_weight"
+                    tools:ignore="MissingConstraints" />
+
+                <ImageView
+                    android:id="@+id/hint_dessert_size"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="start"
+                    android:src="@drawable/noun_ice_cream_4517503"
+                    android:text="dessert size"
+                    android:textColor="@color/grey"
+                    app:layout_constraintStart_toStartOf="@+id/hint_weight"
+                    app:layout_constraintTop_toBottomOf="@+id/hint_weight" />
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Ингредиенты"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/hint_ingredients"
+                    app:layout_constraintStart_toEndOf="@+id/hint_ingredients"
+                    app:layout_constraintTop_toBottomOf="@+id/hint_dessert_size"
+                    tools:ignore="MissingConstraints" />
+
+                <ImageView
+                    android:id="@+id/hint_ingredients"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/ingredients"
+                    android:text="@string/ingredients"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/hint_dessert_size"
+                    tools:ignore="RtlSymmetry" />
+
+                <TextView
+                    android:id="@+id/ingredients"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center|end"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="@+id/hint_ingredients"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView15"
+                    app:layout_constraintTop_toTopOf="@+id/hint_ingredients" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--            <ImageView-->
+<!--                android:id="@+id/portion_img"-->
+<!--                android:layout_width="150dp"-->
+<!--                android:layout_height="150dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:background="@color/chocolate"-->
+<!--                android:gravity="center"-->
+<!--                android:src="@drawable/noun_cake_6710630"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:visibility="visible"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/name" />-->
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/result"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:background="?attr/colorSecondary"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/empty_img"
+                app:layout_constraintTop_toBottomOf="@+id/name">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:paddingHorizontal="5dp"
+                    android:paddingVertical="10dp"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:ignore="RtlSymmetry">
+
+                    <TextView
+                        android:id="@+id/portion"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@android:color/transparent"
+                        android:gravity="end|center"
+                        android:text="@string/gram"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/hint_portion"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/textView18"
+                        app:layout_constraintTop_toTopOf="@+id/hint_portion"
+                        app:layout_constraintVertical_bias="0.0" />
+
+
+                    <TextView
+                        android:id="@+id/portion_price"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@android:color/transparent"
+                        android:gravity="end|center"
+                        android:text="TMT"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/hint_piece_price"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView17"
+                        app:layout_constraintTop_toTopOf="@+id/hint_piece_price" />
+
+                    <TextView
+                        android:id="@+id/portion_weight"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@android:color/transparent"
+                        android:gravity="end|center"
+                        android:text="gr"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/hint_portion_weight"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView16"
+                        app:layout_constraintTop_toTopOf="@+id/hint_portion_weight" />
+
+                    <TextView
+                        android:id="@+id/textView18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Количество"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/hint_portion"
+                        app:layout_constraintStart_toEndOf="@+id/hint_portion"
+                        app:layout_constraintTop_toTopOf="@+id/hint_portion"
+                        tools:ignore="MissingConstraints" />
+
+                    <ImageView
+                        android:id="@+id/hint_portion"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@android:color/transparent"
+                        android:gravity="start"
+                        android:src="@drawable/noun_cake_6710630"
+                        android:textColor="@color/grey"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+                    <TextView
+                        android:id="@+id/textView17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Цена"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/hint_piece_price"
+                        app:layout_constraintStart_toEndOf="@+id/hint_piece_price"
+                        app:layout_constraintTop_toTopOf="@+id/hint_piece_price"
+                        tools:ignore="MissingConstraints" />
+
+                    <ImageView
+                        android:id="@+id/hint_piece_price"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="start"
+                        android:src="@drawable/noun_dividend_3988799"
+                        android:textColor="@color/grey"
+                        app:layout_constraintStart_toStartOf="@+id/hint_portion"
+                        app:layout_constraintTop_toBottomOf="@+id/hint_portion" />
+
+                    <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Вес"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/hint_portion_weight"
+                        app:layout_constraintStart_toEndOf="@+id/hint_portion_weight"
+                        app:layout_constraintTop_toTopOf="@+id/hint_portion_weight"
+                        tools:ignore="MissingConstraints" />
+
+                    <ImageView
+                        android:id="@+id/hint_portion_weight"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/noun_weight_scale_4683187"
+                        android:gravity="start"
+                        android:textColor="@color/grey"
+                        app:layout_constraintStart_toStartOf="@+id/hint_portion"
+                        app:layout_constraintTop_toBottomOf="@+id/hint_piece_price" />
+
+                    <TextView
+                        android:id="@+id/textView13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/portion"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="MissingConstraints" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

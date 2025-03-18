@@ -54,7 +54,7 @@
     <string name="please_add_title">Please, add title</string>
     <string name="please_change_title">Please, change title</string>
 
-    <string name="expanded">Favorites</string>
+    <string name="liked">Favorites</string>
     <string name="home">Main</string>
 
     <string name="no_favorites">No favorites</string>

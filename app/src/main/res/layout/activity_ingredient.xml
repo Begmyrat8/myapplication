@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSecondaryVariant"
+    android:background="?attr/colorPrimaryVariant"
     tools:context=".Activities.IngredientActivity">
 
     <include
@@ -14,28 +14,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/buttons"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/edit_text_orange_border"
-        android:layout_margin="20dp"
-        android:src="@drawable/add"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSecondaryVariant"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="TODO" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/buttons"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/edit_text_orange_border"
+            android:contentDescription="TODO"
+            android:src="@drawable/add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/List"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@android:color/transparent"
+        android:background="@drawable/top_border_radius"
         android:padding="5dp"
         android:scrollbarSize="5dp"
         android:scrollbars="vertical"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/buttons"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,12 +56,12 @@
         android:id="@+id/empty_ingredients"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@android:color/transparent"
+        android:background="@drawable/top_border_radius"
         android:padding="5dp"
         android:scrollbarSize="5dp"
         android:scrollbars="vertical"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/buttons"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include">

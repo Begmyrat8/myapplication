@@ -5,12 +5,12 @@ public class IngredientsModel {
     String title;
     double price;
     double value, gram_price;
-    int kg;
+    double kg;
     String unit;
 
 
 
-    public IngredientsModel(int id, String title, double price, double value, double gram_price, int kg, int dessert_id, String unit) {
+    public IngredientsModel(int id, String title, double price, double value, double gram_price, double kg, int dessert_id, String unit) {
         this.id = id;
         this.title = title;
         this.price = price;
@@ -63,11 +63,11 @@ public class IngredientsModel {
         this.value = value;
     }
 
-    public int getKg() {
+    public double getKg() {
         return kg;
     }
 
-    public void setKg(int kg) {
+    public void setKg(double kg) {
         this.kg = kg;
     }
 

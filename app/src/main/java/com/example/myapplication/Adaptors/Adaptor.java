@@ -133,7 +133,7 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         double originalHeight = activity.getOriginalHeight();
         double coefficient = activity.getCoif();
 
-        DecimalFormat decimalFormat = new DecimalFormat("#0");
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
         if (shape.equals("circle") && (newShape.equals("rectangle") || newShape.equals("square"))) {
             double originalArea = newShape.equals("rectangle") ?
@@ -142,10 +142,10 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             double newArea = Math.PI * Math.pow(newWidth / 2, 2);
             if (originalArea < newArea) {
                 coefficient = newArea / originalArea;
-                textView.setText(decimalFormat.format((coefficient * value)));
+                textView.setText(formatNumber((coefficient * value),decimalFormat));
             } else {
                 coefficient = originalArea / newArea;
-                textView.setText(decimalFormat.format((coefficient / value)));
+                textView.setText(formatNumber((coefficient / value),decimalFormat));
             }
         } else if (newShape.equals("circle") && (shape.equals("rectangle") || shape.equals("square"))) {
             double originalArea = shape.equals("rectangle") ?
@@ -154,13 +154,13 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             double newArea = Math.PI * Math.pow(newWidth / 2, 2);
             if (originalArea < newArea) {
                 coefficient = newArea / originalArea;
-                textView.setText(decimalFormat.format((coefficient * value)));
+                textView.setText(formatNumber((coefficient * value),decimalFormat));
             } else {
                 coefficient = originalArea / newArea;
-                textView.setText(decimalFormat.format((coefficient / value)));
+                textView.setText(formatNumber((coefficient / value),decimalFormat));
             }
         } else {
-            textView.setText(decimalFormat.format(coefficient * value));
+            textView.setText(formatNumber((coefficient * value),decimalFormat));
         }
     }
 
@@ -235,15 +235,20 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             holder.imageView4.setImageResource(R.drawable.down);
         }
     }
+    private String formatNumber(double number, DecimalFormat decimalFormat) {
+        if (number == (long) number) {
+            return String.valueOf((long) number); // Если целое, возвращаем без дробной части
+        }
+        return decimalFormat.format(number); // Иначе с двумя знаками после запятой
+    }
+
 
     @SuppressLint("SetTextI18n")
     private void addDynamicTextViews(LinearLayout container, int listId) {
         List<IngredientsModel> ingredients = getIngredientsByListId(listId);
         container.removeAllViews();
 
-        DecimalFormat format = new DecimalFormat("#0.0");
-        DecimalFormat format2 = new DecimalFormat();
-
+        DecimalFormat format = new DecimalFormat("#.##");
         // Create TableLayout
         TableLayout tableLayout = new TableLayout(context);
         tableLayout.setLayoutParams(new ViewGroup.LayoutParams(
@@ -308,21 +313,21 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             row.addView(nameTextView);
 
             TextView quantityTextView = new TextView(context);
-            quantityTextView.setText(format2.format(ingredient.getValue()));
+            quantityTextView.setText(formatNumber(ingredient.getValue(), format));
             quantityTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             quantityTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
             quantityTextView.setGravity(Gravity.CENTER);
             row.addView(quantityTextView);
 
             TextView kgPriceTextView = new TextView(context);
-            kgPriceTextView.setText(format.format(ingredient.getPrice()));
+            kgPriceTextView.setText(formatNumber(ingredient.getPrice(),format));
             kgPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             kgPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
             kgPriceTextView.setGravity(Gravity.CENTER);
             row.addView(kgPriceTextView);
 
             TextView actualPriceTextView = new TextView(context);
-            actualPriceTextView.setText(format2.format(ingredient.getGram_price()));
+            actualPriceTextView.setText(formatNumber(ingredient.getGram_price(),format));
             actualPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             actualPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
             actualPriceTextView.setGravity(Gravity.CENTER);
@@ -357,7 +362,7 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
         // Total weight under the "Вес" column
         TextView totalWeightTextView = new TextView(context);
-        totalWeightTextView.setText(format2.format(totalWeight));
+        totalWeightTextView.setText(formatNumber(totalWeight,format));
         totalWeightTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         totalWeightTextView.setTextColor(ContextCompat.getColor(context, R.color.orange));
         totalWeightTextView.setGravity(Gravity.CENTER);
@@ -365,7 +370,7 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
         // Empty cell for the "Кг/цена" column
         TextView totalKgPriceTextView = new TextView(context);
-        totalKgPriceTextView.setText(format.format(totalKgPrice));  // No text, just a placeholder
+        totalKgPriceTextView.setText(formatNumber(totalKgPrice,format));  // No text, just a placeholder
         totalKgPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         totalKgPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.red));
         totalKgPriceTextView.setGravity(Gravity.CENTER);
@@ -373,7 +378,7 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
         // Total price under the "Цена" column
         TextView totalPriceTextView = new TextView(context);
-        totalPriceTextView.setText(format2.format(totalPrice));
+        totalPriceTextView.setText(formatNumber(totalPrice,format));
         totalPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         totalPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
         totalPriceTextView.setGravity(Gravity.CENTER);
@@ -390,8 +395,7 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         List<IngredientsModel> ingredients = getIngredientsByListId(listId);
         container.removeAllViews();
 
-        DecimalFormat format = new DecimalFormat("#0.0");
-        DecimalFormat format2 = new DecimalFormat();
+        DecimalFormat format = new DecimalFormat("#.##");
 
         // Create TableLayout
         TableLayout tableLayout = new TableLayout(context);
@@ -463,32 +467,15 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
             row.addView(quantityTextView);
 
             TextView kgPriceTextView = new TextView(context);
-            kgPriceTextView.setText(format.format(ingredient.getPrice()));
+            kgPriceTextView.setText(formatNumber(ingredient.getPrice(),format));
             kgPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             kgPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
             kgPriceTextView.setGravity(Gravity.CENTER);
             row.addView(kgPriceTextView);
 
-            // Calculating the actual price
-            String quantityStr = quantityTextView.getText().toString().replace("\u00A0", "").replace(" ", "").replace(",", ".");
-            String priceStr = kgPriceTextView.getText().toString().replace("\u00A0", "").replace(" ", "").replace(",", ".");
-
-            double a = Double.parseDouble(quantityStr);
-            double b = Double.parseDouble(priceStr);
-            double v;
-
-            if ("Кг".equals(ingredient.getUnit())) {
-                v = a / 1000; // Если выбран "Кг", делим на 1000
-            } else if ("Штук".equals(ingredient.getUnit())) {
-                v = a; // Если выбран "Штук", не делим
-            } else {
-                v = a / 1000; // По умолчанию делим на 1000
-            }
-
-            String r = format2.format(v * b);
 
             TextView actualPriceTextView = new TextView(context);
-            actualPriceTextView.setText(r);
+            actualPriceTextView.setText(formatNumber(ingredient.getGram_price(),format));
             actualPriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             actualPriceTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
             actualPriceTextView.setGravity(Gravity.CENTER);

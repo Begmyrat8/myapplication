@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -38,6 +39,7 @@ public class AddDessertActivity extends AppCompatActivity {
     String COL_IMAGE = "image";
     ImageView imageView, image;
     EditText set_name, set_portion_size, originalCakeWidth, originalCakeHeight, newCakeWidth, newCakeHeight;
+    TextView hint_width, hint_width2, hint_height, hint_height2;
     Toolbar toolbar;
     ImageButton add_img;
     RadioGroup shapeGroup, a;
@@ -72,21 +74,47 @@ public class AddDessertActivity extends AppCompatActivity {
         originalCakeHeight.setVisibility(View.INVISIBLE);
         newCakeHeight.setVisibility(View.INVISIBLE);
 
+        hint_height.setVisibility(View.INVISIBLE);
+        hint_height2.setVisibility(View.INVISIBLE);
+
         shapeRectangle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 originalCakeHeight.setVisibility(View.VISIBLE);
+                hint_height.setVisibility(View.VISIBLE);
+
             } else {
                 originalCakeHeight.setVisibility(View.INVISIBLE);
+                hint_height.setVisibility(View.INVISIBLE);
+
             }
         });
         myRectangle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 newCakeHeight.setVisibility(View.VISIBLE);
+                hint_height2.setVisibility(View.VISIBLE);
             } else {
                 newCakeHeight.setVisibility(View.INVISIBLE);
+                hint_height2.setVisibility(View.INVISIBLE);
                 newCakeHeight.setHintTextColor(R.color.light_grey);
             }
         });
+
+        shapeCircle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked){
+                hint_width.setText("Диаметр");
+            }else {
+                hint_width.setText("Ширина");
+            }
+        });
+
+        myCircle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked){
+                hint_width2.setText("Диаметр");
+            }else {
+                hint_width2.setText("Ширина");
+            }
+        });
+
     }
 
     private void setMode() {
@@ -107,6 +135,11 @@ public class AddDessertActivity extends AppCompatActivity {
     }
 
     private void findView() {
+
+        hint_height2 = findViewById(R.id.hint_height2);
+        hint_width2 = findViewById(R.id.hint_width2);
+        hint_height = findViewById(R.id.hint_height);
+        hint_width = findViewById(R.id.hint_width);
         imageView = findViewById(R.id.imageView);
         toolbar = findViewById(R.id.toolbar);
         set_name = findViewById(R.id.set_name);

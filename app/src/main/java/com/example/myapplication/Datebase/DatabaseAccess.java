@@ -295,9 +295,9 @@ public class DatabaseAccess {
                 int id = cursor.getInt(cursor.getColumnIndex("id"));
                  String title = cursor.getString(cursor.getColumnIndex("title"));
                  double price = cursor.getDouble(cursor.getColumnIndex("price"));
-                 int value = cursor.getInt(cursor.getColumnIndex("value"));
+                 double value = cursor.getInt(cursor.getColumnIndex("value"));
                 double gram_price = cursor.getDouble(cursor.getColumnIndex("gram_price"));
-                int kg = cursor.getInt(cursor.getColumnIndex("kg"));
+                double kg = cursor.getInt(cursor.getColumnIndex("kg"));
                 int dessert_id = cursor.getInt(cursor.getColumnIndex("dessert_id"));
                 String unit = cursor.getString(cursor.getColumnIndex("unit"));
                 IngredientsModel ingredient = new IngredientsModel(id, title, price, value, gram_price, kg, dessert_id, unit);

@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +55,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View categoryItems = LayoutInflater.from(parent.getContext()).inflate(R.layout.dessert_model, parent, false);
+        View categoryItems = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_model, parent, false);
         return new CategoryViewHolder(categoryItems);
     }
 
@@ -110,20 +112,20 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
         holder.dessert_size.setText(decimalFormat.format(dessert_size) + " "+ holder.sm);
 
-//        byte[] image =  desserts.get(position).getImage();
-//        Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-//
-//        if (bitmap == null){
-//            holder.dessertImage.setVisibility(View.INVISIBLE);
-//            holder.empty_img.setVisibility(View.VISIBLE);
-//        } else {
-//            holder.empty_img.setVisibility(View.INVISIBLE);
-//            holder.dessertImage.setVisibility(View.VISIBLE);
-//            holder.dessertImage.setImageBitmap(bitmap);
-//        }
+        byte[] image =  desserts.get(position).getImage();
+        Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+
+        if (bitmap == null){
+            holder.dessertImage.setVisibility(View.INVISIBLE);
+            holder.empty_img.setVisibility(View.VISIBLE);
+        } else {
+            holder.empty_img.setVisibility(View.INVISIBLE);
+            holder.dessertImage.setVisibility(View.VISIBLE);
+            holder.dessertImage.setImageBitmap(bitmap);
+        }
 
         boolean isExpanded = dessert.isExpanded();
-        holder.constraintLayout2.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+//        holder.portion_img.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.constraintLayout3.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.result.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.imageView3.setImageResource(isExpanded ? R.drawable.up : R.drawable.down);
@@ -195,11 +197,11 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
                 contentValues.put("title", title);
                 contentValues.put("sum", holder.sum.getText().toString());
                 contentValues.put("new_dessert_width", holder.dessert_size.getText().toString());
-                contentValues.put("portion_size", holder.portion_size.getText().toString());
+//                contentValues.put("portion_size", holder.portion_size.getText().toString());
                 contentValues.put("portion_price", holder.portion_price.getText().toString());
                 contentValues.put("weight", holder.weight.getText().toString());
                 contentValues.put("portion", holder.portion.getText().toString());
-                contentValues.put("image", "a");
+                contentValues.put("image",image);
                 contentValues.put("desserts", 0);
                 contentValues.put("new_dessert_height", String.valueOf(dessert.getNew_dessert_height()));
                 contentValues.put("dessert_height", String.valueOf(dessert.getDessert_height()));
@@ -256,7 +258,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
 
     public static final class CategoryViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView dessertImage, empty_img,like ,imageView3;
+        ImageView dessertImage, empty_img,like ,imageView3, portion_img;
         ImageButton  change_dessert;
         ConstraintLayout result, constraintLayout2, constraintLayout3;
         TextView dessertTitle, sum, weight, portion, portion_price, dessert_size, portion_size, ingredients, portion_weight;
@@ -266,6 +268,7 @@ public class DessertAdaptor extends RecyclerView.Adapter<DessertAdaptor.Category
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
 
+//            portion_img = itemView.findViewById(R.id.portion_img);
             constraintLayout3 = itemView.findViewById(R.id.constraintLayout3);
             constraintLayout2 = itemView.findViewById(R.id.constraintLayout2);
             result = itemView.findViewById(R.id.result);

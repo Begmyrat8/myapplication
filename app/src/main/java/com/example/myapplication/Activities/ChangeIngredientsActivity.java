@@ -12,12 +12,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -27,8 +24,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +40,6 @@ import com.example.myapplication.Models.IngredientsModel;
 import com.example.myapplication.R;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
@@ -72,10 +66,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     Button save_btn;
     private LinearLayout dynamicContainer;
     private final Map<String, View> ingredientViewsMap = new HashMap<>();
-    private final Map<String, LinearLayout> ingredientViewsMap2 = new HashMap<String, LinearLayout>();
-    private final Map<String, TextInputEditText> ingredientValueMap = new HashMap<>();
-    private final Map<String, TextInputEditText> ingredientKgMap = new HashMap<>();
-    private final Map<String, TextInputEditText> ingredientPriceMap = new HashMap<>();
+    private final Map<String, View> ingredientViewsMap2 = new HashMap<>();
     private Map<String, ArrayList<String>> ingredientCategories = new HashMap<>();
     ArrayList<String> items;
     boolean hasIngredients = false;
@@ -388,68 +379,27 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     private void updateDataAndInsertData() {
         save_btn.setOnClickListener(view -> {
             SharedPreferences sharedPreferences = getSharedPreferences("ingredient_preferences", MODE_PRIVATE);
-
-            for (Map.Entry<String, LinearLayout> entry : ingredientViewsMap2.entrySet()) {
-                String ingredientTitle = entry.getKey();
-                TextInputEditText valueEditText = ingredientValueMap.get(ingredientTitle);
-                TextInputEditText kgEditText = ingredientKgMap.get(ingredientTitle);
-                TextInputEditText priceEditText = ingredientPriceMap.get(ingredientTitle);
-
-                if (valueEditText == null || kgEditText == null || priceEditText == null ||
-                        TextUtils.isEmpty(Objects.requireNonNull(valueEditText.getText()).toString().trim()) ||
-                        TextUtils.isEmpty(Objects.requireNonNull(priceEditText.getText()).toString().trim()) ||
-                        TextUtils.isEmpty(Objects.requireNonNull(kgEditText.getText()).toString().trim())) {
-                    Toast.makeText(ChangeIngredientsActivity.this, "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                hasIngredients = true;
-            }
+             boolean hasIngredients = validateAndPrepareIngredients(ingredientViewsMap2);
 
             if (hasIngredients) {
                 boolean inserted = updateTitleIfNotExists();
                 if (inserted) {
                     Toast.makeText(ChangeIngredientsActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    updateProcessIngredients(sharedPreferences);
+                    finish();
+                } else {
+                    Toast.makeText(ChangeIngredientsActivity.this, R.string.ingredient_already_exists, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(ChangeIngredientsActivity.this, "Необходимо добавить хотя бы один ингредиент", Toast.LENGTH_SHORT).show();
+            }
+             hasIngredients = validateAndPrepareIngredients(ingredientViewsMap);
 
-                    for (Map.Entry<String, LinearLayout> entry : ingredientViewsMap2.entrySet()) {
-                        String ingredientTitle = entry.getKey();
-                        TextInputEditText valueEditText = ingredientValueMap.get(ingredientTitle);
-                        TextInputEditText kgEditText = ingredientKgMap.get(ingredientTitle);
-                        TextInputEditText priceEditText = ingredientPriceMap.get(ingredientTitle);
-
-                        if (valueEditText == null || kgEditText == null || priceEditText == null ||
-                                TextUtils.isEmpty(Objects.requireNonNull(valueEditText.getText()).toString().trim()) ||
-                                TextUtils.isEmpty(Objects.requireNonNull(priceEditText.getText()).toString().trim()) ||
-                                TextUtils.isEmpty(Objects.requireNonNull(kgEditText.getText()).toString().trim())) {
-                            Toast.makeText(ChangeIngredientsActivity.this, "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        try {
-                            String unit = sharedPreferences.getString(ingredientTitle, ""); // Получение сохраненного значения (Кг или Штук)
-
-                            double value = Double.parseDouble(Objects.requireNonNull(valueEditText.getText()).toString());
-                            double kg = Double.parseDouble(Objects.requireNonNull(kgEditText.getText()).toString());
-                            double priceStr = Double.parseDouble(Objects.requireNonNull(priceEditText.getText()).toString());
-                            double price = kg * priceStr;
-                            double v;
-
-                            // Проверяем, что сохранено в SharedPreferences: Кг или Штук
-                            if ("Кг".equals(unit)) {
-                                v = value / 1000; // Если выбран "Кг", делим на 1000
-                            } else if ("Штук".equals(unit)) {
-                                v = value; // Если выбран "Штук", не делим
-                            } else {
-                                v = value / 1000; // По умолчанию делим на 1000
-                            }
-
-                            double r = v * price;
-                            // Call the updateIngredient method for each ingredient
-                            updateIngredient(String.valueOf(this.id), ingredientTitle, value, price, kg, r, unit);
-                        } catch (NumberFormatException e) {
-                            Toast.makeText(ChangeIngredientsActivity.this, "Ошибка формата числа", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    }
+            if (hasIngredients) {
+                boolean inserted = updateTitleIfNotExists();
+                if (inserted) {
+                    Toast.makeText(ChangeIngredientsActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    insertProcessIngredients(sharedPreferences);
                     finish();
                 } else {
                     Toast.makeText(ChangeIngredientsActivity.this, R.string.ingredient_already_exists, Toast.LENGTH_SHORT).show();
@@ -458,92 +408,103 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
                 Toast.makeText(ChangeIngredientsActivity.this, "Необходимо добавить хотя бы один ингредиент", Toast.LENGTH_SHORT).show();
             }
 
-            for (Map.Entry<String, View> entry : ingredientViewsMap.entrySet()) {
-                LinearLayout container = (LinearLayout) entry.getValue();
 
-                // Find the TextInputLayouts
-                LinearLayout detailsContainer = (LinearLayout) container.getChildAt(1);
-                TextInputLayout countInputLayout = (TextInputLayout) detailsContainer.getChildAt(0);
-
-                LinearLayout detailsContainer2 = (LinearLayout) detailsContainer.getChildAt(2);
-                TextInputLayout countInputLayout2 = (TextInputLayout) detailsContainer2.getChildAt(0);
-                TextInputLayout priceInputLayout = (TextInputLayout) detailsContainer2.getChildAt(1);
-
-                // Get TextInputEditTexts from TextInputLayouts
-                TextInputEditText amountEditText = (TextInputEditText) countInputLayout.getEditText();
-                TextInputEditText amountEditText2 = (TextInputEditText) countInputLayout2.getEditText();
-                TextInputEditText priceEditText = (TextInputEditText) priceInputLayout.getEditText();
-
-                if (TextUtils.isEmpty(Objects.requireNonNull(Objects.requireNonNull(amountEditText).getText()).toString().trim()) ||
-                        TextUtils.isEmpty(Objects.requireNonNull(Objects.requireNonNull(priceEditText).getText()).toString().trim()) ||
-                        TextUtils.isEmpty(Objects.requireNonNull(Objects.requireNonNull(amountEditText2).getText()).toString().trim())) {
-                    Toast.makeText(ChangeIngredientsActivity.this, "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                hasIngredients = true;
-            }
-
-            if (hasIngredients) {
-                boolean inserted = updateTitleIfNotExists();
-                if (inserted) {
-                    dessert_id = (Objects.requireNonNull(getIntent().getStringExtra("dessert_id")));
-                    Toast.makeText(ChangeIngredientsActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
-
-                    for (Map.Entry<String, View> entry : ingredientViewsMap.entrySet()) {
-                        String ingredient = entry.getKey();
-                        LinearLayout container = (LinearLayout) entry.getValue();
-
-                        // Find the TextInputLayouts
-                        LinearLayout detailsContainer = (LinearLayout) container.getChildAt(1);
-                        TextInputLayout countInputLayout = (TextInputLayout) detailsContainer.getChildAt(0);
-
-                        LinearLayout detailsContainer2 = (LinearLayout) detailsContainer.getChildAt(2);
-                        TextInputLayout countInputLayout2 = (TextInputLayout) detailsContainer2.getChildAt(0);
-                        TextInputLayout priceInputLayout = (TextInputLayout) detailsContainer2.getChildAt(1);
-
-                        // Get TextInputEditTexts from TextInputLayouts
-                        TextInputEditText amountEditText = (TextInputEditText) countInputLayout.getEditText();
-                        TextInputEditText amountEditText2 = (TextInputEditText) countInputLayout2.getEditText();
-                        TextInputEditText priceEditText = (TextInputEditText) priceInputLayout.getEditText();
-
-                        if (TextUtils.isEmpty(Objects.requireNonNull(Objects.requireNonNull(amountEditText).getText()).toString().trim()) ||
-                                TextUtils.isEmpty(Objects.requireNonNull(Objects.requireNonNull(priceEditText).getText()).toString().trim())) {
-                            Toast.makeText(ChangeIngredientsActivity.this, "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        String unit = sharedPreferences.getString(ingredient, "");
-                        // Get text from TextInputEditTexts
-                        double amountStr = Double.parseDouble(Objects.requireNonNull(amountEditText.getText()).toString());
-                        int amountStr2 = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(amountEditText2).getText()).toString());
-                        double priceStr = Double.parseDouble(Objects.requireNonNull(priceEditText.getText()).toString());
-                        double price = amountStr2 * priceStr;
-                        double v;
-
-                        // Проверяем, что сохранено в SharedPreferences: Кг или Штук
-                        if ("Кг".equals(unit)) {
-                            v = amountStr / 1000; // Если выбран "Кг", делим на 1000
-                        } else if ("Штук".equals(unit)) {
-                            v = amountStr; // Если выбран "Штук", не делим
-                        } else {
-                            v = amountStr / 1000; // По умолчанию делим на 1000
-                        }
-
-                        double r = v * price;
-
-                        insertIngredient(String.valueOf(this.id), ingredient, amountStr, price, r, amountStr2, dessert_id, unit);
-                    }
-                    finish();
-
-                } else {
-                    Toast.makeText(ChangeIngredientsActivity.this, R.string.ingredient_already_exists, Toast.LENGTH_SHORT).show();
-                }
-
-            } else {
-                Toast.makeText(ChangeIngredientsActivity.this, "Необходимо добавить хотя бы один ингредиент", Toast.LENGTH_SHORT).show();
-            }
         });
     }
+
+    private boolean validateAndPrepareIngredients(Map<String, View> map) {
+        boolean hasIngredients = false;
+
+        for (Map.Entry<String, View> entry : map.entrySet()) {
+            CardView cardView = (CardView) entry.getValue();
+
+            TextInputEditText valueEditText = cardView.findViewById(R.id.set_value);
+            TextInputEditText kgEditText = cardView.findViewById(R.id.countKg);
+            TextInputEditText priceEditText = cardView.findViewById(R.id.set_price);
+
+            if (isEmpty(valueEditText, kgEditText, priceEditText)) {
+                Toast.makeText(ChangeIngredientsActivity.this, "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            hasIngredients = true;
+        }
+        return hasIngredients;
+    }
+
+    private boolean isEmpty(TextInputEditText... editTexts) {
+        for (TextInputEditText editText : editTexts) {
+            if (editText == null || TextUtils.isEmpty(editText.getText().toString().trim())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void updateProcessIngredients(SharedPreferences sharedPreferences) {
+        for (Map.Entry<String, View> entry : ingredientViewsMap2.entrySet()) {
+            String ingredientTitle = entry.getKey();
+            CardView cardView = (CardView) entry.getValue();
+
+            TextInputEditText valueEditText = cardView.findViewById(R.id.set_value);
+            TextInputEditText kgEditText = cardView.findViewById(R.id.countKg);
+            TextInputEditText priceEditText = cardView.findViewById(R.id.set_price);
+
+            try {
+                String unit = sharedPreferences.getString(ingredientTitle, "");
+
+                double value = Double.parseDouble(String.valueOf(valueEditText.getText()));
+                double kg = Double.parseDouble(String.valueOf(kgEditText.getText()));
+                double price = Double.parseDouble(String.valueOf(priceEditText.getText()));
+
+                double adjustedValue = adjustValueBasedOnUnit(unit, value);
+                double totalPrice = adjustedValue * price;
+
+                updateIngredient(String.valueOf(this.id), ingredientTitle, value, price, kg, totalPrice, unit);
+            } catch (NumberFormatException e) {
+                Toast.makeText(ChangeIngredientsActivity.this, "Ошибка формата числа. Убедитесь, что используете точку.", Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
+    }
+    private void insertProcessIngredients(SharedPreferences sharedPreferences) {
+        for (Map.Entry<String, View> entry : ingredientViewsMap.entrySet()) {
+            String ingredient = entry.getKey();
+            CardView cardView = (CardView) entry.getValue();
+
+            TextInputEditText valueEditText = cardView.findViewById(R.id.set_value);
+            TextInputEditText kgEditText = cardView.findViewById(R.id.countKg);
+            TextInputEditText priceEditText = cardView.findViewById(R.id.set_price);
+
+            try {
+                String unit = sharedPreferences.getString(ingredient, "");
+
+                double value = Double.parseDouble(String.valueOf(valueEditText.getText()));
+                double kg = Double.parseDouble(String.valueOf(kgEditText.getText()));
+                double price = Double.parseDouble(String.valueOf(priceEditText.getText()));
+
+                double adjustedValue = adjustValueBasedOnUnit(unit, value);
+                double totalPrice = adjustedValue * price;
+
+                insertIngredient(String.valueOf(this.id), ingredient, value, price, kg, totalPrice, dessert_id, unit);
+            } catch (NumberFormatException e) {
+                Toast.makeText(ChangeIngredientsActivity.this, "Ошибка формата числа. Убедитесь, что используете точку.", Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
+    }
+
+    private double adjustValueBasedOnUnit(String unit, double value) {
+        if ("Кг".equals(unit)) {
+            return value / 1000; // Convert from grams to kilograms
+        } else if ("Штук".equals(unit)) {
+            return value; // No conversion for pieces
+        } else {
+            return value / 1000; // Default to converting to kilograms
+        }
+    }
+
 
     private boolean updateTitleIfNotExists() {
         ContentValues contentValues = new ContentValues();
@@ -590,133 +551,40 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
     @SuppressLint({"ResourceAsColor", "ResourceType"})
     private void setIngredientViews(final String ingredientTitle, int listId) {
         if (ingredientViewsMap2.containsKey(ingredientTitle)) {
-            // Если ингредиент уже существует, нет необходимости добавлять его снова
             return;
         }
-
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
         List<IngredientsModel> ingredients = getIngredientsByListId(listId);
-        DecimalFormat format = new DecimalFormat();
-
         SharedPreferences sharedPreferences = getSharedPreferences("ingredient_preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
+        LayoutInflater inflater = LayoutInflater.from(this);
 
         for (IngredientsModel ingredient : ingredients) {
-            // Создаем CardView для ингредиента
-            CardView cardView = new CardView(this);
-            CardView.LayoutParams cardParams = new CardView.LayoutParams(
-                    CardView.LayoutParams.MATCH_PARENT,
-                    CardView.LayoutParams.WRAP_CONTENT
-            );
-            cardParams.setMargins(20, 20, 20, 20); // Установка отступов
-            cardView.setLayoutParams(cardParams);
-            cardView.setRadius(12); // Установка радиуса углов CardView
-            cardView.setCardBackgroundColor(getResources().getColor(R.color.white)); // Установка цвета фона CardView
+            // Загрузка разметки карточки ингредиента
+            CardView cardView = (CardView) inflater.inflate(R.layout.a, dynamicContainer, false);
 
-
-            // Создаем контейнер для ImageButton и EditText внутри CardView
-            final LinearLayout container = new LinearLayout(this);
-            container.setOrientation(LinearLayout.VERTICAL);
-            container.setPadding(16, 16, 16, 16); // Padding для контейнера
-
-            // Создаем RelativeLayout для TextView и ImageButton
-            RelativeLayout buttonContainer = new RelativeLayout(this);
-
-            // Создаем TextView для отображения названия ингредиента
-            TextView ingredientTextView = new TextView(this);
+            TextView ingredientTextView = cardView.findViewById(R.id.ingredientTextView);
             ingredientTextView.setText(ingredient.getTitle());
-            ingredientTextView.setPadding(0, 16, 16, 16);
-            ingredientTextView.setTextSize(16);
-            ingredientTextView.setTextColor(getResources().getColor(android.R.color.black));
 
-            RelativeLayout.LayoutParams textParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            );
-            textParams.addRule(RelativeLayout.ALIGN_PARENT_START);
-            ingredientTextView.setLayoutParams(textParams);
+            ImageButton ingredientButton = cardView.findViewById(R.id.ingredientButton);
 
-            // Создаем ImageButton для ингредиента
-            ImageButton ingredientButton = new ImageButton(this);
-            ingredientButton.setImageResource(R.drawable.ic_delete);
-            ingredientButton.setBackgroundResource(android.R.color.transparent);
+            TextInputEditText editValue = cardView.findViewById(R.id.set_value);
+            editValue.setText(formatNumber(ingredient.getValue(), decimalFormat));
 
-            RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            );
-            buttonParams.addRule(RelativeLayout.ALIGN_PARENT_END);
-            ingredientButton.setLayoutParams(buttonParams);
+            TextInputEditText editPrice = cardView.findViewById(R.id.set_price);
+            editPrice.setText(formatNumber(ingredient.getPrice(), decimalFormat));
 
-            // Добавляем TextView и ImageButton в buttonContainer
-            buttonContainer.addView(ingredientTextView);
-            buttonContainer.addView(ingredientButton);
+            TextInputEditText editUnit = cardView.findViewById(R.id.countKg);
+            editUnit.setText(formatNumber(ingredient.getKg(), decimalFormat));
 
-            // Добавляем buttonContainer в основной контейнер
-            container.addView(buttonContainer);
-
-            // Создаем LinearLayout для ввода количества и цены
-            LinearLayout detailsContainer = new LinearLayout(this);
-            detailsContainer.setOrientation(LinearLayout.VERTICAL);
-
-            LinearLayout detailsContainer3 = new LinearLayout(this);
-            detailsContainer3.setOrientation(LinearLayout.HORIZONTAL);
-            LinearLayout.LayoutParams detailsParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            detailsContainer3.setLayoutParams(detailsParams);
-
-            // Создаем TextInputLayout для первого количества (или количество)
-            TextInputLayout countInputLayout = new TextInputLayout(this, null, R.style.TextInput);
-            countInputLayout.setHint("Количество");
-            countInputLayout.setBoxStrokeColor(getResources().getColor(R.color.chocolate)); // Установка цвета обводки
-            countInputLayout.setLayoutParams(detailsParams);
-
-            TextInputEditText editValue = new TextInputEditText(countInputLayout.getContext());
-            editValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            editValue.setText(format.format(ingredient.getValue()));
-            countInputLayout.addView(editValue, new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
-
-            // Сохранение ссылки на edit_value
-            ingredientValueMap.put(ingredient.getTitle(), editValue);
-
-            // Создаем контейнер для CheckBox
-            LinearLayout checkBoxContainer = new LinearLayout(this);
-            checkBoxContainer.setOrientation(LinearLayout.HORIZONTAL);
-            checkBoxContainer.setGravity(Gravity.START);
-            checkBoxContainer.setPadding(0, 10, 0, 20);
-            LinearLayout.LayoutParams checkBoxParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            checkBoxContainer.setLayoutParams(checkBoxParams);
-
-            // Создаем CheckBox для "Кг"
-            CheckBox kgCheckBox = new CheckBox(this);
-            kgCheckBox.setText("Кг");
-            kgCheckBox.setChecked(true);
-            checkBoxContainer.addView(kgCheckBox);
-
-            // Создаем CheckBox для "Штук"
-            CheckBox piecesCheckBox = new CheckBox(this);
-            piecesCheckBox.setText("Штук");
-            checkBoxContainer.addView(piecesCheckBox);
+            CheckBox kgCheckBox = cardView.findViewById(R.id.kgCheckBox);
+            CheckBox piecesCheckBox = cardView.findViewById(R.id.piecesCheckBox);
 
             String savedUnit = sharedPreferences.getString(ingredient.getTitle(), "Кг");
-            if ("Кг".equals(savedUnit)) {
-                kgCheckBox.setChecked(true);
-                piecesCheckBox.setChecked(false);
-            } else {
-                kgCheckBox.setChecked(false);
-                piecesCheckBox.setChecked(true);
-            }
+            kgCheckBox.setChecked("Кг".equals(savedUnit));
+            piecesCheckBox.setChecked("Штук".equals(savedUnit));
 
-
-            // Слушатель для CheckBox "Кг"
             kgCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     piecesCheckBox.setChecked(false);
@@ -725,7 +593,6 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
                 }
             });
 
-            // Слушатель для CheckBox "Штук"
             piecesCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     kgCheckBox.setChecked(false);
@@ -734,231 +601,41 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
                 }
             });
 
-            // Создаем LinearLayout для ввода количества, цены
-            LinearLayout detailsContainer2 = new LinearLayout(this);
-            detailsContainer2.setOrientation(LinearLayout.HORIZONTAL);
-            detailsContainer2.setLayoutParams(detailsParams);
-
-            // Создаем TextInputLayout для кг/шт
-            TextInputLayout kgInputLayout = new TextInputLayout(this, null, R.style.TextInput);
-            TextInputEditText countKg = new TextInputEditText(kgInputLayout.getContext());
-            countKg.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            countKg.setHint("Кг/шт");
-            countKg.setWidth(150);
-            countKg.setText(format.format(ingredient.getKg()));
-            kgInputLayout.addView(countKg, new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
-
-            ingredientKgMap.put(ingredient.getTitle(), countKg);
-
-            // Создаем TextInputLayout для цены
-            TextInputLayout priceInputLayout = new TextInputLayout(this, null, R.style.TextInput);
-            priceInputLayout.setHint("Цена");
-            priceInputLayout.setLayoutParams(detailsParams);
-
-            TextInputEditText editPrice = new TextInputEditText(priceInputLayout.getContext());
-            editPrice.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            editPrice.setText(format.format(ingredient.getPrice() / ingredient.getKg()));
-            priceInputLayout.addView(editPrice, new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
-
-            ingredientPriceMap.put(ingredient.getTitle(), editPrice);
-
-            // Добавляем все элементы в контейнеры
-            detailsContainer.addView(countInputLayout);
-            detailsContainer.addView(checkBoxContainer);
-            detailsContainer2.addView(kgInputLayout);
-            detailsContainer2.addView(priceInputLayout);
-            detailsContainer.addView(detailsContainer2);
-            container.addView(detailsContainer);
-
-            // Добавляем контейнер в CardView
-            cardView.addView(container);
-
-            // Добавляем CardView в динамический контейнер
-            dynamicContainer.addView(cardView);
-
-            // Сохраняем контейнер в карте
-            ingredientViewsMap2.put(ingredient.getTitle(), container);
-
-            // Устанавливаем обработчик нажатия для ImageButton
             ingredientButton.setOnClickListener(v -> {
-                PopupMenu popupMenu = new PopupMenu(this, v);
-                popupMenu.getMenuInflater().inflate(R.menu.mode_menu, popupMenu.getMenu());
-
-                popupMenu.setOnMenuItemClickListener(item -> {
-                    int itemId = item.getItemId();
-                    if (itemId == R.id.nav_setting) {
-                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-                        builder.setTitle(ingredient.getTitle())
-                                .setCancelable(true)
-                                .setPositiveButton(R.string.yes, (dialog, which) -> {
-                                    ArrayList<String> selectedList = ingredientCategories.get(ingredient.getTitle());
-                                    if (selectedList != null) {
-                                        selectedList.remove(ingredient.getTitle());
-                                        items.remove(ingredient.getTitle());
-                                        if (selectedList.isEmpty()) {
-                                            ingredientCategories.remove(ingredient.getTitle());
-                                            items.remove(ingredient.getTitle());
-                                        }
-                                        adapterItem.notifyDataSetChanged(); // Update the adapter to refresh the list
-                                    }
-                                    dynamicContainer.removeView(cardView);
-                                    ingredientViewsMap2.remove(ingredientTitle);
-                                    removeIngredientFromAutoComplete(ingredientTitle);
-                                    database.delete("ingredients", "title =?", new String[]{ingredient.getTitle()});
-                                    saveDataToSharedPreferences();
-                                })
-                                .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
-
-                        android.app.AlertDialog alertDialog = builder.create();
-                        alertDialog.setCanceledOnTouchOutside(false);
-                        alertDialog.show();
-                        return true;
-                    } else if (itemId == R.id.delete_all) {
-                        dynamicContainer.removeView(cardView);
-                        ingredientViewsMap2.remove(ingredientTitle);
-                        removeIngredientFromAutoComplete(ingredientTitle);
-                        database.delete("ingredients", "title =?", new String[]{ingredient.getTitle()});
-                        saveDataToSharedPreferences();
-                    }
-                    return true;
-                });
-                popupMenu.show();
+                dynamicContainer.removeView(cardView);
+                ingredientViewsMap2.remove(ingredientTitle);
+                database.delete("ingredients", "title =?", new String[]{ingredient.getTitle()});
                 saveDataToSharedPreferences();
             });
+
+            dynamicContainer.addView(cardView);
+            ingredientViewsMap2.put(ingredient.getTitle(), cardView);
         }
     }
 
     @SuppressLint({"ResourceAsColor", "ResourceType"})
     private void addIngredientViews(final String ingredient) {
         if (ingredientViewsMap.containsKey(ingredient)) {
-            // Если ингредиент уже существует, нет необходимости добавлять его снова
             return;
         }
         if (ingredientViewsMap2.containsKey(ingredient)) {
-            // Если ингредиент уже существует, нет необходимости добавлять его снова
             return;
         }
 
-        CardView cardView = new CardView(this);
-        CardView.LayoutParams cardParams = new CardView.LayoutParams(
-                CardView.LayoutParams.MATCH_PARENT,
-                CardView.LayoutParams.WRAP_CONTENT
-        );
-        cardParams.setMargins(20, 20, 20, 20); // Установка отступов
-        cardView.setLayoutParams(cardParams);
-        cardView.setRadius(12); // Установка радиуса углов CardView
-        cardView.setCardBackgroundColor(getResources().getColor(R.color.white)); // Установка цвета фона CardView
+        LayoutInflater inflater = LayoutInflater.from(this);
+        CardView cardView = (CardView) inflater.inflate(R.layout.a, dynamicContainer, false);
 
-        // Создаем контейнер для ImageButton и EditText
-        final LinearLayout container = new LinearLayout(this);
-        container.setOrientation(LinearLayout.VERTICAL);
-        container.setPadding(16, 16, 16, 16); // Padding для контейнера
-
-        // Создаем LinearLayout для TextView и ImageButton
-        RelativeLayout buttonContainer = new RelativeLayout(this);
-
-
-        // Создаем TextView для отображения названия ингредиента
-        TextView ingredientTextView = new TextView(this);
+        TextView ingredientTextView = cardView.findViewById(R.id.ingredientTextView);
         ingredientTextView.setText(ingredient);
-        ingredientTextView.setPadding(0,16,16,16);
-        ingredientTextView.setTextSize(16);
-        ingredientTextView.setTextColor(getResources().getColor(android.R.color.black)); // Установка цвета текста через ресурсы
 
-        RelativeLayout.LayoutParams textParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
-        textParams.addRule(RelativeLayout.ALIGN_PARENT_START);
-        ingredientTextView.setLayoutParams(textParams);
+        ImageButton ingredientButton = cardView.findViewById(R.id.ingredientButton);
 
-        // Создаем ImageButton для ингредиента
-        ImageButton ingredientButton = new ImageButton(this);
-        ingredientButton.setImageResource(R.drawable.ic_delete); // Установка соответствующей иконки
-        ingredientButton.setBackgroundResource(android.R.color.transparent); // Прозрачный фон
-
-        RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
-        buttonParams.addRule(RelativeLayout.ALIGN_PARENT_END); // Выравнивание ImageButton в конце
-        ingredientButton.setLayoutParams(buttonParams);
-
-
-        // Добавляем TextView и ImageButton в buttonContainer
-        buttonContainer.addView(ingredientTextView);
-        buttonContainer.addView(ingredientButton);
-
-        // Добавляем buttonContainer в основной контейнер
-        container.addView(buttonContainer);
-
-        // Создаем LinearLayout для ввода количества, цены
-        LinearLayout detailsContainer = new LinearLayout(this);
-        detailsContainer.setOrientation(LinearLayout.VERTICAL);
-
-        LinearLayout detailsContainer3 = new LinearLayout(this);
-        detailsContainer3.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams detialsParms = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        detailsContainer3.setLayoutParams(detialsParms);
-
-        // Создаем TextInputLayout для первого количества (или количество)
-        TextInputLayout countInputLayout = new TextInputLayout(this, null, R.style.TextInput);
-        countInputLayout.setHint("Количество");
-        countInputLayout.setBoxStrokeColor(getResources().getColor(R.color.chocolate)); // Установка цвета обводки
-        countInputLayout.setLayoutParams(detialsParms);
-        edit_value = new TextInputEditText(countInputLayout.getContext());
-        edit_value.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        countInputLayout.addView(edit_value, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-
-//        TextInputLayout set_unit = new TextInputLayout(this, null, R.style.TextInputWithDropDown);
-//
-//        AutoCompleteTextView unit = new AutoCompleteTextView(set_unit.getContext());
-//        unit.setHint("Единица");
-//        unit.setInputType(InputType.TYPE_NULL);
-//        unit.setWidth(200);
-//        set_unit.addView(unit, new LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.MATCH_PARENT,
-//                LinearLayout.LayoutParams.WRAP_CONTENT
-//        ));
-
-        // Создаем контейнер для CheckBox
-        LinearLayout checkBoxContainer = new LinearLayout(this);
-        checkBoxContainer.setOrientation(LinearLayout.HORIZONTAL);
-        checkBoxContainer.setGravity(Gravity.START);
-        checkBoxContainer.setPadding(0, 10, 0, 20);
-        LinearLayout.LayoutParams checkBoxParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        checkBoxContainer.setLayoutParams(checkBoxParams);
-
-        // Создаем CheckBox для "Кг"
-        CheckBox kgCheckBox = new CheckBox(this);
-        kgCheckBox.setText("Кг");
-        kgCheckBox.setChecked(true);
-        checkBoxContainer.addView(kgCheckBox);
-
-        // Создаем CheckBox для "Штук"
-        CheckBox piecesCheckBox = new CheckBox(this);
-        piecesCheckBox.setText("Штук");
-        checkBoxContainer.addView(piecesCheckBox);
+        CheckBox kgCheckBox = cardView.findViewById(R.id.kgCheckBox);
+        CheckBox piecesCheckBox = cardView.findViewById(R.id.piecesCheckBox);
 
         SharedPreferences sharedPreferences = getSharedPreferences("ingredient_preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        // Слушатель для CheckBox "Кг"
         kgCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 piecesCheckBox.setChecked(false);
@@ -967,7 +644,6 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             }
         });
 
-        // Слушатель для CheckBox "Штук"
         piecesCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 kgCheckBox.setChecked(false);
@@ -976,125 +652,13 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
             }
         });
 
-        // Создаем LinearLayout для ввода количества, цены
-        LinearLayout detailsContainer2 = new LinearLayout(this);
-        detailsContainer2.setOrientation(LinearLayout.HORIZONTAL);
-        detailsContainer2.setLayoutParams(detialsParms);
-
-        // Создаем TextInputLayout для кг
-        TextInputLayout priceInputLayout2 = new TextInputLayout(this, null, R.style.TextInput);
-
-        TextInputEditText countKg = new TextInputEditText(priceInputLayout2.getContext());
-        countKg.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        countKg.setHint("Кг/шт");
-        countKg.setText("1");
-        countKg.setWidth(150);
-        countKg.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-        priceInputLayout2.addView(countKg, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-
-
-        // Создаем TextInputLayout для цены
-        TextInputLayout priceInputLayout = new TextInputLayout(this, null, R.style.TextInput);
-        priceInputLayout.setHint("Цена");
-        priceInputLayout.setLayoutParams(detialsParms);
-
-        edit_price = new TextInputEditText(priceInputLayout.getContext());
-        edit_price.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        priceInputLayout.addView(edit_price, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-
-
-        detailsContainer.addView(countInputLayout);
-        detailsContainer.addView(checkBoxContainer);
-        detailsContainer2.addView(priceInputLayout2);
-        detailsContainer2.addView(priceInputLayout);
-        detailsContainer.addView(detailsContainer2);
-
-
-        // Добавляем вертикальный LinearLayout в основной контейнер
-        container.addView(detailsContainer);
-        cardView.addView(container);
-
-        // Добавляем контейнер в динамический контейнер
-        dynamicContainer.addView(cardView);
-
-        // Добавляем контейнер в карту
-        ingredientViewsMap.put(ingredient, container);
-
         ingredientButton.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(this, v);
-            popupMenu.getMenuInflater().inflate(R.menu.mode_menu, popupMenu.getMenu());
-
-            popupMenu.setOnMenuItemClickListener(item -> {
-                int itemId = item.getItemId();
-                if (itemId == R.id.nav_setting) {
-                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-                    builder.setTitle(ingredient)
-                            .setCancelable(true)
-                            .setPositiveButton(R.string.yes, (dialog, which) -> {
-                                ArrayList<String> selectedList = ingredientCategories.get(ingredient);
-                                if (selectedList != null) {
-                                    selectedList.remove(ingredient);
-                                    items.remove(ingredient);
-                                    if (selectedList.isEmpty()) {
-                                        ingredientCategories.remove(ingredient);
-                                        items.remove(ingredient);
-                                    }
-                                    adapterItem.notifyDataSetChanged(); // Обновляем адаптер
-                                }
-                                // Удаляем контейнер из пользовательского интерфейса
-                                dynamicContainer.removeView(cardView);
-                                // Удаляем ингредиент из карты
-                                ingredientViewsMap.remove(ingredient);
-                                // Удаляем ингредиент из автодополнения
-                                removeIngredientFromAutoComplete(ingredient);
-
-                                int rowsDeleted = database.delete("ingredients", "title =?", new String[]{ingredient});
-                                if (rowsDeleted > 0) {
-                                    saveDataToSharedPreferences(); // Сохраняем изменения только если удаление прошло успешно
-                                } else {
-                                    // Можно добавить обработку ошибки или вывод логов
-                                    Log.e("DeleteError", "Ingredient not deleted from database: " + ingredient);
-                                }
-                                saveDataToSharedPreferences();
-                            })
-                            .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
-
-                    android.app.AlertDialog alertDialog = builder.create();
-                    alertDialog.setCanceledOnTouchOutside(false);
-                    alertDialog.show();
-
-                    return true;
-                } else if (itemId == R.id.delete_all) {
-                    // Удаляем контейнер из пользовательского интерфейса
-                    dynamicContainer.removeView(cardView);
-                    // Удаляем ингредиент из карты
-                    ingredientViewsMap.remove(ingredient);
-                    // Удаляем ингредиент из автодополнения
-                    removeIngredientFromAutoComplete(ingredient);
-
-                    int rowsDeleted = database.delete("ingredients", "title =?", new String[]{ingredient});
-                    if (rowsDeleted > 0) {
-                        saveDataToSharedPreferences(); // Сохраняем изменения только если удаление прошло успешно
-                    } else {
-                        // Можно добавить обработку ошибки или вывод логов
-                        Log.e("DeleteError", "Ingredient not deleted from database: " + ingredient);
-                    }
-                }
-
-                return true;
-            });
-
-            popupMenu.show();
+            dynamicContainer.removeView(cardView);
+            ingredientViewsMap.remove(ingredient);
         });
 
-
-
+        dynamicContainer.addView(cardView);
+        ingredientViewsMap.put(ingredient, cardView);
     }
 
     private void removeIngredientFromAutoComplete(String ingredient) {
@@ -1133,7 +697,7 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         }
     }
 
-    private void insertIngredient(String listId, String ingredient, double amount, double price, double gram_price, int kg, String dessertId, String unit) {
+    private void insertIngredient(String listId, String ingredient, double amount, double price, double gram_price, double kg, String dessertId, String unit) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("list_id", listId);
         contentValues.put("title", ingredient);
@@ -1155,6 +719,14 @@ public class ChangeIngredientsActivity extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
         return stream.toByteArray();
     }
+
+    private String formatNumber(double number, DecimalFormat decimalFormat) {
+        if (number == (long) number) {
+            return String.valueOf((long) number); // Если целое, возвращаем без дробной части
+        }
+        return decimalFormat.format(number); // Иначе с двумя знаками после запятой
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

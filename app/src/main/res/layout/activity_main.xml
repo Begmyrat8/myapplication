@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSecondaryVariant"
+    android:background="?attr/colorPrimaryVariant"
     tools:context=".Activities.MainActivity">
 
     <include
@@ -22,10 +22,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/coordinatorLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:cardElevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -35,13 +36,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="?attr/colorPrimaryVariant"
-            app:itemIconTint="@color/white"
-            app:itemTextColor="@color/white"
+            android:background="?attr/colorSecondaryVariant"
+            app:compatShadowEnabled="true"
+            app:itemIconTint="@color/dark_chocolate"
+            app:itemTextColor="@color/dark_chocolate"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_menu" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.cardview.widget.CardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

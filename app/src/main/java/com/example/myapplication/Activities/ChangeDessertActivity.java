@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -30,6 +32,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DecimalFormat;
 import java.util.Objects;
 
 public class ChangeDessertActivity extends AppCompatActivity {
@@ -41,6 +44,8 @@ public class ChangeDessertActivity extends AppCompatActivity {
     ImageView imageView, edit_image, setting;
     Toolbar toolbar;
     ImageButton change_dessert_img;
+    TextView hint_width, hint_width2, hint_height, hint_height2;
+
     RadioGroup shapeGroup, a;
     RadioButton shapeCircle, shapeRectangle, shapeSquare, myCircle, myRectangle, mySquare;
     Button save_btn;
@@ -59,6 +64,7 @@ public class ChangeDessertActivity extends AppCompatActivity {
         findView();
         get_and_set_intent_data();
         insertData();
+        imagePick();
 
         toolbar.setSubtitle(getString(R.string.change));
         setting.setVisibility(View.GONE);
@@ -70,6 +76,10 @@ public class ChangeDessertActivity extends AppCompatActivity {
 
     }
     private void findView(){
+        hint_height2 = findViewById(R.id.hint_height2);
+        hint_width2 = findViewById(R.id.hint_width2);
+        hint_height = findViewById(R.id.hint_height);
+        hint_width = findViewById(R.id.hint_width);
         setting = findViewById(R.id.setting);
         edit_image = findViewById(R.id.dessert_image);
         imageView = findViewById(R.id.imageView);
@@ -135,49 +145,82 @@ public class ChangeDessertActivity extends AppCompatActivity {
             originalCakeWidth.setText(getIntent().getStringExtra("dessert_height"));
             originalCakeHeight.setText(getIntent().getStringExtra("dessert_width"));
 
-            if (Objects.equals(getIntent().getStringExtra("new_shape_name"), "circle")){
+            if (Objects.equals(getIntent().getStringExtra("shape_name"), "circle")){
                 shapeGroup.check(R.id.shape_circle2);
                 originalCakeHeight.setVisibility(View.INVISIBLE);
+                hint_height.setVisibility(View.INVISIBLE);
+                hint_width.setText("Диаметр");
 
-            }else if (Objects.equals(getIntent().getStringExtra("new_shape_name"), "rectangle")){
+            }else if (Objects.equals(getIntent().getStringExtra("shape_name"), "rectangle")){
                 shapeGroup.check(R.id.shape_rectangle2);
                 originalCakeHeight.setVisibility(View.VISIBLE);
+                hint_height.setVisibility(View.VISIBLE);
             }else {
                 shapeGroup.check(R.id.shape_square2);
                 originalCakeHeight.setVisibility(View.INVISIBLE);
+                hint_height.setVisibility(View.INVISIBLE);
+                hint_width.setText("Ширина");
             }
 
-            if (Objects.equals(getIntent().getStringExtra("shape_name"), "circle")){
+            if (Objects.equals(getIntent().getStringExtra("new_shape_name"), "circle")){
                 a.check(R.id.my_circle2);
                 newCakeHeight.setVisibility(View.INVISIBLE);
-            }else if (Objects.equals(getIntent().getStringExtra("shape_name"), "rectangle")){
+                hint_height2.setVisibility(View.INVISIBLE);
+                hint_width2.setText("Диаметр");
+            }else if (Objects.equals(getIntent().getStringExtra("new_shape_name"), "rectangle")){
                 a.check(R.id.my_rectangle2);
                 newCakeHeight.setVisibility(View.VISIBLE);
+                hint_height2.setVisibility(View.VISIBLE);
             }else {
-                newCakeHeight.setVisibility(View.INVISIBLE);
                 a.check(R.id.my_square2);
+                newCakeHeight.setVisibility(View.INVISIBLE);
+                hint_height2.setVisibility(View.INVISIBLE);
+                hint_width.setText("Ширина");
             }
+
             shapeRectangle.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     originalCakeHeight.setVisibility(View.VISIBLE);
+                    hint_height.setVisibility(View.VISIBLE);
+
                 } else {
                     originalCakeHeight.setVisibility(View.INVISIBLE);
+                    hint_height.setVisibility(View.INVISIBLE);
+
                 }
             });
             myRectangle.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     newCakeHeight.setVisibility(View.VISIBLE);
+                    hint_height2.setVisibility(View.VISIBLE);
                 } else {
                     newCakeHeight.setVisibility(View.INVISIBLE);
+                    hint_height2.setVisibility(View.INVISIBLE);
                 }
             });
 
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
-//            if (bitmap != null){
-//                edit_image.setImageBitmap(bitmap);
-//            }else {
-//                edit_image.setImageResource(R.drawable.noun_cake_6710939);
-//            }
+            shapeCircle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked){
+                    hint_width.setText("Диаметр");
+                }else {
+                    hint_width.setText("Ширина");
+                }
+            });
+
+            myCircle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked){
+                    hint_width2.setText("Диаметр");
+                }else {
+                    hint_width2.setText("Ширина");
+                }
+            });
+
+            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+            if (bitmap != null){
+                edit_image.setImageBitmap(bitmap);
+            }else {
+                edit_image.setImageResource(R.drawable.noun_cake_6710939);
+            }
 
         }else {
             Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
@@ -339,11 +382,11 @@ public class ChangeDessertActivity extends AppCompatActivity {
         contentValues.put("new_shape_name", newShape);
         contentValues.put("coefficient", coefficient);
 
-//        try {
-//            contentValues.put("image", ImageViewToByte(edit_image));
-//        } catch (Exception e) {
-//            contentValues.put("image", String.valueOf(edit_image));
-//        }
+        try {
+            contentValues.put("image", ImageViewToByte(edit_image));
+        } catch (Exception e) {
+            contentValues.put("image", String.valueOf(edit_image));
+        }
 
         Cursor cursor = database.query("dessert", new String[]{"COUNT(*)"}, "title=?", new String[]{title}, null, null, null);
         if (cursor != null) {
@@ -376,5 +419,11 @@ public class ChangeDessertActivity extends AppCompatActivity {
                 setTheme(R.style.AppTheme);
                 break;
         }
+    }
+    private String formatNumber(double number, DecimalFormat decimalFormat) {
+        if (number == (long) number) {
+            return String.valueOf((long) number); // Если целое, возвращаем без дробной части
+        }
+        return decimalFormat.format(number); // Иначе с двумя знаками после запятой
     }
 }

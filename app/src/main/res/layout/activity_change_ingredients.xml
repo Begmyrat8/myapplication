@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSecondaryVariant">
+    android:background="?attr/colorPrimaryVariant">
 
     <include
         android:id="@+id/include"
@@ -16,8 +16,8 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/save_product"
+        android:background="@drawable/top_border_radius"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_image">
@@ -25,8 +25,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp">
+            android:padding="20dp">
 
             <TextView
                 android:id="@+id/textView6"
@@ -43,7 +42,6 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="?attr/colorSecondary"
                 app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +75,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginEnd="10dp"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="?attr/colorSecondary"
                 app:layout_constraintEnd_toStartOf="@+id/button4"
@@ -271,16 +269,24 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <Button
-        android:id="@+id/save_product"
-        android:backgroundTint="?attr/colorPrimaryVariant"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout7"
         android:layout_width="match_parent"
-        android:layout_margin="20dp"
-        android:layout_height="70dp"
-        android:text="@string/save"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:background="?attr/colorSecondaryVariant"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/save_product"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            app:cornerRadius="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
