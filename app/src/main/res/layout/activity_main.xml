@@ -38,8 +38,8 @@
             android:layout_gravity="bottom"
             android:background="?attr/colorSecondaryVariant"
             app:compatShadowEnabled="true"
-            app:itemIconTint="@color/dark_chocolate"
-            app:itemTextColor="@color/dark_chocolate"
+            app:itemIconTint="?attr/colorPrimaryVariant"
+            app:itemTextColor="?attr/colorPrimaryVariant"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_menu" />
 

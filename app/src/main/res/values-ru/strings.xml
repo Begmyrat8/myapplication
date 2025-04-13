@@ -87,4 +87,12 @@
     <string name="square">Квадрат</string>
     <string name="select_cake_shape_in_recipes">Выберите форму из рецепта</string>
     <string name="select_your_cake_shape">Выберите вашу форму</string>
+    <string name="quantity">Количество</string>
+    <string name="kg_piece">Кг/шт</string>
+    <string name="size">Размер</string>
+    <string name="diameter">Диаметр</string>
+    <string name="length">Длина</string>
+    <string name="from_the_recipe">Из рецепта</string>
+    <string name="your">Ваш</string>
+    <string name="total">Итого :</string>
 </resources>

@@ -82,7 +82,7 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         // Добавляем динамические TextView в контейнеры
         addDynamicTextViews(holder.fromRecipeContainer, list.get(position).getId());
         addDynamicTextViews2(holder.yourContainer, list.get(position).getId());
-        addDynamicTextViews4(holder.resultContainer2,list.get(position).getId());
+//        addDynamicTextViews4(holder.resultContainer2,list.get(position).getId());
     }
 
     @Override
@@ -266,28 +266,28 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         headerRow.setPadding(0, 16, 16, 16);  // Padding for headers
 
         TextView nameHint = new TextView(context);
-        nameHint.setText("Ингредиенты");
+        nameHint.setText(R.string.ingredients);
         nameHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         nameHint.setTextColor(ContextCompat.getColor(context, R.color.grey));
         nameHint.setGravity(Gravity.CENTER);
         headerRow.addView(nameHint);
 
         TextView amountHint = new TextView(context);
-        amountHint.setText("Вес");
+        amountHint.setText(R.string.weight);
         amountHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         amountHint.setTextColor(ContextCompat.getColor(context, R.color.grey));
         amountHint.setGravity(Gravity.CENTER);
         headerRow.addView(amountHint);
 
         TextView kg_priceHint = new TextView(context);
-        kg_priceHint.setText("Кг/цена");
+        kg_priceHint.setText(R.string.kg_price);
         kg_priceHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         kg_priceHint.setTextColor(ContextCompat.getColor(context, R.color.grey));
         kg_priceHint.setGravity(Gravity.CENTER);
         headerRow.addView(kg_priceHint);
 
         TextView priceHint = new TextView(context);
-        priceHint.setText("Цена");
+        priceHint.setText(R.string.price);
         priceHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         priceHint.setTextColor(ContextCompat.getColor(context, R.color.green));
         priceHint.setGravity(Gravity.CENTER);
@@ -354,7 +354,7 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
         // Empty cell for the first column (Ingredients)
         TextView total = new TextView(context);
-        total.setText("Итого :");
+        total.setText(R.string.total);
         total.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         total.setTextColor(ContextCompat.getColor(context, R.color.red));
         total.setGravity(Gravity.CENTER);
@@ -414,28 +414,28 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         headerRow.setPadding(0, 16, 16, 8);  // Padding for headers
 
         TextView nameHint = new TextView(context);
-        nameHint.setText("Ингредиенты");
+        nameHint.setText(R.string.ingredients);
         nameHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         nameHint.setTextColor(ContextCompat.getColor(context, R.color.grey));
         nameHint.setGravity(Gravity.CENTER);
         headerRow.addView(nameHint);
 
         TextView amountHint = new TextView(context);
-        amountHint.setText("Вес");
+        amountHint.setText(R.string.weight);
         amountHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         amountHint.setTextColor(ContextCompat.getColor(context, R.color.grey));
         amountHint.setGravity(Gravity.CENTER);
         headerRow.addView(amountHint);
 
         TextView kg_priceHint = new TextView(context);
-        kg_priceHint.setText("Кг/цена");
+        kg_priceHint.setText(R.string.kg_price);
         kg_priceHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         kg_priceHint.setTextColor(ContextCompat.getColor(context, R.color.grey));
         kg_priceHint.setGravity(Gravity.CENTER);
         headerRow.addView(kg_priceHint);
 
         TextView priceHint = new TextView(context);
-        priceHint.setText("Цена");
+        priceHint.setText(R.string.price);
         priceHint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         priceHint.setTextColor(ContextCompat.getColor(context, R.color.green));
         priceHint.setGravity(Gravity.CENTER);
@@ -502,7 +502,7 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
 
         // TextView для Итого
         TextView allpriceTextView = new TextView(context);
-        allpriceTextView.setText("Итого: ");
+        allpriceTextView.setText(R.string.total);
         allpriceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         allpriceTextView.setTextColor(ContextCompat.getColor(context, R.color.red));
         allpriceTextView.setGravity(Gravity.CENTER);
@@ -577,4 +577,3 @@ public class Adaptor extends RecyclerView.Adapter<Adaptor.CategoryViewHolder> {
         return list.isEmpty();
     }
 }
-

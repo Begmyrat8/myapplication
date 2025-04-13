@@ -426,7 +426,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
                     }
                     finish();
                 } else {
-                    Toast.makeText(this, R.string.ingredient_already_exists, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.please_add_title, Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Toast.makeText(this, "Необходимо добавить хотя бы один ингредиент", Toast.LENGTH_SHORT).show();
@@ -466,9 +466,9 @@ public class AddIngredientsActivity extends AppCompatActivity {
         dynamicContainer = findViewById(R.id.dynamic_container);
     }
     private boolean insertTitleIfNotExists(String title) {
-        try (Cursor cursor = database.rawQuery("SELECT * FROM list WHERE title = ?", new String[]{title})) {
+//        try (Cursor cursor = database.rawQuery("SELECT * FROM list WHERE title = ?", new String[]{title})) {
             dessert_id = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("dessertId")));
-            if (cursor.getCount() == 0) {
+//            if (cursor.getCount() == 0) {
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(COL_TITLE, Objects.requireNonNull(set_title.getText()).toString());
                 contentValues.put(COL_DESSERT_ID, dessert_id);
@@ -480,10 +480,10 @@ public class AddIngredientsActivity extends AppCompatActivity {
 
                 database.insert("list", null, contentValues);
                 return true;
-            } else {
-                return false;
-            }
-        }
+//            } else {
+//                return false;
+//            }
+//        }
     }
     private void insertIngredient(String listId, String ingredient, double amount, double price, double gram_price, double kg, int dessertId, String unit) {
         ContentValues contentValues = new ContentValues();
@@ -553,15 +553,20 @@ public class AddIngredientsActivity extends AppCompatActivity {
     }
 
 
-    @SuppressLint("NonConstantResourceId")
     private void setMode() {
-        SharedPreferences sharedPreferences = getSharedPreferences("night", 0);
-        boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
+        String mode = getSharedPreferences("Settings", MODE_PRIVATE).getString("mode", "light");
 
-        if (isNightMode) {
-            setTheme(R.style.AppTheme_Dark);
-        } else {
-            setTheme(R.style.AppTheme);
+        // Применяем тему перед super.onCreate()
+        switch (mode) {
+            case "dark":
+                setTheme(R.style.AppTheme_Dark);
+                break;
+            case "blue":
+                setTheme(R.style.AppTheme_Blue);
+                break;
+            default:
+                setTheme(R.style.AppTheme);
+                break;
         }
     }
 

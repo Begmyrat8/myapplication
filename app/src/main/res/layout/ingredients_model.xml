@@ -9,7 +9,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="15dp"
         android:backgroundTint="@color/white"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,16 +18,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:backgroundTint="@color/white"
-            app:cardCornerRadius="10dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="5dp">
+                >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/title_and_btn"
@@ -80,7 +76,6 @@
                     android:layout_height="match_parent"
                     android:layout_margin="3dp"
                     android:paddingStart="5dp"
-                    android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/title_and_btn"
@@ -92,8 +87,8 @@
                         android:id="@+id/textView4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Из рецепта"
-                        android:textSize="16sp"
+                        android:text="@string/from_the_recipe"
+                        android:textSize="17sp"
                         android:textColor="@android:color/holo_red_dark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -104,11 +99,11 @@
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ваш"
+                        android:text="@string/your"
                         android:textColor="@color/green"
                         android:visibility="visible"
-                        android:textSize="16sp"
-                        android:layout_marginTop="20dp"
+                        android:textSize="17sp"
+                        android:layout_marginTop="5dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.491"
                         app:layout_constraintStart_toStartOf="parent"
@@ -155,8 +150,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
 
 
     </androidx.cardview.widget.CardView>

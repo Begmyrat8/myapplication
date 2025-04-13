@@ -34,7 +34,6 @@ public class SettingActivity extends AppCompatActivity {
         loadPreferences();
 
         toolbar.setSubtitle(R.string.setting);
-        setting.setVisibility(View.GONE);
 
         // Set listeners for radio groups
         lang.setOnCheckedChangeListener((group, checkedId) -> {

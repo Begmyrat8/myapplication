@@ -76,6 +76,14 @@
     <string name="circle">Circle</string>
     <string name="rectangle">Rectangle</string>
     <string name="square">Square</string>
-    <string name="select_cake_shape_in_recipes">Выберите форму из рецепта</string>
-    <string name="select_your_cake_shape">Выберите вашу форму</string>
+    <string name="select_cake_shape_in_recipes">Select cake shape in recipes</string>
+    <string name="select_your_cake_shape">Select your cake shape</string>
+    <string name="quantity">Quantity</string>
+    <string name="kg_piece">Kg/pc</string>
+    <string name="size">Size</string>
+    <string name="diameter">Diameter</string>
+    <string name="length">Length</string>
+    <string name="from_the_recipe">From recipe</string>
+    <string name="your">Your</string>
+    <string name="total">Total :</string>
 </resources>

@@ -179,6 +179,7 @@ public class AddDessertActivity extends AppCompatActivity {
                 .crop()
                 .compress(1024)
                 .maxResultSize(1080, 1080)
+                .crop(1f, 1f)
                 .start();
     }
 

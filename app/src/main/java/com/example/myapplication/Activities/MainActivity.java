@@ -5,6 +5,7 @@ import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
@@ -30,6 +32,7 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
+import java.util.Locale;
 
 public class MainActivity extends BaseActivity {
 
@@ -52,25 +55,26 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onViewReady(Bundle savedInstanceState,Intent intent) {
         SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
-//        String language = sharedPreferences.getString("language", "English");
+        String language = sharedPreferences.getString("language", "English");
         String mode = sharedPreferences.getString("mode", "light");
 
 
         // Apply language
-//        Locale locale;
-//        if (language.equals("English")) {
-//            locale = new Locale("en");
-//        } else if (language.equals("Русский")) {
-//            locale = new Locale("ru");
-//        } else {
-//            locale = new Locale(" ");
-//        }
-//        Locale.setDefault(locale);
-//        Configuration config = new Configuration();
-//        config.locale = locale;
-//        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        Locale locale;
+        if (language.equals("English")) {
+            locale = new Locale("en");
+        } else if (language.equals("Русский")) {
+            locale = new Locale("ru");
+        } else {
+            locale = new Locale(" ");
+        }
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
 
         int color;
+//        Toast.makeText(this, mode, Toast.LENGTH_SHORT).show();
         // Apply mode
         if (mode.equals("dark")) {
             setTheme(R.style.AppTheme_Dark);
@@ -152,6 +156,8 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
+
+        setting.setVisibility(View.VISIBLE);
 
         setting.setOnClickListener(view -> {
 

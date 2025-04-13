@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
-            android:text="Количество"
+            android:text="@string/quantity"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ingredientTextView" />
 
@@ -79,7 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Кг"
+            android:text="@string/kg"
             app:layout_constraintStart_toStartOf="@+id/textView20"
             app:layout_constraintTop_toBottomOf="@+id/textView20" />
 
@@ -88,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="Штук"
+            android:text="@string/piece"
             app:layout_constraintStart_toEndOf="@+id/kgCheckBox"
             app:layout_constraintTop_toTopOf="@+id/kgCheckBox" />
 
@@ -96,7 +96,7 @@
             android:id="@+id/textView21"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Кг/шт"
+            android:text="@string/kg_piece"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/piecesCheckBox" />
@@ -128,7 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Цена"
+            android:text="@string/price"
             android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@+id/piecesCheckBox"
             app:layout_constraintTop_toTopOf="@+id/textView21" />
